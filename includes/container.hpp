@@ -1,24 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.cpp                                           :+:      :+:    :+:   */
+/*   container.hpp                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/16 19:06:25 by hyap             ###   ########.fr       */
+/*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
+/*   Updated: 2022/11/16 19:16:05 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.hpp"
-#include <vector>
+#ifndef CONTAINER_H
+# define CONTAINER_H
+# include <iostream>
 
-int	main(void)
-{
-	ft::vector<int>	intv(5, 10);
+namespace ft {
 	
-	std::cout << intv[2] << std::endl;
-	std::cout << "int: " << ft::is_integral<int>::value << std::endl;
+template< bool B, class T = void >
+struct enable_if {};
 
-	return (0);
+template<class T>
+struct enable_if<true, T>
+{
+	typedef T	type;
+};
+
+template< typename T >
+struct is_integral
+
 }
+
+#endif

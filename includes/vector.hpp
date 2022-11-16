@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/15 15:33:37 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/16 19:05:34 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define VECTOR_H
 # include <iostream>
 # include <vector>
+# include "container.hpp"
 
 namespace ft {
 	
@@ -50,7 +51,7 @@ class vector {
 				_data[i] = val;
 			std::cout << "Fill constructor called" << std::endl;
 		}
-
+		std::enable_if<std::is_integral>
 		/* copy */
 		vector(const vector &src)
 		{
