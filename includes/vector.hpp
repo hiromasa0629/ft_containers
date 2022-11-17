@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/16 19:05:34 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/17 17:05:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ class vector {
 	typedef	const typename allocator_type::const_pointer	const_pointer;
 
 	private:
-		value_type		*_data;
+		pointer			_data;
 		size_type		_capacity;
 		size_type		_size;
 		allocator_type	_alloc;
@@ -51,7 +51,6 @@ class vector {
 				_data[i] = val;
 			std::cout << "Fill constructor called" << std::endl;
 		}
-		std::enable_if<std::is_integral>
 		/* copy */
 		vector(const vector &src)
 		{
@@ -67,19 +66,46 @@ class vector {
 		/* destructor */
 		~vector(void)
 		{
+			_alloc.deallocate(_data, _capacity);
+			std::cout << "Destructing..." << std::endl;
+		}
+		
+		/* ============================ Capacity functions ============================ */
+		size_type	size(void) const 
+		{
+			return (_size); 
+		}
+		
+		size_type	max_size(void) const 
+		{ 
+			return (_alloc.max_size());  
+		}
+		
+		size_type	capacity(void) const { 
+			return (_capacity); 
+		}
+		
+		void		reserve(size_type n)
+		{
+			pointer		new_data;
+			size_type	old_capacity;
+			
+			if (n > this->max_size())
+				throw (std::length_error("ft::vector::reserve"));
+			if (n <= this->capacity())
+				return ;
+			old_capacity = _capacity;
+			_capacity = n;
+			new_data = _alloc.allocate(n);
+			for (size_type i = 0; i < this->size(); i++)
+				new_data[i] = _data[i];
+			_alloc.deallocate(_data, old_capacity);
 			
 		}
 		
-		/* Returns vector capacity */
-		size_type	capacity(void) const
+		void		resize(size_type n, value_type val = value_type())
 		{
-			return (this->_capacity);
-		}
-		
-		/* Returns vector size */
-		size_type	size(void) const
-		{
-			return (this->_size);
+			
 		}
 		
 		/* Random access using array index operator */
