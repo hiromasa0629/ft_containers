@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/17 17:05:53 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/17 17:51:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,35 +35,35 @@ class vector {
 		allocator_type	_alloc;
 
 	public:
-		/* default constructor */
+		/* Default constructor */
 		explicit vector(const allocator_type &alloc = allocator_type())
 			: _data(NULL), _capacity(1), _size(0), _alloc(alloc)
 		{
 			std::cout << "Default constructor called" << std::endl;
 		}
 
-		/* fill construcotr */
+		/* Fill construcotr */
 		explicit vector(size_type n, const value_type &val, const allocator_type &alloc = allocator_type())
 			: _capacity(n), _size(n), _alloc(alloc)
 		{
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
-				_data[i] = val;
+				_data[i] = _alloc.construct(&_data[i], val);
 			std::cout << "Fill constructor called" << std::endl;
 		}
-		/* copy */
+		/* Copy constructor */
 		vector(const vector &src)
 		{
 			(void)src;
 		}
 
-		/* copy assignment */
+		/* Copy assignment */
 		vector	&operator=(const vector &rhs)
 		{
 			(void)rhs;
 		}
 
-		/* destructor */
+		/* Destructor */
 		~vector(void)
 		{
 			_alloc.deallocate(_data, _capacity);
@@ -100,7 +100,6 @@ class vector {
 			for (size_type i = 0; i < this->size(); i++)
 				new_data[i] = _data[i];
 			_alloc.deallocate(_data, old_capacity);
-			
 		}
 		
 		void		resize(size_type n, value_type val = value_type())
