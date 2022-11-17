@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/17 19:30:04 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/17 21:47:28 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 namespace ft {
 	
 template <typename T, typename Allocator = std::allocator<T> >
-class vector {
+class Vector {
 	typedef typename std::size_t							size_type;
 	typedef	Allocator										allocator_type;
 	typedef T												value_type;
@@ -88,22 +88,33 @@ class vector {
 		void		reserve(size_type n)
 		{
 			pointer		new_data;
-			size_type	old_capacity;
 			
 			if (n > this->max_size())
 				throw (std::length_error("ft::vector::reserve"));
 			if (n <= this->capacity())
 				return ;
-			old_capacity = _capacity;
-			_capacity = n;
 			new_data = _alloc.allocate(n);
 			for (size_type i = 0; i < this->size(); i++)
-				new_data[i] = _data[i];
-			_alloc.deallocate(_data, old_capacity);
+				new_data[i] = _alloc.construct(&new_data[i], _data[i]);
+			_alloc.deallocate(_data, this->capacity());
+			_capacity = n;
+			_data = new_data;
 		}
 		
 		void		resize(size_type n, value_type val = value_type())
 		{
+			pointer		new_data;
+			size_type	end;
+			size_type	i;
+			
+			if (n > this->max_size())
+				throw (std::length_error("ft::vector::resize"));
+			if (n < this->size())
+				for (size_type i = n - 1; i < this->size(); i++)
+					_alloc.destroy(&_data[i];)
+			if (n > this->size())
+				for (size_type i = this->size() - 1; i < n; i++)
+					
 			
 		}
 		

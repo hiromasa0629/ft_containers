@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/17 16:34:12 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/17 21:27:48 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 
 namespace ft {
 	
+/* ============================ Enable if ============================ */
 template< bool B, class T = void >
 struct enable_if {};
 
@@ -25,7 +26,7 @@ struct enable_if<true, T>
 	typedef T	type;
 };
 
-/* is_integral */
+/* ============================ is_integral ============================ */
 template< bool is_integral, typename T >
 struct is_integral_base
 {
@@ -52,8 +53,6 @@ template<> struct is_integral<unsigned int> : is_integral_base<true, unsigned in
 template<> struct is_integral<unsigned short int> : is_integral_base<true, unsigned short int> {};
 template<> struct is_integral<unsigned long> : is_integral_base<true, unsigned long> {};
 template<> struct is_integral<unsigned long long> : is_integral_base<true, unsigned long long> {};
-
-
 
 }
 
