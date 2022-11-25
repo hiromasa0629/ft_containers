@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/17 21:47:28 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/25 19:54:09 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include <iostream>
 # include <vector>
 # include "container.hpp"
+# include "iterators.hpp"
 
 namespace ft {
 	
@@ -27,6 +28,9 @@ class Vector {
 	typedef const typename allocator_type::value_type&		const_reference;
 	typedef typename  allocator_type::pointer				pointer;
 	typedef	const typename allocator_type::const_pointer	const_pointer;
+	typedef typename ft::RandomAccessIterator				iterator;
+	typedef const typename ft::RandomAccessIterator			const_iterator;
+		difference_type;
 
 	private:
 		pointer			_data;
@@ -51,6 +55,7 @@ class Vector {
 				_data[i] = _alloc.construct(&_data[i], val);
 			std::cout << "Fill constructor called" << std::endl;
 		}
+
 		/* Copy constructor */
 		vector(const vector &src)
 		{
@@ -111,7 +116,7 @@ class Vector {
 				throw (std::length_error("ft::vector::resize"));
 			if (n < this->size())
 				for (size_type i = n - 1; i < this->size(); i++)
-					_alloc.destroy(&_data[i];)
+					_alloc.destroy(&_data[i])
 			if (n > this->size())
 				for (size_type i = this->size() - 1; i < n; i++)
 					
