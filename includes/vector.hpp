@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/28 17:05:47 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/28 18:12:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,19 @@ class Vector {
 		// }
 		
 		/* Replaces the contents of the container */
+		template < class InputIt >
+		void	assign(InputIt first, InputIt last)
+		{
+			this->clear();
+			_alloc.deallocate(_data, _capacity);
+			_size = last - first;
+			if (_size >= _capacity)
+				_capacity = _size;
+			_data = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&(_data[i]), first[i]);
+		}
+		
 		void	assign(size_type count, const_reference value)
 		{
 			this->clear();
@@ -121,20 +134,6 @@ class Vector {
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&(_data[i]), value);
 		}
-		
-		template < class InputIt >
-		void	assign(InputIt first, InputIt last)
-		{
-			this->clear();
-			_alloc.deallocate(_data, _capacity);
-			_size = last - first;
-			if (_size >= _capacity)
-				_capacity = _size;
-			_data = _alloc.allocate(_capacity);
-			for (size_type i = 0; i < _size; i++)
-				_alloc.construct(&(_data[i]), *(first[i]));
-		}
-		
 		
 		/* Inserts elements at the specified location in the container */
 		iterator	insert(const_iterator pos, const_reference value)
@@ -191,11 +190,18 @@ class Vector {
 			return (iterator(_data + ipos + i - 1));
 		}
 		
-		// template< class InputIt >
-		// iterator	insert(const_iterator pos, InputIt first, InputIt last)
-		// {
+		template< class InputIt >
+		iterator	insert(const_iterator pos, InputIt first, InputIt last)
+		{
+			size_type	ipos;
+			iterator	tmppos;
 			
-		// }
+			ipos = ft::distance(pos, this->begin());
+			tmppos = pos;
+			for (iterator start = first; start != last; start++)
+				tmppos = this->insert(tmppos, *start);
+			return (iterator(_data + ipos));
+		}
 
 		 /* Erases all elements from the container */
 		void	clear(void)

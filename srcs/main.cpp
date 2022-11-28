@@ -6,12 +6,13 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/28 17:06:04 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/28 18:08:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "vector.hpp"
 #include "colors.hpp"
+#include <sstream>
 
 void									print_header(const std::string& s) { std::cout << BOLD << RED << HR20 << UNDERLINED << s << RESET_UNDERLINED << HR20 << RESET << std::endl; }
 void									print_content_header(const std::string& lhs, const std::string& rhs) { 	std::cout << ANGRT << BLUE << lhs << YELLOW << rhs << RESET << std::endl; }
@@ -20,7 +21,7 @@ template < typename T > void			print_content(const std::string& lhs, T rhs ) { s
 template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) { std::cout << ANGRT2 << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
 template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; return (o); }
+template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
 // template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; return (o); }
 
 template < typename T, typename U >
@@ -89,7 +90,7 @@ int	main(void)
 		print_header("Fill constructor");
 		print_content("fill constructor: ", "(5, 10)");
 		ft::Vector<int>		x(5, 10);
-		// std::vector<int>	y(5, 10);
+		std::vector<int>	y(5, 10);
 		
 		// test_capacity(x, y);
 		// test_element_access(x, y);
@@ -103,48 +104,64 @@ int	main(void)
 		// std::cout << y.size() << std::endl;
 		// std::cout << y.capacity() << std::endl;
 		
-		x.insert(x.end(), 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.begin(), 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.begin() + 3, 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.begin() + 3, 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.begin() + 5, 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.end(), 20);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;
-		x.insert(x.begin(), 5, 30);
-		for (size_t i = 0; i < x.size(); i++)
-			std::cout << x[i] << " ";
-		std::cout << std::endl;
-		std::cout << x.size() << std::endl;
-		std::cout << x.capacity() << std::endl;	
-	
+		
+		// print_subcontent_header("insert(end(), 20)", "");
+		// {
+		// 	x.insert(x.end(), 20);
+		// 	y.insert(y.end(), 20);
+		// 	std::stringstream	myss;
+		// 	std::stringstream	ss;
+		// 	for (size_t i = 0; i < x.size(); i++)
+		// 		myss << x[i] << " ";
+		// 	myss << "| " << x.size() << " | " << x.capacity();
+		// 	ss << y;
+		// 	print_subsubcontent_compare("insert(end(), 20)", "", myss.str(), ss.str());
+		// }
+		// {
+		// 	x.insert(x.begin(), 20);
+		// 	y.insert(y.begin(), 20);	
+		// 	std::stringstream	myss;
+		// 	std::stringstream	ss;
+		// 	for (size_t i = 0; i < x.size(); i++)
+		// 		myss << x[i] << " ";
+		// 	myss << "| " << x.size() << " | " << x.capacity();
+		// 	ss << y;
+		// 	print_subsubcontent_compare("insert(begin(), 20)", "", myss.str(), ss.str());
+		// }
+		// {
+		// 	x.insert(x.begin() + 3, 20);
+		// 	y.insert(y.begin() + 3, 20);	
+		// 	std::stringstream	myss;
+		// 	std::stringstream	ss;
+		// 	for (size_t i = 0; i < x.size(); i++)
+		// 		myss << x[i] << " ";
+		// 	myss << "| " << x.size() << " | " << x.capacity();
+		// 	ss << y;
+		// 	print_subsubcontent_compare("insert(begin() + 3, 20)", "", myss.str(), ss.str());
+		// }
+		// {
+		// 	x.insert(x.begin(), x.begin() + 3, x.end());
+		// 	y.insert(y.begin(), y.begin() + 3, y.end());
+		// 	std::stringstream	myss;
+		// 	std::stringstream	ss;
+		// 	for (size_t i = 0; i < x.size(); i++)
+		// 		myss << x[i] << " ";
+		// 	myss << "| " << x.size() << " | " << x.capacity();
+		// 	ss << y;
+		// 	print_subsubcontent_compare("insert(begin(), begin() + 3, end())", "", myss.str(), ss.str());
+		// }
+		{
+			x.assign(3, 20);
+			y.assign(3, 20);
+			std::stringstream	myss;
+			std::stringstream	ss;
+			for (size_t i = 0; i < x.size(); i++)
+				myss << x[i] << " ";
+			myss << "| " << x.size() << " | " << x.capacity();
+			ss << y;
+			print_subsubcontent_compare("assign(3, 20)", "", myss.str(), ss.str());
+			
+		}
+
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/28 17:04:07 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/28 18:10:20 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
 		
 		/* Operators */
 		typename IteratorBase<Category, T>::reference		operator*(void) const { return (*_ptr); }
-		typename IteratorBase<Category, T>::reference		operator[](int n) { return *(_ptr + n); }
+		typename IteratorBase<Category, T>::reference		operator[](size_t n) { return *(_ptr + n); }
 		typename IteratorBase<Category, T>::pointer			operator->(void) { return (_ptr); }
 		RandomAccessIterator&								operator++(void) { _ptr++; return (*this); }
 		RandomAccessIterator								operator++(int) { RandomAccessIterator<T>	tmp = *this; _ptr++; return (tmp); }
