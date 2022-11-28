@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/25 19:54:09 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/28 17:05:47 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,79 +16,67 @@
 # include <vector>
 # include "container.hpp"
 # include "iterators.hpp"
+# include "colors.hpp"
 
 namespace ft {
 	
 template <typename T, typename Allocator = std::allocator<T> >
 class Vector {
-	typedef typename std::size_t							size_type;
-	typedef	Allocator										allocator_type;
-	typedef T												value_type;
-	typedef typename allocator_type::value_type&			reference;
-	typedef const typename allocator_type::value_type&		const_reference;
-	typedef typename  allocator_type::pointer				pointer;
-	typedef	const typename allocator_type::const_pointer	const_pointer;
-	typedef typename ft::RandomAccessIterator				iterator;
-	typedef const typename ft::RandomAccessIterator			const_iterator;
-		difference_type;
-
-	private:
-		pointer			_data;
-		size_type		_capacity;
-		size_type		_size;
-		allocator_type	_alloc;
-
 	public:
+		typedef typename std::size_t									size_type;
+		typedef	Allocator												allocator_type;
+		typedef T														value_type;
+		typedef typename allocator_type::value_type&					reference;
+		typedef const typename allocator_type::value_type&				const_reference;
+		typedef typename  allocator_type::pointer						pointer;
+		typedef	const typename allocator_type::const_pointer			const_pointer;
+		typedef ft::RandomAccessIterator<T>								iterator;
+		typedef const ft::RandomAccessIterator<T>						const_iterator;
+		typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
+
 		/* Default constructor */
-		explicit vector(const allocator_type &alloc = allocator_type())
-			: _data(NULL), _capacity(1), _size(0), _alloc(alloc)
+		explicit Vector(const allocator_type &alloc = allocator_type())
+			: _data(NULL), _capacity(1), _size(0), _alloc(alloc) 
 		{
-			std::cout << "Default constructor called" << std::endl;
+			
 		}
 
 		/* Fill construcotr */
-		explicit vector(size_type n, const value_type &val, const allocator_type &alloc = allocator_type())
+		explicit Vector(size_type n, const value_type &val, const allocator_type &alloc = allocator_type())
 			: _capacity(n), _size(n), _alloc(alloc)
 		{
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
-				_data[i] = _alloc.construct(&_data[i], val);
-			std::cout << "Fill constructor called" << std::endl;
+				_alloc.construct(&_data[i], val);
 		}
 
 		/* Copy constructor */
-		vector(const vector &src)
+		Vector(const Vector &src)
 		{
-			(void)src;
+			*this = src;
 		}
 
 		/* Copy assignment */
-		vector	&operator=(const vector &rhs)
-		{
-			(void)rhs;
-		}
+		// Vector&	operator=(const Vector &rhs)
+		// {
+		// 	_data = rhs.data();
+		// 	_capacity = rhs.capacity();
+		// 	_size = rhs.size();
+		// 	_alloc = rhs.get_allocator();
+		// 	return (*this);
+		// }
 
 		/* Destructor */
-		~vector(void)
+		~Vector(void)
 		{
 			_alloc.deallocate(_data, _capacity);
-			std::cout << "Destructing..." << std::endl;
+			std::cout << DIM << ANGRT << DIM << "Destructing..." << RESET << std::endl;
 		}
 		
 		/* ============================ Capacity functions ============================ */
-		size_type	size(void) const 
-		{
-			return (_size); 
-		}
-		
-		size_type	max_size(void) const 
-		{ 
-			return (_alloc.max_size());  
-		}
-		
-		size_type	capacity(void) const { 
-			return (_capacity); 
-		}
+		size_type	size(void) const { return (_size); } /* Returns the number of elements */
+		size_type	max_size(void) const { return (_alloc.max_size()); } /* Returns the maximum number of elements the vector can hold */
+		size_type	capacity(void) const { return (_capacity); } /* Returns size of allocated storage capacity */
 		
 		void		reserve(size_type n)
 		{
@@ -101,34 +89,166 @@ class Vector {
 			new_data = _alloc.allocate(n);
 			for (size_type i = 0; i < this->size(); i++)
 				new_data[i] = _alloc.construct(&new_data[i], _data[i]);
+			this->clear();
 			_alloc.deallocate(_data, this->capacity());
 			_capacity = n;
 			_data = new_data;
 		}
+
+		// void		resize(size_type n, value_type val = value_type())
+		// {
+		// 	pointer		new_data;
+		// 	size_type	end;
+			
+		// 	if (n > this->max_size())
+		// 		throw (std::length_error("ft::vector::resize"));
+		// 	if (n < this->size())
+		// 		for (size_type i = n - 1; i < this->size(); i++)
+		// 			_alloc.destroy(&_data[i]);
+		// 	if (n > this->size())
+		// 		for (size_type i = this->size() - 1; i < n; i++)
+		// }
 		
-		void		resize(size_type n, value_type val = value_type())
+		/* Replaces the contents of the container */
+		void	assign(size_type count, const_reference value)
 		{
-			pointer		new_data;
-			size_type	end;
+			this->clear();
+			_alloc.deallocate(_data, _capacity);
+			_size = count;
+			if (_size >= _capacity)
+				_capacity = _size;
+			_data = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&(_data[i]), value);
+		}
+		
+		template < class InputIt >
+		void	assign(InputIt first, InputIt last)
+		{
+			this->clear();
+			_alloc.deallocate(_data, _capacity);
+			_size = last - first;
+			if (_size >= _capacity)
+				_capacity = _size;
+			_data = _alloc.allocate(_capacity);
+			for (size_type i = 0; i < _size; i++)
+				_alloc.construct(&(_data[i]), *(first[i]));
+		}
+		
+		
+		/* Inserts elements at the specified location in the container */
+		iterator	insert(const_iterator pos, const_reference value)
+		{
+			size_type	ipos;
+			bool		inserted;
+			pointer		newdata;
+			size_type	oldcapacity;
 			size_type	i;
-			
-			if (n > this->max_size())
-				throw (std::length_error("ft::vector::resize"));
-			if (n < this->size())
-				for (size_type i = n - 1; i < this->size(); i++)
-					_alloc.destroy(&_data[i])
-			if (n > this->size())
-				for (size_type i = this->size() - 1; i < n; i++)
-					
-			
+
+			// ipos = pos - this->begin();
+			ipos = ft::distance(pos, this->begin());
+			oldcapacity = _capacity;
+			newdata = double_realloc();
+			if (ipos == _size)
+			{
+				for (i = 0; i < _size; i++)
+					_alloc.construct(&(newdata[i]), _data[i]);
+				_alloc.construct(&(newdata[ipos]), value);
+				this->clear();
+				_size = i + 1;
+				_alloc.deallocate(_data, oldcapacity);
+				_data = newdata;
+				return (iterator(_data + ipos));
+			}
+			inserted = 0;
+			for (i = 0; i < _size + 1; i++)
+			{
+				if (i == ipos && !inserted)
+				{
+					_alloc.construct(&(newdata[i]), value);
+					inserted = 1;
+					continue;
+				}
+				_alloc.construct(&(newdata[i]), _data[i - inserted]);
+			}
+			this->clear();
+			_size = i;
+			_alloc.deallocate(_data, oldcapacity);
+			_data = newdata;
+			return (iterator(_data + ipos));
 		}
-		
-		/* Random access using array index operator */
-		reference	operator[](size_type n)
+
+		iterator	insert(const_iterator pos, size_type count, const_reference value)
 		{
-			return (_data[n]);
+			size_type	i;
+			size_type	ipos;
+			iterator	tmppos;
+			
+			ipos = ft::distance(pos, this->begin());
+			tmppos = pos;
+			for (i = 0; i < count; i++)
+				tmppos = this->insert(tmppos, value);
+			return (iterator(_data + ipos + i - 1));
 		}
 		
+		// template< class InputIt >
+		// iterator	insert(const_iterator pos, InputIt first, InputIt last)
+		// {
+			
+		// }
+
+		 /* Erases all elements from the container */
+		void	clear(void)
+		{
+			for (size_type i = 0; i < _size; i++)
+				_alloc.destroy(&(_data[i]));
+			_size = 0;
+		}
+
+		/* ============================ Element access ============================ */
+		reference			operator[](size_type n) { return (_data[n]); }			/* Returns a reference to the element at position n */
+		const_reference		operator[](size_type n) const { return (_data[n]); }	/* Returns a const reference to the element at position n */
+		reference			front(void) { return (_data[0]); }						/* Returns a reference to the first element */
+		const_reference		front(void) const { return (_data[0]); }				/* Returns a const reference to the first element */
+		reference			back(void) { return (_data[_size - 1]); }				/* Returns a reference to the last element */
+		const_reference		back(void) const { return (_data[_size - 1]); }			/* Returns a const reference to the last element */
+		value_type*			data(void) { return (_data); }							/* Returns a direct pointer to the memory array */
+		const value_type*	data(void) const { return (_data); }					/* Returns a const direct pointer to the memory array */
+		/* Returns a reference to the element at position n, throw out_of_range if n >= size */
+		reference			at(size_type n) { if (n >= _size) throw std::out_of_range("ft::Vector::at"); return (_data[n]); }
+		/* Returns a reference to the element at position n, throw out_of_range if n >= size */
+		const_reference		at(size_type n) const { if (n >= _size) throw std::out_of_range("const ft::Vector::at"); return (_data[n]); }
+
+		/* ============================ Allocator ============================ */
+		allocator_type	get_allocator(void) const { return (allocator_type()); }
+		
+		/* ============================ Iterator ============================ */
+		iterator		begin(void) { return (_data); }
+		const_iterator	begin(void) const { return (_data); }
+		iterator		end(void) { return (&(_data[_size])); }
+		const_iterator	end(void) const { return (&(_data[_size])); }
+		
+		
+		
+	private:
+		pointer			_data;
+		size_type		_capacity;
+		size_type		_size;
+		allocator_type	_alloc;
+		
+		pointer	double_realloc(void)
+		{
+			pointer		newdata;
+
+			if (_size == _capacity)
+			{
+				newdata = _alloc.allocate(_capacity * 2);
+				_capacity *= 2;
+			}
+			else
+				newdata = _alloc.allocate(_capacity);
+			return (newdata);
+		}
 };
 
 }

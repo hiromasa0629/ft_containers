@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/25 19:50:50 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/26 14:07:42 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,10 @@ template<> struct is_integral<wchar_t> : is_integral_base<true, wchar_t> {};
 template<> struct is_integral<short int> : is_integral_base<true, short int> {};
 template<> struct is_integral<int> : is_integral_base<true, int> {};
 template<> struct is_integral<long> : is_integral_base<true, long> {};
-template<> struct is_integral<long long> : is_integral_base<true, long long> {};
 template<> struct is_integral<unsigned char> : is_integral_base<true, unsigned char> {};
 template<> struct is_integral<unsigned int> : is_integral_base<true, unsigned int> {};
 template<> struct is_integral<unsigned short int> : is_integral_base<true, unsigned short int> {};
 template<> struct is_integral<unsigned long> : is_integral_base<true, unsigned long> {};
-template<> struct is_integral<unsigned long long> : is_integral_base<true, unsigned long long> {};
 
 }
 
