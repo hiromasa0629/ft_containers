@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/28 18:12:45 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/29 00:33:55 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 # include "colors.hpp"
 
 namespace ft {
-	
+
 template <typename T, typename Allocator = std::allocator<T> >
 class Vector {
 	public:
@@ -36,9 +36,9 @@ class Vector {
 
 		/* Default constructor */
 		explicit Vector(const allocator_type &alloc = allocator_type())
-			: _data(NULL), _capacity(1), _size(0), _alloc(alloc) 
+			: _data(NULL), _capacity(1), _size(0), _alloc(alloc)
 		{
-			
+
 		}
 
 		/* Fill construcotr */
@@ -52,19 +52,23 @@ class Vector {
 
 		/* Copy constructor */
 		Vector(const Vector &src)
+			: _data(NULL), _capacity(0), _size(0), _alloc(src.get_allocator())
 		{
-			*this = src;
+			this->insert(this->begin(), src.begin(), src.end());
 		}
 
 		/* Copy assignment */
-		// Vector&	operator=(const Vector &rhs)
-		// {
-		// 	_data = rhs.data();
-		// 	_capacity = rhs.capacity();
-		// 	_size = rhs.size();
-		// 	_alloc = rhs.get_allocator();
-		// 	return (*this);
-		// }
+		Vector&	operator=(const Vector &rhs)
+		{
+			this->clear();
+			_alloc = rhs.get_allocator();
+			_alloc.deallocate(_data, _capacity);
+			_capacity = 0;
+			_size = 0;
+			_data = NULL;
+			this->insert(this->begin(), rhs.begin(), rhs.end());
+			return (*this);
+		}
 
 		/* Destructor */
 		~Vector(void)
@@ -72,16 +76,16 @@ class Vector {
 			_alloc.deallocate(_data, _capacity);
 			std::cout << DIM << ANGRT << DIM << "Destructing..." << RESET << std::endl;
 		}
-		
+
 		/* ============================ Capacity functions ============================ */
 		size_type	size(void) const { return (_size); } /* Returns the number of elements */
 		size_type	max_size(void) const { return (_alloc.max_size()); } /* Returns the maximum number of elements the vector can hold */
 		size_type	capacity(void) const { return (_capacity); } /* Returns size of allocated storage capacity */
-		
+
 		void		reserve(size_type n)
 		{
 			pointer		new_data;
-			
+
 			if (n > this->max_size())
 				throw (std::length_error("ft::vector::reserve"));
 			if (n <= this->capacity())
@@ -99,7 +103,7 @@ class Vector {
 		// {
 		// 	pointer		new_data;
 		// 	size_type	end;
-			
+
 		// 	if (n > this->max_size())
 		// 		throw (std::length_error("ft::vector::resize"));
 		// 	if (n < this->size())
@@ -108,33 +112,37 @@ class Vector {
 		// 	if (n > this->size())
 		// 		for (size_type i = this->size() - 1; i < n; i++)
 		// }
-		
+
 		/* Replaces the contents of the container */
 		template < class InputIt >
-		void	assign(InputIt first, InputIt last)
+		void	assign(InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 		{
-			this->clear();
-			_alloc.deallocate(_data, _capacity);
-			_size = last - first;
-			if (_size >= _capacity)
-				_capacity = _size;
-			_data = _alloc.allocate(_capacity);
+			pointer		newdata;
+			size_type	oldcapacity;
+
+			oldcapacity = _capacity;
+			_size = ft::distance(last, first);
+			_capacity = _size;
+			newdata = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
-				_alloc.construct(&(_data[i]), first[i]);
+				_alloc.construct(&(newdata[i]), first[i]);
+			this->clear();
+			_alloc.deallocate(_data, oldcapacity);
+			_size = ft::distance(last, first);
+			_data = newdata;
 		}
-		
+
 		void	assign(size_type count, const_reference value)
 		{
 			this->clear();
 			_alloc.deallocate(_data, _capacity);
 			_size = count;
-			if (_size >= _capacity)
-				_capacity = _size;
+			_capacity = _size;
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&(_data[i]), value);
 		}
-		
+
 		/* Inserts elements at the specified location in the container */
 		iterator	insert(const_iterator pos, const_reference value)
 		{
@@ -144,7 +152,6 @@ class Vector {
 			size_type	oldcapacity;
 			size_type	i;
 
-			// ipos = pos - this->begin();
 			ipos = ft::distance(pos, this->begin());
 			oldcapacity = _capacity;
 			newdata = double_realloc();
@@ -182,20 +189,20 @@ class Vector {
 			size_type	i;
 			size_type	ipos;
 			iterator	tmppos;
-			
+
 			ipos = ft::distance(pos, this->begin());
 			tmppos = pos;
 			for (i = 0; i < count; i++)
 				tmppos = this->insert(tmppos, value);
 			return (iterator(_data + ipos + i - 1));
 		}
-		
+
 		template< class InputIt >
 		iterator	insert(const_iterator pos, InputIt first, InputIt last)
 		{
 			size_type	ipos;
 			iterator	tmppos;
-			
+
 			ipos = ft::distance(pos, this->begin());
 			tmppos = pos;
 			for (iterator start = first; start != last; start++)
@@ -227,29 +234,37 @@ class Vector {
 
 		/* ============================ Allocator ============================ */
 		allocator_type	get_allocator(void) const { return (allocator_type()); }
-		
+
 		/* ============================ Iterator ============================ */
 		iterator		begin(void) { return (_data); }
 		const_iterator	begin(void) const { return (_data); }
 		iterator		end(void) { return (&(_data[_size])); }
 		const_iterator	end(void) const { return (&(_data[_size])); }
-		
-		
-		
+
+
+
 	private:
 		pointer			_data;
 		size_type		_capacity;
 		size_type		_size;
 		allocator_type	_alloc;
-		
+
 		pointer	double_realloc(void)
 		{
 			pointer		newdata;
 
 			if (_size == _capacity)
 			{
-				newdata = _alloc.allocate(_capacity * 2);
-				_capacity *= 2;
+				if (_capacity == 0)
+				{
+					_capacity = 1;
+					newdata = _alloc.allocate(_capacity);
+				}
+				else
+				{
+					newdata = _alloc.allocate(_capacity * 2);
+					_capacity *= 2;
+				}
 			}
 			else
 				newdata = _alloc.allocate(_capacity);
