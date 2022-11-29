@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/29 00:33:55 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/29 21:07:13 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ class Vector {
 			ipos = ft::distance(pos, this->begin());
 			oldcapacity = _capacity;
 			newdata = double_realloc();
+			// std::cout << "value: " << value << std::endl;
 			if (ipos == _size)
 			{
 				for (i = 0; i < _size; i++)
@@ -198,15 +199,18 @@ class Vector {
 		}
 
 		template< class InputIt >
-		iterator	insert(const_iterator pos, InputIt first, InputIt last)
+		iterator	insert(const_iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 		{
 			size_type	ipos;
 			iterator	tmppos;
 
 			ipos = ft::distance(pos, this->begin());
 			tmppos = pos;
-			for (iterator start = first; start != last; start++)
-				tmppos = this->insert(tmppos, *start);
+			for (iterator end = last - 1; end >= first; end--)
+			{
+				// std::cout << "*end: " << *end << std::endl;
+				tmppos = this->insert(tmppos, *end);
+			}
 			return (iterator(_data + ipos));
 		}
 

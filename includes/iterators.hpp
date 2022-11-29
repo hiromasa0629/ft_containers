@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/28 18:10:20 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/29 21:08:13 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ template< class InputIt >
 typename ft::iterator_traits<InputIt>::difference_type	distance(InputIt first, InputIt last)
 {
 	if (last > first)
-		return (last - first);
+		return (last - first)x;
 	return (first - last);
 }
 
