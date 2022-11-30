@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 21:01:24 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 01:32:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	main(void)
 		print_header("Default Constructor");
 		ft::Vector<int>		x;
 		std::vector<int>	y;
-		
+
 		pre_test(x, y);
 		// test_element_access(x, y);
 		// test_capacity(x, y);
@@ -50,19 +50,20 @@ int	main(void)
 		// std::cout << "y: " << x << std::endl;
 		// std::cout << "z: " << z << std::endl;
 		// test_swap(x, y);
-		test_operators_n_lexicographical(x, y);
-		
-		
+		// test_operators_n_lexicographical(x, y);
+		test_reverse_iterator(x, y);
+
+
 		// x.reserve(10);
 		// ft::Vector<int> z;
 		// z.reserve(10);
 		// z = x;
 		// std::vector<int> w;
-		
+
 		// std::cout << x << std::endl;
 		// std::cout << z << std::endl;
 		// test(y);
-		
+
 	}
 	return (0);
 }

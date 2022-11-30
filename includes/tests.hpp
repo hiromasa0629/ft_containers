@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:27:16 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 21:00:40 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 01:32:36 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,5 +36,6 @@ template < typename T, typename U > void	test_pop_back(T x, U y);
 template < typename T, typename U > void	test_resize(T x, U y);
 template < typename T, typename U > void	test_swap(T x, U y);
 template < typename T, typename U > void	test_operators_n_lexicographical(T x, U y);
+template < typename T, typename U > void	test_reverse_iterator(T x, U y);
 
 #endif

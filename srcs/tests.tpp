@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 21:21:48 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 02:25:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ template < typename T > void			print_content(const std::string& lhs, T rhs ) { s
 template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) { std::cout << ANGRT2 << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
 template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
+template < typename T, typename U > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, U expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
 template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
 template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
 
@@ -80,9 +81,7 @@ template < typename T, typename U >
 void	test_iterator(T x, U y)
 {
 	ft::Vector<int>::iterator	myit;
-	ft::Vector<int>::iterator	endmyit;
 	std::vector<int>::iterator	it;
-	std::vector<int>::iterator	endit;
 
 	std::stringstream	s;
 	s << "Iterators [";
@@ -94,8 +93,6 @@ void	test_iterator(T x, U y)
 	it = y.begin();
 	print_subcontent("it = begin()", "");
 	print_subsubcontent_compare("begin()", "", *myit, *it);
-	endmyit = x.end();
-	endit = y.end();
 	print_subsubcontent_compare("it[2]", "", myit[2], it[2]);
 	print_subsubcontent_compare("++it", "", *(++myit), *(++it));
 	print_subsubcontent_compare("it++", "", *(myit++), *(it++));
@@ -141,10 +138,10 @@ void	test_insert(T x, U y)
 	U	b(y);
 
 	typename T::iterator	myit;
-	typename U::iterator	it; 
+	typename U::iterator	it;
 	typename T::iterator	myit2;
 	typename U::iterator	it2;
-	
+
 	{
 		myit = x.insert(x.end(), 5);
 		it = y.insert(y.end(), 5);
@@ -216,7 +213,7 @@ void	test_erase(T x, U y)
 	print_content_header("Member functions: ", s.str());
 	typename T::iterator	myit;
 	typename U::iterator	it;
-	
+
 	{
 		myit = x.erase(x.begin());
 		it = y.erase(y.begin());
@@ -406,7 +403,7 @@ void	test_operators_n_lexicographical(T x, U y)
 		print_subsubcontent_compare(s.str(), "", x > w, y > z);
 	}
 	{
-		
+
 		std::stringstream	s;
 		s << "[" << x << "] <= [" << w << "]";
 		print_subsubcontent_compare(s.str(), "", x <= w, y <= z);
@@ -419,7 +416,7 @@ void	test_operators_n_lexicographical(T x, U y)
 	T	a(x);
 	U	b(y);
 	{
-		
+
 		std::stringstream	s;
 		s << "[" << x << "] <= [" << a << "]";
 		print_subsubcontent_compare(s.str(), "", x <= a, y <= b);
@@ -431,4 +428,41 @@ void	test_operators_n_lexicographical(T x, U y)
 	}
 }
 
+template < typename T, typename U >
+void	test_reverse_iterator(T x, U y)
+{
+	typename T::reverse_iterator	rmyit(x.end());
+	typename T::reverse_iterator		rbmyit(x.begin());
+	typename U::reverse_iterator	rit(y.end());
+	typename U::reverse_iterator	rbit(y.begin());
 
+	std::stringstream	s;
+	s << "Reverse Iterators [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	print_subcontent("it(end())", "");
+	print_subsubcontent_compare("*it", "", *rmyit, *rit);
+	print_subsubcontent_compare("it[4]", "", rmyit[4], rit[4]);
+	print_subsubcontent_compare("++it", "", *(++rmyit), *(++rit));
+	print_subsubcontent_compare("it++", "", *(rmyit++), *(rit++));
+	print_subsubcontent_compare("--it", "", *(--rmyit), *(--rit));
+	print_subsubcontent_compare("it--", "", *(rmyit--), *(rit--));
+	print_subsubcontent_compare("it += 2", "", *(rmyit += 2), *(rit += 2));
+	print_subsubcontent_compare("it -= 2", "", *(rmyit -= 2), *(rit -= 2));
+	print_subsubcontent_compare("it + 2", "", *(rmyit = rmyit + 2), *(rit = rit + 2));
+	print_subsubcontent_compare("it - 2", "", *(rmyit = rmyit - 2), *(rit = rit - 2));
+	// print_subsubcontent_compare("end() - begin()", "", x.end() - x.begin(), y.end() - y.begin());
+	print_subsubcontent_compare("end() == begin()", "", rmyit == rbmyit, rit == rbit);
+	print_subsubcontent_compare("end() != begin()", "", rmyit != rbmyit, rit != rbit);
+	print_subsubcontent_compare("begin() > end()", "", rbmyit > rmyit, rbit > rit);
+	print_subsubcontent_compare("begin() < end()", "", rbmyit < rmyit, rbit < rit);
+	print_subsubcontent_compare("begin() <= begin()", "", rbmyit <= rbmyit, rbit <= rbit);
+	print_subsubcontent_compare("end() >= end()", "", rmyit >= rmyit, rit >= rit);
+
+	print_subsubcontent_compare("3 + end()", "", *(3 + rmyit), *(3 + rit));
+	print_subsubcontent_compare("end() - (begin() - 3)", "", (rmyit - (rbmyit - 3)), (rit - (rbit - 3)));
+	std::cout << std::endl;
+
+}
