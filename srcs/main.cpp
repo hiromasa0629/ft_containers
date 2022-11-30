@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/29 21:04:41 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 15:27:07 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,17 +20,27 @@ int	main(void)
 {
 		print_header("Fill constructor");
 		print_content("fill constructor: ", "(5, 10)");
-		ft::Vector<int>		x;
-		std::vector<int>	y;
+		ft::Vector<int>		x(5, 10);
+		ft::Vector<int>		w(5, 99);
 
-		for (int i = 0; i < 5; i++)
-			x.insert(x.end(), i);
-		for (int i = 0; i < 5; i++)
-			y.insert(y.end(), i);
+		std::vector<int>	y(5, 10);
+		std::vector<int>	z(5, 99);
+
 		// test_capacity(x, y);
 		// test_element_access(x, y);
-		test_iterator(x, y);
+		// test_iterator(x, y);
 		// test_insert(x, y);
+		x.insert(x.begin(), w.begin() + 5, w.begin() + 3);
+		std::cout << x << std::endl;
+		// std::vector<int>::iterator it = y.erase(y.begin() + 1);
+		// std::cout << y << std::endl;
+		// std::cout << std::distance(it, y.begin());
+		// x.reserve(20);
+		// x.erase(x.begin() + 1);
+		// std::cout << x << std::endl;
+		// x.insert(x.end(), 99);
+		// std::cout << x << std::endl;
+		
 		// for (int i = 0; i < 5; i++)
 		// 	y.push_back(i);
 		// std::vector<int>	a(y);

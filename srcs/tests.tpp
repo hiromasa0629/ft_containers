@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/29 19:32:19 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 14:47:35 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) 
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
 template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
 template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; return (o); }
+template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
 
 template < typename T, typename U >
 void	test_capacity(T x, U y)
@@ -159,13 +159,13 @@ void	test_insert(T x, U y)
 			x.insert(x.end(), i);
 		for (int i = 0; i < 5; i++)
 			y.insert(y.end(), i);
-		myit = x.insert(x.begin(), x.begin() + 7, x.end());
 		
-		for (int i = 7; y.begin() + i != y.end(); i++)
-			std::cout << *(y.begin() + i) << " ";
-			
-		std::cout << std::endl;
-		it = y.insert(y.begin(), y.begin() + 7, y.end());
+		// for (int i = 7; y.begin() + i != y.end(); i++)
+		// 	std::cout << *(y.begin() + i) << " ";	
+		// std::cout << std::endl;
+
+		myit = x.insert(x.begin(), y.begin() + 7, y.end());
+		it = y.insert(y.begin(), x.begin() + 7, x.end());
 		std::stringstream	myss;
 		std::stringstream	ss;
 		myss << ft::distance(myit, x.begin()) << " | ";

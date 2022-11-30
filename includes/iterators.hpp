@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/29 21:08:13 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 14:50:12 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,38 +21,42 @@ struct random_access_iterator_tag {};
 
 template< class T >
 struct iterator_traits {
-	typedef typename T::value_type			value_type;
-	typedef typename T::difference_type		difference_type;
-	typedef typename T::iterator_category	iterator_category;
-	typedef typename T::pointer				pointer;
-	typedef typename T::reference			reference;
+	public:
+		typedef typename T::value_type			value_type;
+		typedef typename T::difference_type		difference_type;
+		typedef typename T::iterator_category	iterator_category;
+		typedef typename T::pointer				pointer;
+		typedef typename T::reference			reference;
 };
 
 template <class T> 
 class iterator_traits<T*> {
-	typedef T							value_type;
-	typedef ptrdiff_t					difference_type;
-	typedef random_access_iterator_tag	iterator_category;
-	typedef	T*							pointer;
-	typedef T&							reference;
+	public:
+		typedef T							value_type;
+		typedef ptrdiff_t					difference_type;
+		typedef random_access_iterator_tag	iterator_category;
+		typedef	T*							pointer;
+		typedef T&							reference;
 };
 
 template <class T> 
 class iterator_traits<const T*> {
-	typedef T							value_type;
-	typedef ptrdiff_t					difference_type;
-	typedef random_access_iterator_tag	iterator_category;
-	typedef	const T*					pointer;
-	typedef const T&					reference;
+	public:
+		typedef T							value_type;
+		typedef ptrdiff_t					difference_type;
+		typedef random_access_iterator_tag	iterator_category;
+		typedef	const T*					pointer;
+		typedef const T&					reference;
 };
 
 template<  class Category, class T,  class Distance = ptrdiff_t, class Pointer = T*, class Reference = T& >
 struct IteratorBase {
-	typedef T			value_type;
-	typedef Distance	difference_type;
-	typedef Pointer		pointer;
-	typedef Reference	reference;
-	typedef Category	iterator_category;
+	public:
+		typedef T			value_type;
+		typedef Distance	difference_type;
+		typedef Pointer		pointer;
+		typedef Reference	reference;
+		typedef Category	iterator_category;
 };
 
 template< class T, class Category = ft::random_access_iterator_tag >
@@ -97,7 +101,7 @@ template< class InputIt >
 typename ft::iterator_traits<InputIt>::difference_type	distance(InputIt first, InputIt last)
 {
 	if (last > first)
-		return (last - first)x;
+		return (last - first);
 	return (first - last);
 }
 
