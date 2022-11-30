@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/26 14:55:16 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/29 19:08:09 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 18:48:50 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,5 +72,8 @@
 
 # define MY 		"My:       "
 # define EXPECTED	"Expected: "
+
+# define TICK "\033[32m\u2705\033[0m"
+# define CROSS "\033[32m\u274C\033[0m"
 
 #endif

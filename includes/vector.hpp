@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 15:28:08 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 21:37:12 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,12 +32,14 @@ class Vector {
 		typedef	const typename allocator_type::const_pointer			const_pointer;
 		typedef ft::RandomAccessIterator<T>								iterator;
 		typedef const ft::RandomAccessIterator<T>						const_iterator;
+		typedef ft::reverse_iterator<iterator>							reverse_iterator;
+		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 		typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
 
 		/* ============================ Member Functions ============================ */
 
 		/* Default constructor */
-		explicit Vector(const allocator_type &alloc = allocator_type()) : _data(NULL), _capacity(1), _size(0), _alloc(alloc) {}
+		explicit Vector(const allocator_type &alloc = allocator_type()) : _data(NULL), _capacity(0), _size(0), _alloc(alloc) {}
 
 		/* Fill construcotr */
 		explicit Vector(size_type n, const value_type &val, const allocator_type &alloc = allocator_type()) : _capacity(n), _size(n), _alloc(alloc)
@@ -47,21 +49,22 @@ class Vector {
 				_alloc.construct(&_data[i], val);
 		}
 
-		/* Copy constructor */
-		Vector(const Vector &src) : _data(NULL), _capacity(src.capacity()), _size(src.size()), _alloc(src.get_allocator()) 
+		/* Copy constructor, shrink to the minimum capacity */
+		Vector(const Vector &src) : _data(NULL), _capacity(src.size()), _size(src.size()), _alloc(src.get_allocator()) 
 		{ 
+			
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < this->size(); i++)
 				_alloc.construct(&(_data[i]), src[i]);
 		}
 
-		/* Copy assignment */
+		/* Copy assignment, shirk to the minimum capacity if the current  */
 		Vector&	operator=(const Vector &rhs)
 		{
 			this->clear();
 			_alloc = rhs.get_allocator();
 			_alloc.deallocate(_data, _capacity);
-			_capacity = rhs.capacity();
+			_capacity = _capacity < rhs.size() ? rhs.size() : _capacity;
 			_size = rhs.size();
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < this->size(); i++)
@@ -73,7 +76,6 @@ class Vector {
 		~Vector(void)
 		{
 			_alloc.deallocate(_data, _capacity);
-			std::cout << DIM << ANGRT << DIM << "Destructing..." << RESET << std::endl;
 		}
 
 		/* Return allocator type */
@@ -160,7 +162,7 @@ class Vector {
 			inserted = 0;
 			if (_size == _capacity)
 			{
-				newdata = _alloc.allocate(_capacity + 1);
+				newdata = _alloc.allocate(_capacity * 2 == 0 ? 1 : _capacity * 2);
 				for (size_type i = 0; (i - inserted) < _size; i++)
 				{
 					if (i == ipos)
@@ -175,7 +177,7 @@ class Vector {
 					_alloc.construct(&(newdata[ipos]), value);
 				this->clear();
 				_alloc.deallocate(_data, _capacity);
-				_capacity += 1;
+				_capacity = _capacity == 0 ? 1 : _capacity * 2;
 				_size = oldsize + 1;
 				_data = newdata;
 			}
@@ -193,7 +195,6 @@ class Vector {
 					_alloc.construct(&(_data[ipos]), value);
 				}
 				_size++;
-				_capacity += 1;
 			}
 			return (iterator(_data + ipos));
 		}
@@ -208,7 +209,7 @@ class Vector {
 			tmppos = pos;
 			for (i = 0; i < count; i++)
 				tmppos = this->insert(tmppos, value);
-			return (iterator(_data + ipos + i - 1));
+			return (iterator(_data + ipos));
 		}
 
 		template< class InputIt >
@@ -227,33 +228,36 @@ class Vector {
 		iterator	erase(iterator pos)
 		{
 			size_type	ipos;
-			pointer		newdata;
-			size_type	i = 0;
-			size_type	found;
 			
 			ipos = ft::distance(pos, this->begin());
-			newdata = _alloc.allocate(_capacity - 1);
-			found = 0;
-			while (i < this->size())
+			_alloc.destroy(&(_data[ipos]));
+			for (size_type i = ipos + 1; i < _size; i++)
 			{
-				if (i == ipos)
-				{
-					found = 1;
-					i++;
-					continue;
-				}
-				_alloc.construct(&(newdata[i - found]), _data[i]);
-				i++;
+				_alloc.construct(&(_data[i - 1]), _data[i]);
+				_alloc.destroy(&(_data[i]));
 			}
-			this->clear();
-			_alloc.deallocate(_data, _capacity);
-			_capacity = _capacity - 1;
-			_size = _capacity;
-			_data = newdata;
+			_size--;
+			return (iterator(_data + ipos));
+		}
+		
+		iterator	erase(iterator first, iterator last)
+		{
+			size_type	ipos;
+			
+			ipos = ft::distance(first, this->begin());
+			for (iterator end = last - 1; end >= first; end--)
+				this->erase(end);
 			return (iterator(_data + ipos));
 		}
 
-		void		resize(size_type n, value_type val = value_type())
+		/* Appends the given element value to the end  */
+		void	push_back(const_reference value) { this->insert(end(), value); }
+		
+		/* Removes the last element of the container. */
+		void	pop_back(void) { _alloc.destroy(&(_data[_size - 1])); _size--; }
+
+		/* Resizes the container to contain n elements. If the current size is less than count, copies of val are appended */
+		void	resize(size_type n, value_type val = value_type())
 		{
 			pointer		newdata;
 			size_type	i;
@@ -267,9 +271,31 @@ class Vector {
 				_alloc.construct(&(newdata[j]), val);
 			this->clear();
 			_alloc.deallocate(_data, _capacity);
-			_capacity = n;
+			_capacity = n < _capacity ? _capacity : n;
 			_size = n;
 			_data = newdata;
+		}
+		
+		/* Exchanges the contents of the container with those of other */
+		void	swap(Vector& other)
+		{
+			size_type		capacity;
+			size_type		size;
+			allocator_type	alloc;
+			pointer			data;
+			
+			data = _data;
+			size = _size;
+			capacity = _capacity;
+			alloc = _alloc;
+			_data = other.data();
+			_size = other.size();
+			_capacity = other.capacity();
+			_alloc = other.get_allocator();
+			other._data = data;
+			other._size = size;
+			other._capacity = capacity;
+			other._alloc = alloc;
 		}
 
 		/* ============================ Element access ============================ */
@@ -300,6 +326,37 @@ class Vector {
 		size_type		_size;
 		allocator_type	_alloc;
 };
+
+template < class T, class Alloc >
+void	swap(ft::Vector<T, Alloc>& lhs, ft::Vector<T, Alloc>& rhs) { lhs.swap(rhs); }
+
+template < class T, class Alloc >
+bool	operator==(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs)
+{
+	if (lhs.size() != rhs.size())
+		return (false);
+	for (size_t i = 0; i < lhs.size(); i++)
+		if (lhs[i] != rhs[i])
+			return (false);
+	return (true);
+}
+
+template < class T, class Alloc >
+bool	operator!=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs)
+{
+	if (lhs.size() == rhs.size())
+		return (false);
+	for (size_t i = 0; i < lhs.size(); i++)
+		if (lhs[i] == rhs[i])
+			return (false);
+	return (true);
+}
+
+template < class T, class Alloc > bool	operator<(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); } 
+template < class T, class Alloc > bool	operator<=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs < rhs); } 
+template < class T, class Alloc > bool	operator>(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (!ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); } 
+template < class T, class Alloc > bool	operator>=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs > rhs); } 
+
 
 }
 

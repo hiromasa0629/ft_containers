@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 14:47:35 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 21:21:48 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,24 +18,52 @@ void									print_subcontent_header(const std::string& lhs, const std::string& 
 template < typename T > void			print_content(const std::string& lhs, T rhs ) { std::cout << ANGRT << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) { std::cout << ANGRT2 << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
-template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T> rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
+template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+
+template < typename T, typename U >
+void	pre_test(T& x, U& y)
+{
+	print_content_header("Pre test: ", "push_back({0, 1, 2, 3, 4})");
+	for (size_t i = 0; i < 5; i++)
+		x.push_back(i);
+	for (size_t i = 0; i < 5; i++)
+		y.push_back(i);
+}
 
 template < typename T, typename U >
 void	test_capacity(T x, U y)
 {
-	print_content_header("Member Functions: ", "Capacity");
+	std::stringstream	s;
+	s << "Capacity [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member Functions: ", s.str());
+	print_subsubcontent_compare("empty()", "", x.empty(), y.empty());
 	print_subsubcontent_compare("size()", "", x.size(), y.size());
 	print_subsubcontent_compare("max_size()", "", x.max_size(), y.max_size());
 	print_subsubcontent_compare("capacity()", "", x.capacity(), y.capacity());
+	x.reserve(10);
+	y.reserve(10);
+	std::stringstream	myss;
+	std::stringstream	ss;
+	myss << x;
+	ss << y;
+	print_subsubcontent_compare("reserve(10): ", "Check capacity", myss.str(), ss.str());
 	std::cout << std::endl;
 }
 
 template < typename T, typename U >
 void	test_element_access(T x, U y)
 {
-	print_content_header("Member functions: ", "Element access");
+	std::stringstream	s;
+	s << "Element access [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
 	print_subsubcontent_compare("operator[2]", "", x[2], y[2]);
 	print_subsubcontent_compare("at(2)", "", x.at(2), y.at(2));
 	print_subcontent_header("at(6) ", "Exception");
@@ -56,7 +84,12 @@ void	test_iterator(T x, U y)
 	std::vector<int>::iterator	it;
 	std::vector<int>::iterator	endit;
 
-	print_content_header("Member functions: ", "Iterators");
+	std::stringstream	s;
+	s << "Iterators [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
 	myit = x.begin();
 	it = y.begin();
 	print_subcontent("it = begin()", "");
@@ -84,14 +117,37 @@ void	test_iterator(T x, U y)
 }
 
 template < typename T, typename U >
+void	test_clear(T x, U y)
+{
+	x.clear();
+	y.clear();
+	std::stringstream	myss;
+	std::stringstream	ss;
+	myss << x;
+	ss << y;
+	print_subsubcontent_compare("clear() ", "", myss.str(), ss.str());
+}
+
+template < typename T, typename U >
 void	test_insert(T x, U y)
 {
+	std::stringstream	s;
+	s << "Modifiers (Insert) [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	T	a(x);
+	U	b(y);
+
 	typename T::iterator	myit;
 	typename U::iterator	it; 
+	typename T::iterator	myit2;
+	typename U::iterator	it2;
 	
 	{
-		myit = x.insert(x.end(), 99);
-		it = y.insert(y.end(), 99);
+		myit = x.insert(x.end(), 5);
+		it = y.insert(y.end(), 5);
 		std::stringstream	myss;
 		std::stringstream	ss;
 		myss << ft::distance(myit, x.begin()) << " | ";
@@ -100,80 +156,279 @@ void	test_insert(T x, U y)
 			myss << x[i] << " ";
 		myss << "| " << x.size() << " | " << x.capacity();
 		ss << y;
-		print_subsubcontent_compare("insert(end(), 99)", "", myss.str(), ss.str());
+		print_subsubcontent_compare("insert(end(), 5)", "", myss.str(), ss.str());
 	}
 	{
-		myit = x.insert(x.begin(), 33);
-		it = y.insert(y.begin(), 33);
+		myit = x.insert(x.begin(), -1);
+		it = y.insert(y.begin(), -1);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << ft::distance(myit, x.begin()) << " | ";
-		ss << ft::distance(it, y.begin()) << " | ";
-		for (size_t i = 0; i < x.size(); i++)
-			myss << x[i] << " ";
-		myss << "| " << x.size() << " | " << x.capacity();
-		ss << y;
-		print_subsubcontent_compare("insert(begin(), 33)", "", myss.str(), ss.str());
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("insert(begin(), -1)", "", myss.str(), ss.str());
 	}
 	{
-		myit = x.insert(x.begin(), 33);
-		it = y.insert(y.begin(), 33);
+		myit = x.insert(x.begin() + 1, 2, 0);
+		it = y.insert(y.begin() + 1, 2, 0);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << ft::distance(myit, x.begin()) << " | ";
-		ss << ft::distance(it, y.begin()) << " | ";
-		for (size_t i = 0; i < x.size(); i++)
-			myss << x[i] << " ";
-		myss << "| " << x.size() << " | " << x.capacity();
-		ss << y;
-		print_subsubcontent_compare("insert(begin(), 33)", "", myss.str(), ss.str());
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("insert(begin(), 2, 0)", "", myss.str(), ss.str());
 	}
-	// {
-	// 	myit = x.insert(x.begin(), 33);
-	// 	it = y.insert(y.begin(), 33);
-	// 	std::stringstream	myss;
-	// 	std::stringstream	ss;
-	// 	myss << ft::distance(myit, x.begin()) << " | ";
-	// 	ss << ft::distance(it, y.begin()) << " | ";
-	// 	for (size_t i = 0; i < x.size(); i++)
-	// 		myss << x[i] << " ";
-	// 	myss << "| " << x.size() << " | " << x.capacity();
-	// 	ss << y;
-	// 	print_subsubcontent_compare("insert(begin(), 33)", "", myss.str(), ss.str());
-	// }
-	// {
-	// 	myit = x.insert(x.begin() + 3, 11);
-	// 	it = y.insert(y.begin() + 3, 11);
-	// 	std::stringstream	myss;
-	// 	std::stringstream	ss;
-	// 	myss << ft::distance(myit, x.begin()) << " | ";
-	// 	ss << ft::distance(it, y.begin()) << " | ";
-	// 	for (size_t i = 0; i < x.size(); i++)
-	// 		myss << x[i] << " ";
-	// 	myss << "| " << x.size() << " | " << x.capacity();
-	// 	ss << y;
-	// 	print_subsubcontent_compare("insert(begin() + 3, 11)", "", myss.str(), ss.str());
-	// }
 	{
-		for (int i = 0; i < 5; i++)
-			x.insert(x.end(), i);
-		for (int i = 0; i < 5; i++)
-			y.insert(y.end(), i);
-		
-		// for (int i = 7; y.begin() + i != y.end(); i++)
-		// 	std::cout << *(y.begin() + i) << " ";	
-		// std::cout << std::endl;
-
-		myit = x.insert(x.begin(), y.begin() + 7, y.end());
-		it = y.insert(y.begin(), x.begin() + 7, x.end());
+		myit = x.insert(x.end(), 2, 5);
+		it = y.insert(y.end() , 2, 5);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << ft::distance(myit, x.begin()) << " | ";
-		ss << ft::distance(it, y.begin()) << " | ";
-		for (size_t i = 0; i < x.size(); i++)
-			myss << x[i] << " ";
-		myss << "| " << x.size() << " | " << x.capacity();
-		ss << y;
-		print_subsubcontent_compare("insert(begin(), begin() + 5, end())", "", myss.str(), ss.str());
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("insert(end(), 2, 5)", "", myss.str(), ss.str());
+	}
+	{
+		myit = x.insert(x.begin(), a.begin(), a.begin() + 4);
+		it = y.insert(y.begin(), b.begin(), b.begin() + 4);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("insert(begin(), a.begin(), a.begin() + 4)", "", myss.str(), ss.str());
+	}
+	{
+		myit = x.insert(x.end(), a.begin(), a.begin() + 4);
+		it = y.insert(y.end(), b.begin(), b.begin() + 4);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("insert(end(), a.begin(), a.begin() + 4)", "", myss.str(), ss.str());
 	}
 }
+
+template < typename T, typename U >
+void	test_erase(T x, U y)
+{
+	std::stringstream	s;
+	s << "Modifiers (Erase) [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	typename T::iterator	myit;
+	typename U::iterator	it;
+	
+	{
+		myit = x.erase(x.begin());
+		it = y.erase(y.begin());
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("erase(begin())", "", myss.str(), ss.str());
+	}
+	{
+		myit = x.erase(x.begin(), x.begin() + 2);
+		it = y.erase(y.begin(), y.begin() + 2);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << ft::distance(myit, x.begin()) << " | " << x;
+		ss << ft::distance(it, y.begin()) << " | " << y;
+		print_subsubcontent_compare("erase(begin(), x.begin() + 2)", "", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_push_back(T x, U y)
+{
+	std::stringstream	s;
+	s << "Modifiers (push_back) [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	{
+		x.push_back(5);
+		y.push_back(5);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("push_back(5)", "", myss.str(), ss.str());
+	}
+	{
+		x.push_back(6);
+		y.push_back(6);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("push_back(6)", "", myss.str(), ss.str());
+	}
+	{
+		T	w(x);
+		U	z(y);
+		w.clear();
+		z.clear();
+		w.push_back(0);
+		z.push_back(0);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << w;
+		ss << z;
+		print_subsubcontent_compare("push_back(0) ", "empty vector", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_pop_back(T x, U y)
+{
+	std::stringstream	s;
+	s << "Modifiers (pop_back) [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	{
+		x.pop_back();
+		y.pop_back();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("pop_back()", "", myss.str(), ss.str());
+	}
+	{
+		x.pop_back();
+		y.pop_back();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("pop_back()", "", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_resize(T x, U y)
+{
+	std::stringstream	s;
+	s << "Modifiers (resize) [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	{
+		x.resize(3, 99);
+		y.resize(3, 99);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("resize(3, 99)", "", myss.str(), ss.str());
+	}
+	{
+		x.resize(10, 99);
+		y.resize(10, 99);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("resize(10, 99)", "", myss.str(), ss.str());
+	}
+	{
+		T	w(x);
+		U	z(y);
+		w.clear();
+		z.clear();
+		w.resize(5, 99);
+		z.resize(5, 99);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << w;
+		ss << z;
+		print_subsubcontent_compare("resize(5, 99) ", "empty vector", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_swap(T x, U y)
+{
+	print_content_header("Member functions: ", "swap");
+	T	w;
+	w.push_back(8);
+	w.push_back(9);
+	U	z;
+	z.push_back(8);
+	z.push_back(9);
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "[" << x << "]  [" << w << "]";
+		ss << "[" << y << "]  [" << z << "]";
+		print_subsubcontent_compare("swap() ", "Before", myss.str(), ss.str());
+	}
+	x.swap(w);
+	z.swap(y);
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "[" << x << "]  [" << w << "]";
+		ss << "[" << y << "]  [" << z << "]";
+		print_subsubcontent_compare("swap() ", "After", myss.str(), ss.str());
+	}
+	print_content_header("Non-Member functions: ", "swap");
+	ft::swap(x, w);
+	std::swap(y, z);
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "[" << x << "]  [" << w << "]";
+		ss << "[" << y << "]  [" << z << "]";
+		print_subsubcontent_compare("ft::swap() ", "After", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_operators_n_lexicographical(T x, U y)
+{
+	T	w;
+	w.push_back(0); w.push_back(2); w.push_back(3); w.push_back(4); w.push_back(5);
+	U	z;
+	z.push_back(0); z.push_back(2); z.push_back(3); z.push_back(4); z.push_back(5);
+	{
+		std::stringstream	s;
+		s << "[" << x << "] < [" << w << "]";
+		print_subsubcontent_compare(s.str(), "", x < w, y < z);
+	}
+	{
+		std::stringstream	s;
+		s << "[" << x << "] > [" << w << "]";
+		print_subsubcontent_compare(s.str(), "", x > w, y > z);
+	}
+	{
+		
+		std::stringstream	s;
+		s << "[" << x << "] <= [" << w << "]";
+		print_subsubcontent_compare(s.str(), "", x <= w, y <= z);
+	}
+	{
+		std::stringstream	s;
+		s << "[" << x << "] >= [" << w << "]";
+		print_subsubcontent_compare(s.str(), "", x >= w, y >= z);
+	}
+	T	a(x);
+	U	b(y);
+	{
+		
+		std::stringstream	s;
+		s << "[" << x << "] <= [" << a << "]";
+		print_subsubcontent_compare(s.str(), "", x <= a, y <= b);
+	}
+	{
+		std::stringstream	s;
+		s << "[" << x << "] >= [" << a << "]";
+		print_subsubcontent_compare(s.str(), "", x >= a, y >= b);
+	}
+}
+
+

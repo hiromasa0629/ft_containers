@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 14:50:12 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 21:36:08 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,12 +78,25 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
 		RandomAccessIterator								operator++(int) { RandomAccessIterator<T>	tmp = *this; _ptr++; return (tmp); }
 		RandomAccessIterator&								operator--(void) { _ptr--; return (*this); }
 		RandomAccessIterator								operator--(int) { RandomAccessIterator<T>	tmp = *this; _ptr--; return (tmp); }
+		
 		bool												operator==(const RandomAccessIterator<T>& rhs) { return (_ptr == rhs._ptr); }
+		bool												operator==(const RandomAccessIterator<T>& rhs) const { return (_ptr == rhs._ptr); }
+		
 		bool												operator!=(const RandomAccessIterator<T>& rhs) { return (_ptr != rhs._ptr); }
+		bool												operator!=(const RandomAccessIterator<T>& rhs) const { return (_ptr != rhs._ptr); }
+		
 		bool												operator<(const RandomAccessIterator<T>& rhs) { return (_ptr < rhs._ptr); }
+		bool												operator<(const RandomAccessIterator<T>& rhs) const { return (_ptr < rhs._ptr); }
+		
 		bool												operator>(const RandomAccessIterator<T>& rhs) { return (_ptr > rhs._ptr); }
+		bool												operator>(const RandomAccessIterator<T>& rhs) const { return (_ptr > rhs._ptr); }
+		
 		bool												operator<=(const RandomAccessIterator<T>& rhs) { return (_ptr <= rhs._ptr); }
+		bool												operator<=(const RandomAccessIterator<T>& rhs) const { return (_ptr <= rhs._ptr); }
+		
 		bool												operator>=(const RandomAccessIterator<T>& rhs) { return (_ptr >= rhs._ptr); }
+		bool												operator>=(const RandomAccessIterator<T>& rhs) const { return (_ptr >= rhs._ptr); }
+		
 		RandomAccessIterator&								operator+=(int n) { _ptr += n; return (*this); }
 		RandomAccessIterator&								operator-=(int n) { _ptr -= n; return (*this); }
 		typename IteratorBase<Category, T>::difference_type	operator-(const RandomAccessIterator<T>& rhs) { return (_ptr - rhs._ptr); };
@@ -95,6 +108,16 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
 		
 		/* Destructor */
 		~RandomAccessIterator(void) {}
+};
+
+template < class Iter >
+class reverse_iterator {
+	typedef Iter													iterator_type;
+	typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
+	typedef typename ft::iterator_traits<Iter>::value_type			value_type;
+	typedef typename ft::iterator_traits<Iter>::difference_type		difference_type;
+	typedef typename ft::iterator_traits<Iter>::pointer				pointer;
+	typedef typename ft::iterator_traits<Iter>::reference			reference;
 };
 
 template< class InputIt >

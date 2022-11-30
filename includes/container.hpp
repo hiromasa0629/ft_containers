@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/26 14:07:42 by hyap             ###   ########.fr       */
+/*   Updated: 2022/11/30 21:28:30 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,19 @@ template<> struct is_integral<unsigned char> : is_integral_base<true, unsigned c
 template<> struct is_integral<unsigned int> : is_integral_base<true, unsigned int> {};
 template<> struct is_integral<unsigned short int> : is_integral_base<true, unsigned short int> {};
 template<> struct is_integral<unsigned long> : is_integral_base<true, unsigned long> {};
+
+template < class InputIt1, class InputIt2 >
+bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)
+{
+	for (; (first1 != last1) && (first2 != last2); ++first1, ++first2)
+	{
+		if (*first1 < *first2)
+            return true;
+        if (*first2 < *first1)
+            return false;
+	}
+	return (first1 == last1) && (first2 != last2);
+}
 
 }
 
