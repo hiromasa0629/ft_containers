@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:27:16 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 01:32:36 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 20:19:55 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,10 @@
 # define TESTS_H
 # include "vector.hpp"
 # include "container.hpp"
+# include "stack.hpp"
 # include <sstream>
 # include <iostream>
+# include <stack>
 
 void										print_header(const std::string& s);
 void										print_content_header(const std::string& lhs, const std::string& rhs);
@@ -25,7 +27,8 @@ template < typename T > void				print_subcontent(const std::string& lhs, T rhs )
 template < typename T > void				print_subsubcontent(const std::string& lhs, T s);
 template < typename T > void				print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected);
 
-template < typename T, typename U > void	pre_test(T& x, U& y);
+template < typename T, typename U > void	pre_test_int(T& x, U& y);
+template < typename T, typename U > void	pre_test_string(T& x, U& y);
 template < typename T, typename U > void	test_capacity(T x, U y);
 template < typename T, typename U > void	test_element_access(T x, U y);
 template < typename T, typename U > void	test_iterator(T x, U y);
@@ -37,5 +40,8 @@ template < typename T, typename U > void	test_resize(T x, U y);
 template < typename T, typename U > void	test_swap(T x, U y);
 template < typename T, typename U > void	test_operators_n_lexicographical(T x, U y);
 template < typename T, typename U > void	test_reverse_iterator(T x, U y);
+
+template < typename T, typename U > void	pre_test_stack(T& x, U& y);
+template < typename T, typename U > void	test_stack(T x, U y);
 
 #endif

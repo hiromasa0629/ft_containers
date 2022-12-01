@@ -6,11 +6,14 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 02:25:45 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 20:22:09 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "tests.hpp"
+
+int	g_correct = 0;
+int	g_total = 0;
 
 void									print_header(const std::string& s) { std::cout << BOLD << RED << HR20 << UNDERLINED << s << RESET_UNDERLINED << HR20 << RESET << std::endl; }
 void									print_content_header(const std::string& lhs, const std::string& rhs) { 	std::cout << ANGRT << BLUE << lhs << YELLOW << rhs << RESET << std::endl; }
@@ -18,19 +21,42 @@ void									print_subcontent_header(const std::string& lhs, const std::string& 
 template < typename T > void			print_content(const std::string& lhs, T rhs ) { std::cout << ANGRT << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) { std::cout << ANGRT2 << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
-template < typename T > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
+template < typename T > 
+void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) 
+{ 
+	bool	same = my == expected ? 1 : 0;
+	if (same) g_correct++;
+	g_total++;
+	print_subcontent_header(header_lhs, header_rhs);
+	std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (same ? TICK : CROSS) << std::endl; 
+	std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;
+}
 template < typename T, typename U > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, U expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const std::vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
-template < typename T > std::ostream&	operator<<(std::ostream& o, const ft::Vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+template < typename T > std::ostream&				operator<<(std::ostream& o, const std::vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+template < typename T > std::ostream&				operator<<(std::ostream& o, const ft::Vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
+template < typename T > std::ostream&				operator<<(std::ostream& o, std::stack<T> rhs) { while (rhs.empty()) { o << rhs.top() << " "; rhs.pop(); } o << "| " << rhs.size(); return (o); }
+template < typename T > std::ostream&				operator<<(std::ostream& o, ft::Stack<T> rhs) { while (rhs.empty()) { o << rhs.top() << " "; rhs.pop(); } o << "| " << rhs.size(); return (o); }
 
 template < typename T, typename U >
-void	pre_test(T& x, U& y)
+void	pre_test_int(T& x, U& y)
 {
 	print_content_header("Pre test: ", "push_back({0, 1, 2, 3, 4})");
 	for (size_t i = 0; i < 5; i++)
 		x.push_back(i);
 	for (size_t i = 0; i < 5; i++)
 		y.push_back(i);
+}
+
+template < typename T, typename U >
+void	pre_test_string(T& x, U& y)
+{
+	print_content_header("Pre test: ", "push_back({\"One\", \"Two\", \"Three\"}})");
+	x.push_back("One");
+	x.push_back("Two");
+	x.push_back("Three");
+	y.push_back("One");
+	y.push_back("Two");
+	y.push_back("Three");
 }
 
 template < typename T, typename U >
@@ -80,8 +106,10 @@ void	test_element_access(T x, U y)
 template < typename T, typename U >
 void	test_iterator(T x, U y)
 {
-	ft::Vector<int>::iterator	myit;
-	std::vector<int>::iterator	it;
+	ft::Vector<int>::iterator			myit;
+	std::vector<int>::iterator			it;
+	ft::Vector<int>::const_iterator		cmyit;
+	std::vector<int>::const_iterator	cit;
 
 	std::stringstream	s;
 	s << "Iterators [";
@@ -110,7 +138,46 @@ void	test_iterator(T x, U y)
 	print_subsubcontent_compare("begin() < end()", "", x.begin() < x.end(), y.begin() < y.end());
 	print_subsubcontent_compare("begin() <= begin()", "", x.begin() <= x.begin(), y.begin() <= y.begin());
 	print_subsubcontent_compare("end() >= end()", "", x.end() >= x.end(), y.end() >= y.end());
-	std::cout << std::endl;
+	
+	s.str(std::string());
+	s << "Modify Iterators [";
+	for (size_t i = 0; i < x.size(); i++)
+		s << x[i] << (i == x.size() - 1 ? "" : ", ");
+	s << "]";
+	print_content_header("Member functions: ", s.str());
+	{
+		myit = x.begin();
+		it = y.begin();
+		*myit = 99;
+		*it = 99;
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("it = begin() ", "*it = 99", myss.str(), ss.str());
+	}
+	{
+		myit = x.begin() + 3;
+		it = y.begin() + 3;
+		*myit = -3;
+		*it = -3;
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("it = begin() + 3 ", "*it = -3", myss.str(), ss.str());
+	}
+	{
+		myit = x.end() - 1;
+		it = y.end() - 1;
+		*myit = 0;
+		*it = 0;
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("it = end() - 1 ", "*it = 0", myss.str(), ss.str());
+	}
 }
 
 template < typename T, typename U >
@@ -431,10 +498,10 @@ void	test_operators_n_lexicographical(T x, U y)
 template < typename T, typename U >
 void	test_reverse_iterator(T x, U y)
 {
-	typename T::reverse_iterator	rmyit(x.end());
-	typename T::reverse_iterator		rbmyit(x.begin());
-	typename U::reverse_iterator	rit(y.end());
-	typename U::reverse_iterator	rbit(y.begin());
+	typename T::reverse_iterator	rmyit(x.rbegin());
+	typename T::reverse_iterator	rbmyit(x.rend());
+	typename U::reverse_iterator	rit(y.rbegin());
+	typename U::reverse_iterator	rbit(y.rend());
 
 	std::stringstream	s;
 	s << "Reverse Iterators [";
@@ -463,6 +530,60 @@ void	test_reverse_iterator(T x, U y)
 
 	print_subsubcontent_compare("3 + end()", "", *(3 + rmyit), *(3 + rit));
 	print_subsubcontent_compare("end() - (begin() - 3)", "", (rmyit - (rbmyit - 3)), (rit - (rbit - 3)));
-	std::cout << std::endl;
-
+	print_subsubcontent_compare("->at(1)", "", rmyit->at(1), rit->at(1));
 }
+
+template < typename T, typename U >
+void	pre_test_stack(T& x, U& y)
+{
+	for (int i = 0; i < 5; i++)
+		x.push(i);
+	for (int i = 0; i < 5; i++)
+		y.push(i);
+}
+
+template < typename T, typename U >
+void	test_stack(T x, U y)
+{
+	print_content_header("Stack: ", "[0, 1, 2, 3, 4]");
+	print_subsubcontent_compare("top()", "", x.top(), y.top());
+	print_subsubcontent_compare("empty()", "", x.empty(), y.empty());
+	print_subsubcontent_compare("size()", "", x.size(), y.size());
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		x.push(5);
+		y.push(5);
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("push(5)", "", myss.str(), ss.str());
+	}
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		x.push(6);
+		y.push(6);
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("push(6)", "", myss.str(), ss.str());
+	}
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		x.pop();
+		y.pop();
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("pop()", "", myss.str(), ss.str());
+	}
+	{
+		std::stringstream	myss;
+		std::stringstream	ss;
+		x.pop();
+		y.pop();
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("pop()", "", myss.str(), ss.str());
+	}
+}
+

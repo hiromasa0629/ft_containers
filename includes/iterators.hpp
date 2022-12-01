@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 02:25:32 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 21:50:36 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,11 @@
 namespace ft {
 
 struct random_access_iterator_tag {};
+struct bidirectional_iterator_tag {};
 
 template< class T >
-struct iterator_traits {
+struct iterator_traits 
+{
 	public:
 		typedef typename T::value_type			value_type;
 		typedef typename T::difference_type		difference_type;
@@ -30,7 +32,8 @@ struct iterator_traits {
 };
 
 template <class T>
-class iterator_traits<T*> {
+class iterator_traits<T*> 
+{
 	public:
 		typedef T							value_type;
 		typedef ptrdiff_t					difference_type;
@@ -40,7 +43,8 @@ class iterator_traits<T*> {
 };
 
 template <class T>
-class iterator_traits<const T*> {
+class iterator_traits<const T*> 
+{
 	public:
 		typedef T							value_type;
 		typedef ptrdiff_t					difference_type;
@@ -50,7 +54,8 @@ class iterator_traits<const T*> {
 };
 
 template<  class Category, class T,  class Distance = ptrdiff_t, class Pointer = T*, class Reference = T& >
-struct IteratorBase {
+struct IteratorBase 
+{
 	public:
 		typedef T			value_type;
 		typedef Distance	difference_type;
@@ -60,7 +65,8 @@ struct IteratorBase {
 };
 
 template< class T, class Category = ft::random_access_iterator_tag >
-struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
+struct RandomAccessIterator : public virtual IteratorBase<Category, T>
+{
 	private:
 		typename IteratorBase<Category, T>::pointer	_ptr;
 
@@ -79,22 +85,11 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
 		RandomAccessIterator&								operator--(void) { _ptr--; return (*this); }
 		RandomAccessIterator								operator--(int) { RandomAccessIterator<T>	tmp = *this; _ptr--; return (tmp); }
 
-		bool												operator==(const RandomAccessIterator<T>& rhs) { return (_ptr == rhs._ptr); }
 		bool												operator==(const RandomAccessIterator<T>& rhs) const { return (_ptr == rhs._ptr); }
-
-		bool												operator!=(const RandomAccessIterator<T>& rhs) { return (_ptr != rhs._ptr); }
 		bool												operator!=(const RandomAccessIterator<T>& rhs) const { return (_ptr != rhs._ptr); }
-
-		bool												operator<(const RandomAccessIterator<T>& rhs) { return (_ptr < rhs._ptr); }
 		bool												operator<(const RandomAccessIterator<T>& rhs) const { return (_ptr < rhs._ptr); }
-
-		bool												operator>(const RandomAccessIterator<T>& rhs) { return (_ptr > rhs._ptr); }
 		bool												operator>(const RandomAccessIterator<T>& rhs) const { return (_ptr > rhs._ptr); }
-
-		bool												operator<=(const RandomAccessIterator<T>& rhs) { return (_ptr <= rhs._ptr); }
 		bool												operator<=(const RandomAccessIterator<T>& rhs) const { return (_ptr <= rhs._ptr); }
-
-		bool												operator>=(const RandomAccessIterator<T>& rhs) { return (_ptr >= rhs._ptr); }
 		bool												operator>=(const RandomAccessIterator<T>& rhs) const { return (_ptr >= rhs._ptr); }
 
 		RandomAccessIterator&								operator+=(int n) { _ptr += n; return (*this); }
@@ -111,7 +106,8 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>{
 };
 
 template < class Iter >
-class reverse_iterator {
+class reverse_iterator 
+{
 	public:
 		typedef Iter													iterator_type;
 		typedef typename ft::iterator_traits<Iter>::iterator_category	iterator_category;
@@ -137,7 +133,6 @@ class reverse_iterator {
 		/* Returns a copy of the base iterator */
 		iterator_type	base(void) const { return(iterator_type(_current)); }
 
-
 		reference			operator*(void) const { return (*(_current - 1)); }
 		reverse_iterator	operator+(difference_type n) const { return (reverse_iterator(_current - n)); }
 		reverse_iterator	operator-(difference_type n) const { return (reverse_iterator(_current + n)); }
@@ -147,7 +142,7 @@ class reverse_iterator {
 		reverse_iterator&	operator--(void) { _current++; return (*this); }
 		reverse_iterator	operator--(int) { iterator_type tmp = _current; _current++; return (reverse_iterator(tmp)); }
 		reverse_iterator&	operator-=(difference_type n) { _current += n; return (*this); }
-		pointer				operator->(void) const { return (&(*this)); }
+		pointer				operator->(void) const { return (&(operator*())); }
 		reference			operator[](difference_type n) const { return *(_current - n - 1); }
 
 		template < class Iterator > friend bool	operator==(const reverse_iterator<Iterator>& lhs, const reverse_iterator<Iterator>& rhs) { return (lhs.base() == rhs.base()); }
@@ -163,6 +158,15 @@ class reverse_iterator {
 	protected:
 		iterator_type	_current;
 };
+
+template < class T, class Category = ft::bidirectional_iterator_tag >
+struct BiderectionalIterator : public virtual IteratorBase<Category, T>
+{
+	private:
+		typename IteratorBase<Category, T>::pointer	_ptr;
+	
+};
+
 
 template< class InputIt >
 typename ft::iterator_traits<InputIt>::difference_type	distance(InputIt first, InputIt last)

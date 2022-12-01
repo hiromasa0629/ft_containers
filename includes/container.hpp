@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 21:28:30 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 20:55:25 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,44 @@ template<> struct is_integral<unsigned char> : is_integral_base<true, unsigned c
 template<> struct is_integral<unsigned int> : is_integral_base<true, unsigned int> {};
 template<> struct is_integral<unsigned short int> : is_integral_base<true, unsigned short int> {};
 template<> struct is_integral<unsigned long> : is_integral_base<true, unsigned long> {};
+
+template < class T1, class T2 >
+struct pair
+{
+	typedef T1	first_type;
+	typedef T2	second_type;
+
+	first_type	first;
+	second_type	second;
+
+	/* Default constructor */
+	pair(void) : first(first_type()), second(second_type());
+	/* Copy constructor */
+	template < class U, class V > pair(const pair<U, V>& src) : first(src.first), second(src.second) {}
+	/* Initialization */
+	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
+	/* Copy assignment */
+	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
+};
+
+template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }
+template < class T1, class T2 > bool	operator!=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs == rhs)); }
+template < class T1, class T2 > bool	operator<(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) 
+{ 
+	if (lhs.first < rhs.first) 
+		return (true); 
+	else if (lhs.first > rhs.first)
+		return (false);
+	if (lhs.second < lhs.second)
+		return (true);
+	else if (lhs.second > rhs.second)
+		return (false);
+	return (false);
+}
+template < class T1, class T2 > bool	operator<=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs == rhs || lhs < rhs); }
+template < class T1, class T2 > bool	operator>(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs <= rhs)); }
+template < class T1, class T2 > bool	operator>=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs < rhs)); }
+
 
 template < class InputIt1, class InputIt2 >
 bool	lexicographical_compare(InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2)

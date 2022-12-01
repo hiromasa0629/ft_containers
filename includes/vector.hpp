@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/11/30 21:37:12 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/01 20:28:43 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@
 namespace ft {
 
 template <typename T, typename Allocator = std::allocator<T> >
-class Vector {
+class Vector 
+{
 	public:
 		typedef typename std::size_t									size_type;
 		typedef	Allocator												allocator_type;
@@ -75,6 +76,7 @@ class Vector {
 		/* Destructor */
 		~Vector(void)
 		{
+			this->clear();
 			_alloc.deallocate(_data, _capacity);
 		}
 
@@ -313,10 +315,14 @@ class Vector {
 		const value_type*	data(void) const { return (_data); }					/* Returns a const direct pointer to the memory array */
 
 		/* ============================ Iterator ============================ */
-		iterator		begin(void) { return (_data); }
-		const_iterator	begin(void) const { return (_data); }
-		iterator		end(void) { return (&(_data[_size])); }
-		const_iterator	end(void) const { return (&(_data[_size])); }
+		iterator				begin(void) { return (_data); }
+		const_iterator			begin(void) const { return (_data); }
+		reverse_iterator		rbegin(void) { return (reverse_iterator(this->end())); }
+		const_reverse_iterator	rbegin(void) const { return (reverse_iterator(this->end())); }
+		iterator				end(void) { return (&(_data[_size])); }
+		const_iterator			end(void) const { return (&(_data[_size])); }
+		reverse_iterator		rend(void) { return (reverse_iterator(this->begin())); }
+		const_reverse_iterator	rend(void) const { return (reverse_iterator(this->begin())); }
 
 
 
@@ -359,5 +365,7 @@ template < class T, class Alloc > bool	operator>=(const ft::Vector<T, Alloc>& lh
 
 
 }
+
+
 
 #endif
