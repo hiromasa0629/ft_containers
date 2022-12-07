@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 21:00:40 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/07 21:32:01 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 # include "container.hpp"
 # include <iostream>
 # include <map>
+# include "trees.hpp"
 
 template < class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< ft::pair<const Key, T> > >
 class Map
@@ -31,7 +32,12 @@ class Map
 		typedef const value_type&					const_reference;
 		typedef typename allocator_type::pointer	pointer;
 		typedef	typename allocator_type::pointer	const_pointer;
-}
+		
+		map(void)
+		
+	private:
+		
+};
 
 
 #endif

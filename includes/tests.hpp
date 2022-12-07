@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:27:16 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 20:19:55 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/07 21:11:52 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,5 +43,7 @@ template < typename T, typename U > void	test_reverse_iterator(T x, U y);
 
 template < typename T, typename U > void	pre_test_stack(T& x, U& y);
 template < typename T, typename U > void	test_stack(T x, U y);
+
+template < typename T, typename U > void	test_pair(T x, U y);
 
 #endif

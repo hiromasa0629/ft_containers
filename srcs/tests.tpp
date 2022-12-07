@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 20:22:09 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/07 21:11:34 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -587,3 +587,18 @@ void	test_stack(T x, U y)
 	}
 }
 
+template < typename T, typename U >
+void	test_pair(T x, U y)
+{
+	T	mypair("Hi there", 20);
+	U	pair("Hi there", 20);
+	
+	print_content_header("pair<std::string, int>: ", "( Hello world, 10 ) ( Hi there, 20 )");
+	print_subsubcontent_compare("( Hello world, 10 ) < ( Hi there, 20 )", "", x < mypair, y < pair);
+	print_subsubcontent_compare("( Hello world, 10 ) <= ( Hi there, 20 )", "", x <= mypair, y <= pair);
+	print_subsubcontent_compare("( Hello world, 10 ) > ( Hi there, 20 )", "", x > mypair, y > pair);
+	print_subsubcontent_compare("( Hello world, 10 ) >= ( Hi there, 20 )", "", x >= mypair, y >= pair);
+	print_subsubcontent_compare("( Hello world, 10 ) == ( Hi there, 20 )", "", x == mypair, y == pair);
+	print_subsubcontent_compare("( Hello world, 10 ) != ( Hi there, 20 )", "", x != mypair, y != pair);
+	
+}
