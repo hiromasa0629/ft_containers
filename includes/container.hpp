@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/07 21:30:19 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/08 20:52:05 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,6 +90,14 @@ template < class T1, class T2 > bool	operator<(const ft::pair<T1, T2>& lhs, cons
 template < class T1, class T2 > bool	operator<=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs == rhs || lhs < rhs); }
 template < class T1, class T2 > bool	operator>(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs <= rhs)); }
 template < class T1, class T2 > bool	operator>=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs < rhs)); }
+
+/* ============================ std::make_pair ============================ */
+template < class T1, class T2 >
+ft::pair<T1, T2> make_pair(T1 t, T2 u)
+{
+	ft::pair<T1, T2>	newpair(t, u);
+	return (newpair);
+}
 
 /* ============================ lexicographical compare ============================ */
 template < class InputIt1, class InputIt2 >

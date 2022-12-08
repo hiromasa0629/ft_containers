@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/07 21:21:24 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/08 21:04:16 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 #include <sstream>
 #include "tests.hpp"
 #include "tests.tpp"
+#include <functional>
 
 int	main(void)
 {
@@ -65,7 +66,8 @@ int	main(void)
 	// 	test_pair(x, y);
 	// }
 	
-	
+	// std::cout << std::less<std::string>() << std::endl;
+	std::cout << std::less<std::string>()("Hello world", "Hi there") << std::endl;
 	
 	return (0);
 }

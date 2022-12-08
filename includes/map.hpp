@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/07 21:32:01 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/08 21:41:41 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,24 @@ template < class Key, class T, class Compare = std::less<Key>, class Allocator =
 class Map
 {
 	public:
-		typedef Key									key_type;
-		typedef T									mapped_type;
-		typedef std::pair<const Key, T>				value_type;
-		typedef typename std::size_t				size_type;
-		typedef typename std::ptrdiff_t				difference_type;
-		typedef Compare								key_compare;
-		typedef Allocator							allocator_type;
-		typedef value_type&							reference;
-		typedef const value_type&					const_reference;
-		typedef typename allocator_type::pointer	pointer;
-		typedef	typename allocator_type::pointer	const_pointer;
+		typedef Key											key_type;
+		typedef T											mapped_type;
+		typedef std::pair<const Key, T>						value_type;
+		typedef typename std::size_t						size_type;
+		typedef typename std::ptrdiff_t						difference_type;
+		typedef Compare										key_compare;
+		typedef Allocator									allocator_type;
+		typedef value_type&									reference;
+		typedef const value_type&							const_reference;
+		typedef typename allocator_type::pointer			pointer;
+		typedef	typename allocator_type::pointer			const_pointer;
 		
-		map(void)
+		typedef ft::RBTTree<T, key_compare>					RBTTree;
+		
+		map(void) : _tree(RBTTree()) {}
 		
 	private:
-		
+		RBTTree*	_tree;
 };
 
 

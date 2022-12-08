@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 21:50:36 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/08 21:41:22 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,6 +104,20 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>
 		/* Destructor */
 		~RandomAccessIterator(void) {}
 };
+
+template < class T, class Category = ft::bidirectional_iterator_tag >
+struct BidirectionalIterator : public virtual IteratorBase<Category, T>
+{
+	private:
+		typename IteratorBase<Category, T>::pointer	_ptr;
+	
+	public:
+		BidirectionalIterator(void) : _ptr(NULL) {}
+		BidirectionalIterator(typename IteratorBase<Category, T>::pointer ptr) : _ptr(ptr) {}
+		BidirectionalIterator&	operator=(const BidirectionalIterator& rhs) { _ptr = rhs._ptr; return (*this); }
+		
+		
+}
 
 template < class Iter >
 class reverse_iterator 
