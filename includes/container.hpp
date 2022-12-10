@@ -6,25 +6,18 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 20:47:26 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 21:36:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONTAINER_H
 # define CONTAINER_H
 # include <iostream>
-# include <iterator>
-# include <vector>
-# include <map>
-# include <stack>
-# include <functional>
 # include <memory>
-# include "trees.hpp"
-# include "map.hpp"
-# include "vector.hpp"
-# include "iterators.hpp"
-# include "stack.hpp"
-# include "colors.hpp"
+# include <functional>
+# include <map>
+# include <vector>
+# include <stack>
 
 namespace ft {
 

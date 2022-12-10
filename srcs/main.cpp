@@ -6,10 +6,13 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 20:43:55 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 21:35:54 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "vector.hpp"
+#include "map.hpp"
+#include "stack.hpp"
 #include "container.hpp"
 
 template < typename T >

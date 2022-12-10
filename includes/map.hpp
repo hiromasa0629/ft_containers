@@ -6,13 +6,15 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 20:49:47 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 21:08:07 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MAP_H
 # define MAP_H
 # include "container.hpp"
+# include "iterators.hpp"
+# include "trees.hpp"
 
 namespace ft {
 
@@ -35,6 +37,7 @@ class Map
 		class value_compare : std::binary_function<value_type, value_type, bool>
 		{
 			friend class Map;
+
 			protected:
 				key_compare	comp;
 				value_compare(key_compare c) : comp(c) { /* std::cout << "value_compare()" << std::endl; */ }

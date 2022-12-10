@@ -6,13 +6,14 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 15:42:13 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 20:44:07 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 21:08:22 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef STACK_H
 # define STACK_H
 # include "container.hpp"
+# include "vector.hpp"
 
 namespace ft {
 	

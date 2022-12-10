@@ -6,13 +6,14 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 20:44:00 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 21:37:40 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREES_H
 # define TREES_H
 # include "container.hpp"
+# include "iterators.hpp"
 
 namespace ft {
 
@@ -45,8 +46,8 @@ class RBTree
 		typedef T											value_type;
 		typedef	std::allocator<T>							allocator_type;
 		typedef std::allocator<node_type>					node_allocator;
-		typedef ft::BidirectionalIterator<value_type>		iterator;
-		typedef const ft::BidirectionalIterator<value_type>	const_iterator;
+		typedef ft::BidirectionalIterator<node_type>		iterator;
+		typedef const ft::BidirectionalIterator<node_type>	const_iterator;
 
 		/* Construct an empty RBT Tree */
 		RBTree(const value_compare& compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
@@ -228,9 +229,9 @@ class RBTree
 			if (rbt_key_issame(*(node->content), content))
 				return (node);
 			if (_compare(content, *(node->content)))
-				return (ft_rbt_search(node->left, content));
+				return (rbt_search(node->left, content));
 			else
-				return (ft_rbt_search(node->right, content));
+				return (rbt_search(node->right, content));
 		}
 };
 
