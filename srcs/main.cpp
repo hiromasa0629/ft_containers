@@ -6,17 +6,17 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/09 15:26:33 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 20:43:55 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "vector.hpp"
-#include "colors.hpp"
-#include <sstream>
-#include "tests.hpp"
-#include "tests.tpp"
-#include <functional>
-#include "map.hpp"
+#include "container.hpp"
+
+template < typename T >
+void	myprint(T value)
+{
+	std::cout << value;
+}
 
 int	main(void)
 {
@@ -67,16 +67,24 @@ int	main(void)
 	// 	test_pair(x, y);
 	// }
 
-	// std::cout << std::less<std::string>() << std::endl;
-	// std::cout << std::less<std::string>()("Hello world", "Hi there") << std::endl;
+	ft::Map<int, std::string>	x;
+	std::map<int, std::string>	y;
+	
+	ft::pair<int, std::string>	p10(10, std::string("ten"));
+	ft::pair<int, std::string>	p5(5, std::string("five"));
+	ft::pair<int, std::string>	p15(15, std::string("fifteen"));
+	ft::pair<int, std::string>	p7(8, std::string("eight"));
+	ft::pair<int, std::string>	p1(1, std::string("one"));
+	ft::pair<int, std::string>	p6(6, std::string("six"));
+	ft::pair<int, std::string>	p8(7, std::string("seven"));
 
-	ft::Map<std::string, int>	x;
-	std::map<std::string, int>	y;
-
-	ft::pair<std::string, int>	pair = ft::make_pair(std::string("one"), 1);
-
-	x.insert(pair);
-	y.insert(std::make_pair(std::string("one"), 1));
-
+	x.insert(p10);
+	x.insert(p5);
+	x.insert(p15);
+	x.insert(p7);
+	x.insert(p1);
+	x.insert(p6);
+	x.insert(p8);
+	x.print_tree(myprint);
 	return (0);
 }

@@ -6,17 +6,13 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/01 20:28:43 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 20:44:13 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef VECTOR_H
 # define VECTOR_H
-# include <iostream>
-# include <vector>
 # include "container.hpp"
-# include "iterators.hpp"
-# include "colors.hpp"
 
 namespace ft {
 

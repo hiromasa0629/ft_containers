@@ -6,13 +6,12 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/09 01:37:30 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 20:43:10 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef ITERATORS_H
 # define ITERATORS_H
-# include <iterator>
 # include "container.hpp"
 
 namespace ft {
@@ -108,12 +107,14 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>
 template < class T, class Category = ft::bidirectional_iterator_tag >
 struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 {
+	typedef ft::RBTNode<T>	node_type;
+	
 	private:
-		typename IteratorBase<Category, T>::pointer	_ptr;
+		typename IteratorBase<Category, node_type>::pointer	_ptr;
 
 	public:
 		BidirectionalIterator(void) : _ptr(NULL) {}
-		BidirectionalIterator(typename IteratorBase<Category, T>::pointer ptr) : _ptr(ptr) {}
+		BidirectionalIterator(typename IteratorBase<Category, node_type>::pointer ptr) : _ptr(ptr) {}
 		BidirectionalIterator&	operator=(const BidirectionalIterator& rhs) { _ptr = rhs._ptr; return (*this); }
 
 

@@ -6,15 +6,13 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/09 16:58:18 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 20:44:00 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef TREES_H
 # define TREES_H
 # include "container.hpp"
-# include "iterators.hpp"
-# include "map.hpp"
 
 namespace ft {
 
@@ -40,7 +38,7 @@ struct RBTNode : public Node<T, RBTNode<T> >
 };
 
 template < class T, class value_compare >
-class RBTTree
+class RBTree
 {
 	public:
 		typedef struct RBTNode<T>							node_type;
@@ -51,15 +49,18 @@ class RBTTree
 		typedef const ft::BidirectionalIterator<value_type>	const_iterator;
 
 		/* Construct an empty RBT Tree */
-		RBTTree(const value_compare& compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
+		RBTree(const value_compare& compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
 			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _compare(compare) {}
 
-		ft::pair<iterator, bool>	rbt_insert(const value_type& value)
+		ft::pair<iterator, bool>	rbt_insert(const value_type& content)
 		{
 			node_type*	inserted;
-
-			inserted = rbt_preinsert(&_root, value, _nil);
+			
+			if ((inserted = rbt_search(_root, content)))
+				return (ft::make_pair(iterator(inserted), false));
+			inserted = rbt_preinsert(&_root, content, _nil);
 			rbt_insert_fixup(&_root, inserted);
+			return (ft::make_pair(iterator(inserted), true));
 		}
 
 		void		rbt_iter(void (*f)(value_type *)) { rbt_iter(_root, f); }
@@ -87,16 +88,18 @@ class RBTTree
 			return (newnode);
 		}
 
-		node_type*	rbt_new(const value_type& value, node_type* parent)
+		node_type*	rbt_new(const value_type& content, node_type* parent)
 		{
 			node_type*	newnode;
 
-			newnode = _alloc.allocate(1);
+			newnode = _node_alloc.allocate(1);
 			newnode->color = nodeRED;
-			newnode->content = value;
+			newnode->content = _alloc.allocate(1);
+			_alloc.construct(newnode->content, content);
 			newnode->parent = parent;
 			newnode->left = _nil;
 			newnode->right = _nil;
+			return (newnode);
 		}
 
 		node_type*	rbt_preinsert(node_type** node, const value_type& content, node_type* parent)
@@ -106,7 +109,7 @@ class RBTTree
 				*node = rbt_new(content, parent);
 				return (*node);
 			}
-			else if (_compare(content, (*node)->content))
+			else if (_compare(content, *((*node)->content)))
 				return (rbt_preinsert(&((*node)->left), content, *node));
 			else
 				return (rbt_preinsert(&((*node)->right), content, *node));
@@ -206,13 +209,29 @@ class RBTTree
 
 		void		rbt_iter(node_type* root, void (*f)(value_type *))
 		{
-			if (!rbt_isnil(root))
+			if (!rbt_isnil(root->left))
 				rbt_iter(root->left, f);
 			f(root->content);
+			if (!rbt_isnil(root->parent))
+				std::cout << " | parent: " << root->parent->content->first << " " << root->parent->content->second;
+			std::cout << (root->color == nodeRED ? " | RED" : " | BLACK") << std::endl;
 			if (!rbt_isnil(root->right))
 				rbt_iter(root->right, f);
 		}
 
+		bool		rbt_key_issame(const value_type& lhs, const value_type& rhs) { return (lhs.first == rhs.first); }
+
+		node_type*	rbt_search(node_type *node, const value_type& content)
+		{
+			if (node == _nil)
+				return (NULL);
+			if (rbt_key_issame(*(node->content), content))
+				return (node);
+			if (_compare(content, *(node->content)))
+				return (ft_rbt_search(node->left, content));
+			else
+				return (ft_rbt_search(node->right, content));
+		}
 };
 
 }

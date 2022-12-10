@@ -6,13 +6,25 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/09 15:29:31 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/10 20:47:26 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CONTAINER_H
 # define CONTAINER_H
 # include <iostream>
+# include <iterator>
+# include <vector>
+# include <map>
+# include <stack>
+# include <functional>
+# include <memory>
+# include "trees.hpp"
+# include "map.hpp"
+# include "vector.hpp"
+# include "iterators.hpp"
+# include "stack.hpp"
+# include "colors.hpp"
 
 namespace ft {
 
@@ -71,6 +83,8 @@ struct pair
 	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 	/* Copy assignment */
 	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
+	
+	friend std::ostream&	operator<<(std::ostream& o, const pair* rhs) { std::cout << "first: " << rhs->first << " | second: " << rhs->second; return (o); }
 };
 
 template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }

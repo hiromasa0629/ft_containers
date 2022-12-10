@@ -1,3 +1,3 @@
-main.o: srcs/main.cpp includes/vector.hpp includes/container.hpp \
-  includes/iterators.hpp includes/colors.hpp includes/tests.hpp \
-  includes/stack.hpp srcs/tests.tpp includes/map.hpp includes/trees.hpp
+main.o: srcs/main.cpp includes/container.hpp includes/trees.hpp \
+  includes/map.hpp includes/vector.hpp includes/iterators.hpp \
+  includes/stack.hpp includes/colors.hpp
