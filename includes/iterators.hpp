@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/08 21:41:22 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/09 01:37:30 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ struct random_access_iterator_tag {};
 struct bidirectional_iterator_tag {};
 
 template< class T >
-struct iterator_traits 
+struct iterator_traits
 {
 	public:
 		typedef typename T::value_type			value_type;
@@ -32,7 +32,7 @@ struct iterator_traits
 };
 
 template <class T>
-class iterator_traits<T*> 
+class iterator_traits<T*>
 {
 	public:
 		typedef T							value_type;
@@ -43,7 +43,7 @@ class iterator_traits<T*>
 };
 
 template <class T>
-class iterator_traits<const T*> 
+class iterator_traits<const T*>
 {
 	public:
 		typedef T							value_type;
@@ -54,7 +54,7 @@ class iterator_traits<const T*>
 };
 
 template<  class Category, class T,  class Distance = ptrdiff_t, class Pointer = T*, class Reference = T& >
-struct IteratorBase 
+struct IteratorBase
 {
 	public:
 		typedef T			value_type;
@@ -110,17 +110,17 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 {
 	private:
 		typename IteratorBase<Category, T>::pointer	_ptr;
-	
+
 	public:
 		BidirectionalIterator(void) : _ptr(NULL) {}
 		BidirectionalIterator(typename IteratorBase<Category, T>::pointer ptr) : _ptr(ptr) {}
 		BidirectionalIterator&	operator=(const BidirectionalIterator& rhs) { _ptr = rhs._ptr; return (*this); }
-		
-		
-}
+
+
+};
 
 template < class Iter >
-class reverse_iterator 
+class reverse_iterator
 {
 	public:
 		typedef Iter													iterator_type;
@@ -178,7 +178,7 @@ struct BiderectionalIterator : public virtual IteratorBase<Category, T>
 {
 	private:
 		typename IteratorBase<Category, T>::pointer	_ptr;
-	
+
 };
 
 

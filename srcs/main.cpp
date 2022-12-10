@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/08 21:04:16 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/09 15:26:33 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "tests.hpp"
 #include "tests.tpp"
 #include <functional>
+#include "map.hpp"
 
 int	main(void)
 {
@@ -24,7 +25,7 @@ int	main(void)
 	// 	ft::Vector<int>		x;
 	// 	std::vector<int>	y;
 	// 	pre_test_int(x, y);
-	// 	pre_test_string(x, y);
+	// 	// pre_test_string(x, y);
 	// 	test_element_access(x, y);
 	// 	test_capacity(x, y);
 	// 	test_iterator(x, y);
@@ -59,15 +60,23 @@ int	main(void)
 	// 		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
 	// 	std::cout << ss.str() << std::endl;
 	// }
-	
+
 	// {		// Pair Tests
 	// 	ft::pair<std::string, int>	x("Hello world", 10);
 	// 	std::pair<std::string, int>	y("Hello world", 10);
 	// 	test_pair(x, y);
 	// }
-	
+
 	// std::cout << std::less<std::string>() << std::endl;
-	std::cout << std::less<std::string>()("Hello world", "Hi there") << std::endl;
-	
+	// std::cout << std::less<std::string>()("Hello world", "Hi there") << std::endl;
+
+	ft::Map<std::string, int>	x;
+	std::map<std::string, int>	y;
+
+	ft::pair<std::string, int>	pair = ft::make_pair(std::string("one"), 1);
+
+	x.insert(pair);
+	y.insert(std::make_pair(std::string("one"), 1));
+
 	return (0);
 }

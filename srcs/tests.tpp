@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/07 21:11:34 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/09 01:38:39 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void									print_subcontent_header(const std::string& lhs, const std::string& 
 template < typename T > void			print_content(const std::string& lhs, T rhs ) { std::cout << ANGRT << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subcontent(const std::string& lhs, T rhs ) { std::cout << ANGRT2 << DIM << lhs << RESET << rhs << std::endl; }
 template < typename T > void			print_subsubcontent(const std::string& lhs, T s) { std::cout << ANGRT3 << DIM << lhs << RESET << s << std::endl;  }
-template < typename T > 
-void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected ) 
-{ 
+template < typename T >
+void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, T expected )
+{
 	bool	same = my == expected ? 1 : 0;
 	if (same) g_correct++;
 	g_total++;
 	print_subcontent_header(header_lhs, header_rhs);
-	std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (same ? TICK : CROSS) << std::endl; 
+	std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (same ? TICK : CROSS) << std::endl;
 	std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;
 }
 template < typename T, typename U > void			print_subsubcontent_compare(const std::string& header_lhs, const std::string& header_rhs , T my, U expected ) { print_subcontent_header(header_lhs, header_rhs); std::cout << ANGRT3 << DIM << "My:       " << RESET << my << " " << (my == expected ? TICK : CROSS) << std::endl; std::cout << ANGRT3 << DIM << "Expected: " << RESET << expected << std::endl;  }
@@ -138,7 +138,7 @@ void	test_iterator(T x, U y)
 	print_subsubcontent_compare("begin() < end()", "", x.begin() < x.end(), y.begin() < y.end());
 	print_subsubcontent_compare("begin() <= begin()", "", x.begin() <= x.begin(), y.begin() <= y.begin());
 	print_subsubcontent_compare("end() >= end()", "", x.end() >= x.end(), y.end() >= y.end());
-	
+
 	s.str(std::string());
 	s << "Modify Iterators [";
 	for (size_t i = 0; i < x.size(); i++)
@@ -530,7 +530,7 @@ void	test_reverse_iterator(T x, U y)
 
 	print_subsubcontent_compare("3 + end()", "", *(3 + rmyit), *(3 + rit));
 	print_subsubcontent_compare("end() - (begin() - 3)", "", (rmyit - (rbmyit - 3)), (rit - (rbit - 3)));
-	print_subsubcontent_compare("->at(1)", "", rmyit->at(1), rit->at(1));
+	// print_subsubcontent_compare("->at(1)", "", rmyit->at(1), rit->at(1));
 }
 
 template < typename T, typename U >
@@ -592,7 +592,7 @@ void	test_pair(T x, U y)
 {
 	T	mypair("Hi there", 20);
 	U	pair("Hi there", 20);
-	
+
 	print_content_header("pair<std::string, int>: ", "( Hello world, 10 ) ( Hi there, 20 )");
 	print_subsubcontent_compare("( Hello world, 10 ) < ( Hi there, 20 )", "", x < mypair, y < pair);
 	print_subsubcontent_compare("( Hello world, 10 ) <= ( Hi there, 20 )", "", x <= mypair, y <= pair);
@@ -600,5 +600,5 @@ void	test_pair(T x, U y)
 	print_subsubcontent_compare("( Hello world, 10 ) >= ( Hi there, 20 )", "", x >= mypair, y >= pair);
 	print_subsubcontent_compare("( Hello world, 10 ) == ( Hi there, 20 )", "", x == mypair, y == pair);
 	print_subsubcontent_compare("( Hello world, 10 ) != ( Hi there, 20 )", "", x != mypair, y != pair);
-	
+
 }

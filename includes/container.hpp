@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/08 20:52:05 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/09 15:29:31 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ struct pair
 	/* Default constructor */
 	pair(void) : first(first_type()), second(second_type()) {}
 	/* Copy constructor */
-	template < class U, class V > pair(const pair<U, V>& src) : first(src.first), second(src.second) {}
+	pair(const pair& src) : first(src.first), second(src.second) {}
 	/* Initialization */
 	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 	/* Copy assignment */
@@ -75,10 +75,10 @@ struct pair
 
 template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }
 template < class T1, class T2 > bool	operator!=(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (!(lhs == rhs)); }
-template < class T1, class T2 > bool	operator<(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) 
-{ 
-	if (lhs.first < rhs.first) 
-		return (true); 
+template < class T1, class T2 > bool	operator<(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs)
+{
+	if (lhs.first < rhs.first)
+		return (true);
 	else if (lhs.first > rhs.first)
 		return (false);
 	if (lhs.second < lhs.second)
