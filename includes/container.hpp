@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 21:36:45 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/12 10:49:49 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,27 @@
 # include <stack>
 
 namespace ft {
+
+enum color {
+	nodeRED,
+	nodeBLACK
+};
+
+/* ============================ Tree nodes struct ============================ */
+template < class T, class NodeType >
+struct Node
+{
+	T*			content;
+	NodeType*	parent;
+	NodeType*	left;
+	NodeType*	right;
+};
+
+template < class T >
+struct RBTNode : public Node<T, RBTNode<T> >
+{
+	enum color	color;
+};
 
 /* ============================ Enable if ============================ */
 template< bool B, class T = void >
@@ -76,7 +97,7 @@ struct pair
 	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 	/* Copy assignment */
 	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
-	
+
 	friend std::ostream&	operator<<(std::ostream& o, const pair* rhs) { std::cout << "first: " << rhs->first << " | second: " << rhs->second; return (o); }
 };
 

@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/09 01:38:39 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/12 11:25:42 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -600,5 +600,4 @@ void	test_pair(T x, U y)
 	print_subsubcontent_compare("( Hello world, 10 ) >= ( Hi there, 20 )", "", x >= mypair, y >= pair);
 	print_subsubcontent_compare("( Hello world, 10 ) == ( Hi there, 20 )", "", x == mypair, y == pair);
 	print_subsubcontent_compare("( Hello world, 10 ) != ( Hi there, 20 )", "", x != mypair, y != pair);
-
 }

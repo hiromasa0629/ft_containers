@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 21:35:54 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/12 11:11:13 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "map.hpp"
 #include "stack.hpp"
 #include "container.hpp"
+#include <iterator>
+#include <map>
 
 template < typename T >
 void	myprint(T value)
@@ -72,7 +74,6 @@ int	main(void)
 
 	ft::Map<int, std::string>	x;
 	std::map<int, std::string>	y;
-	
 	ft::pair<int, std::string>	p10(10, std::string("ten"));
 	ft::pair<int, std::string>	p5(5, std::string("five"));
 	ft::pair<int, std::string>	p15(15, std::string("fifteen"));
@@ -80,14 +81,34 @@ int	main(void)
 	ft::pair<int, std::string>	p1(1, std::string("one"));
 	ft::pair<int, std::string>	p6(6, std::string("six"));
 	ft::pair<int, std::string>	p8(7, std::string("seven"));
-
+	ft::pair<ft::Map<int, std::string>::iterator, bool>	it;
 	x.insert(p10);
 	x.insert(p5);
 	x.insert(p15);
 	x.insert(p7);
-	x.insert(p1);
+	it = x.insert(p1);
 	x.insert(p6);
 	x.insert(p8);
+	std::cout << it.first->first << std::endl;
 	x.print_tree(myprint);
+
+	// std::map<int, std::string>	x;
+	// std::map<int, std::string>	y;
+	// std::pair<int, std::string>	p10(10, std::string("ten"));
+	// std::pair<int, std::string>	p5(5, std::string("five"));
+	// std::pair<int, std::string>	p15(15, std::string("fifteen"));
+	// std::pair<int, std::string>	p7(8, std::string("eight"));
+	// std::pair<int, std::string>	p1(1, std::string("one"));
+	// std::pair<int, std::string>	p6(6, std::string("six"));
+	// std::pair<int, std::string>	p8(7, std::string("seven"));
+	// std::pair<std::map<int, std::string>::iterator, bool>	it;
+	// it = x.insert(p10);
+	// x.insert(p5);
+	// x.insert(p15);
+	// x.insert(p7);
+	// it = x.insert(p1);
+	// x.insert(p6);
+	// x.insert(p8);
+	// std::cout << it.first->first << std::endl;
 	return (0);
 }
