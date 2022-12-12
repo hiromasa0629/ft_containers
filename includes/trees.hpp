@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/12 11:37:15 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/13 01:59:28 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,12 +17,13 @@
 
 namespace ft {
 
-template < class T, class value_compare >
+template < class T, class value_compare>
 class RBTree
 {
 	public:
 		typedef struct RBTNode<T>							node_type;
 		typedef T											value_type;
+		typedef std::size_t									size_type;
 		typedef	std::allocator<T>							allocator_type;
 		typedef std::allocator<node_type>					node_allocator;
 		typedef ft::BidirectionalIterator<value_type>		iterator;
@@ -43,10 +44,19 @@ class RBTree
 			return (ft::make_pair(iterator(inserted), true));
 		}
 
-		void		rbt_iter(void (*f)(value_type *)) const { rbt_iter(_root, f); }
+		iterator	rbt_erase(iterator pos)
+		{
+			node_type*	searched;
+			searched = rbt_search(_root, *pos);
+			rbt_erase(&_root, searched);
+			return (NULL);
+		}
 
-		node_type	*rbt_findmin(void) const { return (rbt_findmin(_root)); }
-		node_type	*rbt_findmax(void) const { return (rbt_findmax(_root)); }
+		void		clear(void) { rbt_iter(rbt_destroyone()); rbt_destroyone(_nil); }
+		void		rbt_iter(void (*f)(node_type *)) { rbt_iter(_root, f); }
+		node_type*	rbt_findmin(void) const { return (rbt_findmin(_root)); }
+		node_type*	rbt_findmax(void) const { return (rbt_findmax(_root)); }
+		size_type	rbt_size(void) const { return (rbt_size(_root)); }
 
 	private:
 		node_type*		_nil;
@@ -55,10 +65,10 @@ class RBTree
 		node_allocator	_node_alloc;
 		value_compare	_compare;
 
-		bool		rbt_isnil(node_type* node) { return ((node == _nil) || (node == NULL)); }
-		bool		rbt_key_issame(const value_type& lhs, const value_type& rhs) { return (lhs.first == rhs.first); }
+		bool		rbt_isnil(node_type* node) const { return ((node == _nil) || (node == NULL)); }
+		bool		rbt_key_issame(const value_type& lhs, const value_type& rhs) const { return (lhs.first == rhs.first); }
 
-		node_type*	rbt_findmin(node_type* root)
+		node_type*	rbt_findmin(node_type* root) const
 		{
 			if (rbt_isnil(root))
 				return (NULL);
@@ -67,7 +77,7 @@ class RBTree
 			return (rbt_findmin(root->left));
 		}
 
-		node_type*	rbt_findmax(node_type* root)
+		node_type*	rbt_findmax(node_type* root) const
 		{
 			if (rbt_isnil(root))
 				return (NULL);
@@ -209,11 +219,11 @@ class RBTree
 			(*root)->color = nodeBLACK;
 		}
 
-		void		rbt_iter(node_type* root, void (*f)(value_type *))
+		void		rbt_iter(node_type* root, void (*f)(node_type *))
 		{
 			if (!rbt_isnil(root->left))
 				rbt_iter(root->left, f);
-			f(root->content);
+			f(root);
 			if (!rbt_isnil(root->parent))
 				std::cout << " | parent: " << root->parent->content->first << " " << root->parent->content->second;
 			std::cout << (root->color == nodeRED ? " | RED" : " | BLACK") << std::endl;
@@ -241,11 +251,10 @@ class RBTree
 				u->parent->left = v;
 			else
 				u->parent->right = v;
-			if (v != g_nil)
-				v->parent = u->parent;
+			v->parent = u->parent;
 		}
 
-		void		rbt_delfixup(node_type** root, node_type *node)
+		void		rbt_erasefixup(node_type** root, node_type *node)
 		{
 			node_type	*w;
 
@@ -317,13 +326,13 @@ class RBTree
 			node->color = nodeBLACK;
 		}
 
-		void	ft_rbt_delone(t_rbtnode **root, t_rbtnode *tbd, void (*del)(void *))
+		void		rbt_erase(node_type** root, node_type* tbd)
 		{
 			enum color	ori;
 			node_type	*x;
 			node_type	*small;
 
-			if (!tbd)
+			if (!tbd || tbd == _nil)
 				return ;
 			ori = tbd->color;
 
@@ -332,36 +341,54 @@ class RBTree
 				x = tbd->right;
 				rbt_transplant(root, tbd, tbd->right);
 			}
-			else if (tbd->right == g_nil)
+			else if (tbd->right == _nil)
 			{
 				x = tbd->left;
 				rbt_transplant(root, tbd, tbd->left);
 			}
 			else
 			{
-				small = ft_rbt_findmin(tbd->right);
+				small = rbt_findmin(tbd->right);
 				ori = small->color;
 				x = small->right;
 				if (small->parent != tbd)
 				{
-					ft_rbt_transplant(root, small, small->right);
+					rbt_transplant(root, small, small->right);
 					small->right = tbd->right;
 					small->right->parent = small;
 				}
 				else
 					x->parent = small;
-				ft_rbt_transplant(root, tbd, small);
+				rbt_transplant(root, tbd, small);
 				small->left = tbd->left;
 				small->left->parent = small;
 				small->color = tbd->color;
 			}
-			printf("x: %d\n", *(int *)tbd->content);
-			if (ori == BLACK)
-				ft_rbt_delfixup(root, x);
-			if (del)
-				del(tbd->content);
-			free(tbd);
+			if (ori == nodeBLACK)
+				rbt_delfixup(root, x);
+			rbt_destroyone(tbd);
 		}
+
+		void		rbt_destroyone(node_type* node)
+		{
+			_alloc.destroy(node->content);
+			_alloc.deallocate(node->content, 1);
+			_node_alloc.destroy(node);
+			_node_alloc.deallocate(node, 1);
+		}
+
+		size_type	rbt_size(node_type* root) const
+		{
+			size_type	left_size;
+			size_type	right_size;
+
+			if (rbt_isnil(root))
+				return (0);
+			left_size = rbt_size(root->left);
+			right_size = rbt_size(root->right);
+			return (1 + left_size + right_size);
+		}
+
 };
 
 }

@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/12 10:49:49 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/13 02:09:06 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,9 @@ struct RBTNode : public Node<T, RBTNode<T> >
 {
 	enum color	color;
 };
+
+template <typename T>
+std::ostream&	operator<<(std::ostream& o, const RBTNode<T>& rhs) {o << rhs.content; return (o); }
 
 /* ============================ Enable if ============================ */
 template< bool B, class T = void >
@@ -98,7 +101,7 @@ struct pair
 	/* Copy assignment */
 	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
 
-	friend std::ostream&	operator<<(std::ostream& o, const pair* rhs) { std::cout << "first: " << rhs->first << " | second: " << rhs->second; return (o); }
+	friend std::ostream&	operator<<(std::ostream& o, const pair* rhs) {o << "first: " << rhs->first << " | second: " << rhs->second; return (o); }
 };
 
 template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }

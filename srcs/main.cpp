@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/12 11:11:13 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/13 02:05:23 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 template < typename T >
 void	myprint(T value)
 {
-	std::cout << value;
+	std::cout << *value;
 }
 
 int	main(void)
@@ -82,6 +82,7 @@ int	main(void)
 	ft::pair<int, std::string>	p6(6, std::string("six"));
 	ft::pair<int, std::string>	p8(7, std::string("seven"));
 	ft::pair<ft::Map<int, std::string>::iterator, bool>	it;
+
 	x.insert(p10);
 	x.insert(p5);
 	x.insert(p15);
@@ -89,7 +90,10 @@ int	main(void)
 	it = x.insert(p1);
 	x.insert(p6);
 	x.insert(p8);
-	std::cout << it.first->first << std::endl;
+	x.print_tree(myprint);
+	std::cout << " ================================= " << std::endl;
+	std::cout << x.size() << std::endl;
+
 	x.print_tree(myprint);
 
 	// std::map<int, std::string>	x;
