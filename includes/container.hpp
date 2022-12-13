@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/13 02:09:06 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/13 19:24:24 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ template < class T >
 struct RBTNode : public Node<T, RBTNode<T> >
 {
 	enum color	color;
+	bool		isnil;
 };
 
 template <typename T>

@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/13 02:05:23 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 00:19:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 #include "map.hpp"
 #include "stack.hpp"
 #include "container.hpp"
+#include "tests.hpp"
+#include "tests.tpp"
 #include <iterator>
 #include <map>
 
@@ -74,28 +76,12 @@ int	main(void)
 
 	ft::Map<int, std::string>	x;
 	std::map<int, std::string>	y;
-	ft::pair<int, std::string>	p10(10, std::string("ten"));
-	ft::pair<int, std::string>	p5(5, std::string("five"));
-	ft::pair<int, std::string>	p15(15, std::string("fifteen"));
-	ft::pair<int, std::string>	p7(8, std::string("eight"));
-	ft::pair<int, std::string>	p1(1, std::string("one"));
-	ft::pair<int, std::string>	p6(6, std::string("six"));
-	ft::pair<int, std::string>	p8(7, std::string("seven"));
-	ft::pair<ft::Map<int, std::string>::iterator, bool>	it;
 
-	x.insert(p10);
-	x.insert(p5);
-	x.insert(p15);
-	x.insert(p7);
-	it = x.insert(p1);
-	x.insert(p6);
-	x.insert(p8);
-	x.print_tree(myprint);
-	std::cout << " ================================= " << std::endl;
-	std::cout << x.size() << std::endl;
+	pre_test_map(x, y);
+	test_map_capacity(x, y);
+	test_map_lookup(x, y);
 
-	x.print_tree(myprint);
-
+	// x.print_tree(myprint);
 	// std::map<int, std::string>	x;
 	// std::map<int, std::string>	y;
 	// std::pair<int, std::string>	p10(10, std::string("ten"));
@@ -105,14 +91,29 @@ int	main(void)
 	// std::pair<int, std::string>	p1(1, std::string("one"));
 	// std::pair<int, std::string>	p6(6, std::string("six"));
 	// std::pair<int, std::string>	p8(7, std::string("seven"));
-	// std::pair<std::map<int, std::string>::iterator, bool>	it;
-	// it = x.insert(p10);
+	// std::pair<std::map<int, std::string>::iterator, bool>	itpair;
+	// itpair = x.insert(p10);
 	// x.insert(p5);
 	// x.insert(p15);
 	// x.insert(p7);
-	// it = x.insert(p1);
+	// itpair = x.insert(p1);
 	// x.insert(p6);
 	// x.insert(p8);
-	// std::cout << it.first->first << std::endl;
+	// std::map<int, std::string>::iterator	it;
+	// it = itpair.first;
+	// std::cout << itpair.first->first << std::endl;
+	// x.insert(it, std::make_pair(20, std::string("twenty")));
+	// it++;
+	// std::cout << it->first << std::endl;
+	// it++;
+	// std::cout << it->first << std::endl;
+	// it++;
+	// std::cout << it->first << std::endl;
+	// it++;
+	// std::cout << it->first << std::endl;
+	// it++;
+	// std::cout << it->first << std::endl;
+	// it++;
+	// std::cout << it->first << std::endl;
 	return (0);
 }

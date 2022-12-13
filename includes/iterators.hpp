@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/12 11:00:06 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 00:39:50 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,21 +107,61 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>
 template < class T, class Category = ft::bidirectional_iterator_tag >
 struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 {
-	typedef T						value_type;
-	typedef ft::RBTNode<value_type>	node_type;
+	typedef T													value_type;
+	typedef ft::RBTNode<value_type>								node_type;
+	typedef typename IteratorBase<Category, node_type>::pointer	node_pointer;
 
 	private:
-		typename IteratorBase<Category, node_type>::pointer	_ptr;
+		node_pointer	_ptr;
 
 	public:
 		BidirectionalIterator(void) : _ptr(NULL) {}
-		BidirectionalIterator(typename IteratorBase<Category, node_type>::pointer ptr) : _ptr(ptr) {}
+		BidirectionalIterator(node_pointer ptr) : _ptr(ptr) {}
 		BidirectionalIterator&	operator=(const BidirectionalIterator& rhs) { _ptr = rhs._ptr; return (*this); }
 
 		bool													operator==(const BidirectionalIterator& rhs) const { return (_ptr == rhs._ptr); }
 		bool													operator!=(const BidirectionalIterator& rhs) const { return (_ptr != rhs._ptr); }
 		typename IteratorBase<Category, value_type>::reference	operator*(void) const { return (*(_ptr->content)); }
 		typename IteratorBase<Category, value_type>::pointer	operator->(void) { return (_ptr->content); }
+		BidirectionalIterator									operator++(void)
+		{
+			BidirectionalIterator	tmp = *this;
+
+			if (_ptr->parent->isnil) // if root
+			{
+				if (!(_ptr->right->isnil) && !(_ptr->right->left->isnil))
+					_ptr = _ptr->right->left;
+				else
+					_ptr = _ptr->right;
+			}
+			else if (_ptr == _ptr->parent->left) // if left child
+				_ptr = _ptr->parent;
+			else if (_ptr == _ptr->parent->right) // if right child
+			{
+				if (_ptr->right->left && !(_ptr->right->left->isnil))
+					_ptr = _ptr->right->left;
+				else
+					_ptr = _ptr->right;
+			}
+			return (tmp);
+		}
+		BidirectionalIterator&									operator++(int) { this->operator++(); return (*this); }
+		BidirectionalIterator									operator--(void)
+		{
+			BidirectionalIterator	tmp = *this;
+
+			if (_ptr->parent->isnil)
+				_ptr = _ptr->left;
+			else if (!(_ptr->left->isnil))
+				_ptr = _ptr->left;
+			else if (((_ptr == _ptr->parent->left) && !(_ptr->parent->parent->isnil) && (_ptr->parent == _ptr->parent->parent->right)) ||
+					((_ptr == _ptr->parent->right) && !(_ptr->parent->parent->isnil) && (_ptr->parent == _ptr->parent->parent->left)))
+				_ptr = _ptr->parent->parent;
+			else
+				_ptr = _ptr->parent;
+			return (tmp);
+		}
+		BidirectionalIterator&									operator--(int) { this->operator--(); return (*this); }
 };
 
 template < class Iter >
@@ -152,7 +192,7 @@ class reverse_iterator
 		/* Returns a copy of the base iterator */
 		iterator_type	base(void) const { return(iterator_type(_current)); }
 
-		reference			operator*(void) const { return (*(_current - 1)); }
+		reference			operator*(void) const { iterator_type tmp = _current; return (*(--tmp)); }
 		reverse_iterator	operator+(difference_type n) const { return (reverse_iterator(_current - n)); }
 		reverse_iterator	operator-(difference_type n) const { return (reverse_iterator(_current + n)); }
 		reverse_iterator&	operator++(void) { _current--; return (*this); }
