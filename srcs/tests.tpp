@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 00:41:09 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 02:46:06 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,10 @@ template < typename T, typename U > std::ostream&				operator<<(std::ostream& o,
 
 	o << "{";
 	for (size_t i = 0; i < rhs.size(); i++, it++)
+	{
+		std::cout << it->first << std::endl;
 		o << " {" << it->first << ", " << it->second << (i + 1 == rhs.size() ? "} " : "}, ");
+	}
 	o << "}";
 	o << " | " << rhs.size();
 	return (o);
@@ -659,7 +662,7 @@ void	test_map_lookup(T x, U y)
 	s << x;
 	print_content_header("Member Functions: ", s.str());
 	print_subsubcontent_compare("count(1)", "", x.count(1), y.count(1));
-	print_subsubcontent_compare("count(99)", "Doesnt exist", x.count(99), y.count(99));
+	print_subsubcontent_compare("count(99)", "", x.count(99), y.count(99));
 	{
 		typename T::iterator			myit = x.find(3);
 		typename U::iterator			it = y.find(3);
@@ -684,7 +687,7 @@ void	test_map_lookup(T x, U y)
 		std::stringstream	myss;
 		std::stringstream	ss;
 		myss << "{" << myitpair.first->first << ", " << myitpair.first->second << "} {" << myitpair.second->first << ", " << myitpair.second->second << "} | " << x;
-		ss << "{" << itpair.first->first << ", " << itpair.second->second << "} {" << itpair.second->first << ", " << itpair.second->second << "} | " << y;
+		ss << "{" << itpair.first->first << ", " << itpair.first->second << "} {" << itpair.second->first << ", " << itpair.second->second << "} | " << y;
 		print_subsubcontent_compare("equal_range(3)", "", myss.str(), ss.str());
 	}
 	{
@@ -722,5 +725,32 @@ void	test_map_lookup(T x, U y)
 		myss << "{" << myit->first << ", " << myit->second << "} | " << x;
 		ss << "{" << it->first << ", " << it->second << "} | " << y;
 		print_subsubcontent_compare("upper_bound(20)", "", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_map_insert(T x, U y)
+{
+	std::stringstream	s;
+	s << "insert ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
+	{
+		ft::pair<typename T::iterator, bool>	mypair = x.insert(ft::make_pair(10, std::string("ten")));
+		std::pair<typename U::iterator, bool>	pair = y.insert(std::make_pair(10, std::string("ten")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << mypair.first->first << ", " << mypair.first->second << "}, " << mypair.second << " | " << x;
+		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
+		print_subsubcontent_compare("insert( {10, ten} )", "", myss.str(), ss.str());
+	}
+	{
+		ft::pair<typename T::iterator, bool>	mypair = x.insert(ft::make_pair(6, std::string("six")));
+		std::pair<typename U::iterator, bool>	pair = y.insert(std::make_pair(6, std::string("six")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << mypair.first->first << ", " << mypair.first->second << "}, " << mypair.second << " | " << x;
+		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
+		print_subsubcontent_compare("insert( {6, six} )", "", myss.str(), ss.str());
 	}
 }

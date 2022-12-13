@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/13 23:53:23 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 02:27:49 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@ class Map
 
 		ft::pair<iterator, bool>		insert(const value_type& value) { return (_tree.rbt_insert(value)); }
 		iterator						insert(iterator pos, const value_type& value) { return (_tree.rbt_insert(pos, value)); }
-		// template < class InputIt > void	insert(InputIt first, InputIt last) {}
+		template < class InputIt > void	insert(InputIt first, InputIt last) { _tree.rbt_insert(first, last); }
 
 		iterator					erase(iterator pos) { return (_tree.rbt_erase(pos)); }
 		allocator_type				get_allocator(void) const { return (allocator_type()); }

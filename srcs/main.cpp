@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 00:19:45 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 02:45:38 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,6 @@ int	main(void)
 	// 	test_resize(x, y);
 	// 	test_operators_n_lexicographical(x, y);
 	// 	test_reverse_iterator(x, y);
-	// 	int	diff = g_total - g_correct;
-	// 	std::stringstream	ss;
-	// 	if (diff > 0)
-	// 		ss << RED << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;
-	// 	else
-	// 		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
-	// 	std::cout << ss.str() << std::endl;
 	// }
 
 	// {		// Stack Tests
@@ -59,61 +52,34 @@ int	main(void)
 	// 	std::stack<int>	y;
 	// 	pre_test_stack(x, y);
 	// 	test_stack(x, y);
-	// 	int	diff = g_total - g_correct;
-	// 	std::stringstream	ss;
-	// 	if (diff > 0)
-	// 		ss << RED << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;
-	// 	else
-	// 		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
-	// 	std::cout << ss.str() << std::endl;
 	// }
 
 	// {		// Pair Tests
+	// 	print_header("Pair");
 	// 	ft::pair<std::string, int>	x("Hello world", 10);
 	// 	std::pair<std::string, int>	y("Hello world", 10);
 	// 	test_pair(x, y);
 	// }
 
-	ft::Map<int, std::string>	x;
-	std::map<int, std::string>	y;
+	{
+		print_header("Map");
+		ft::Map<int, std::string>	x;
+		std::map<int, std::string>	y;
 
-	pre_test_map(x, y);
-	test_map_capacity(x, y);
-	test_map_lookup(x, y);
+		pre_test_map(x, y);
+		test_map_capacity(x, y);
+		test_map_lookup(x, y);
+		test_map_insert(x, y);
+		// x.insert(ft::make_pair(6, std::string("six")));
+		// x.print_tree(myprint);
+	}
 
-	// x.print_tree(myprint);
-	// std::map<int, std::string>	x;
-	// std::map<int, std::string>	y;
-	// std::pair<int, std::string>	p10(10, std::string("ten"));
-	// std::pair<int, std::string>	p5(5, std::string("five"));
-	// std::pair<int, std::string>	p15(15, std::string("fifteen"));
-	// std::pair<int, std::string>	p7(8, std::string("eight"));
-	// std::pair<int, std::string>	p1(1, std::string("one"));
-	// std::pair<int, std::string>	p6(6, std::string("six"));
-	// std::pair<int, std::string>	p8(7, std::string("seven"));
-	// std::pair<std::map<int, std::string>::iterator, bool>	itpair;
-	// itpair = x.insert(p10);
-	// x.insert(p5);
-	// x.insert(p15);
-	// x.insert(p7);
-	// itpair = x.insert(p1);
-	// x.insert(p6);
-	// x.insert(p8);
-	// std::map<int, std::string>::iterator	it;
-	// it = itpair.first;
-	// std::cout << itpair.first->first << std::endl;
-	// x.insert(it, std::make_pair(20, std::string("twenty")));
-	// it++;
-	// std::cout << it->first << std::endl;
-	// it++;
-	// std::cout << it->first << std::endl;
-	// it++;
-	// std::cout << it->first << std::endl;
-	// it++;
-	// std::cout << it->first << std::endl;
-	// it++;
-	// std::cout << it->first << std::endl;
-	// it++;
-	// std::cout << it->first << std::endl;
+	int	diff = g_total - g_correct;
+	std::stringstream	ss;
+	if (diff > 0)
+		ss << RED << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;
+	else
+		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
+	std::cout << ss.str() << std::endl;
 	return (0);
 }

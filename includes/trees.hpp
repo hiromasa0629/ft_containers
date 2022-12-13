@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 00:43:47 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 02:32:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,11 +51,12 @@ class RBTree
 			return(rbt_insert(content).first);
 		}
 
-		// template < class InputIt >
-		// void	insert(InputIt first, InputIt last)
-		// {
-
-		// }
+		template < class InputIt >
+		void	rbt_insert(InputIt first, InputIt last)
+		{
+			for (; first != last; first++)
+				rbt_insert(*first);
+		}
 
 		iterator	rbt_lower_bound(const key_type& key)
 		{
@@ -126,11 +127,29 @@ class RBTree
 		iterator	rbt_erase(iterator pos)
 		{
 			node_type*	searched;
+
 			searched = rbt_search(_root, pos->first);
 			if (rbt_isnil(searched))
 				return (NULL);
 			rbt_erase(&_root, searched);
 			return (NULL);
+		}
+
+		iterator	rbt_erase(iterator first, iterator last)
+		{
+			for (; first != last; first++)
+				rbt_erase(first);
+		}
+
+		size_type	rbt_erase(const key_type& key)
+		{
+			node_type*	searched;
+
+			searched = rbt_search(_root, key);
+			if (rbt_isnil(searched))
+				return (0);
+			rbt_erase(&_root, searched);
+			return (1);
 		}
 
 		void		clear(void) { rbt_iter(&RBTree::rbt_destroyone); _root = _nil; }
