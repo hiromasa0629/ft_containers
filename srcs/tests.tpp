@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 18:56:02 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 22:32:07 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -722,10 +722,11 @@ void	test_map_lookup(T x, U y)
 		typename U::iterator			it = y.upper_bound(20);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << "{" << myit->first << ", " << myit->second << "} | " << x;
-		ss << "{" << it->first << ", " << it->second << "} | " << y;
-		print_subsubcontent_compare("upper_bound(20)", "", myss.str(), ss.str());
+		myss << ( myit == x.end() ? "same" : "not same" ) << " | " << x;
+		ss << ( it == y.end() ? "same" : "not same" ) << " | " << y;
+		print_subsubcontent_compare("upper_bound(20)", " returns end() ", myss.str(), ss.str());
 	}
+	std::cout << std::endl;
 }
 
 template < typename T, typename U >
@@ -753,4 +754,79 @@ void	test_map_insert(T x, U y)
 		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
 		print_subsubcontent_compare("insert( {6, six} )", "", myss.str(), ss.str());
 	}
+	{
+		ft::pair<typename T::iterator, bool>	mypair = x.insert(ft::make_pair(-2, std::string("-two")));
+		std::pair<typename U::iterator, bool>	pair = y.insert(std::make_pair(-2, std::string("-two")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << mypair.first->first << ", " << mypair.first->second << "}, " << mypair.second << " | " << x;
+		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
+		print_subsubcontent_compare("insert( {-2, -two} )", "", myss.str(), ss.str());
+	}
+	{
+		ft::pair<typename T::iterator, bool>	mypair = x.insert(ft::make_pair(-2, std::string("-two")));
+		std::pair<typename U::iterator, bool>	pair = y.insert(std::make_pair(-2, std::string("-two")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << mypair.first->first << ", " << mypair.first->second << "}, " << mypair.second << " | " << x;
+		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
+		print_subsubcontent_compare("insert( {-2, -two} )", "Duplicates", myss.str(), ss.str());
+	}
+	{
+		typename T::iterator	myit = x.insert(x.lower_bound(9), ft::make_pair(15, std::string("fifteen")));
+		typename U::iterator	it = y.insert(y.lower_bound(9), std::make_pair(15, std::string("fifteen")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << myit->first << ", " << myit->second << "} | " << x;
+		ss << "{" << it->first << ", " << it->second << "} | " << y;
+		print_subsubcontent_compare("insert( lower_bound(9), {15, fifteen} )", "", myss.str(), ss.str());
+	}
+	{
+		typename T::iterator	myit = x.insert(x.upper_bound(20), ft::make_pair(17, std::string("seventeen")));
+		typename U::iterator	it = y.insert(y.upper_bound(20), std::make_pair(17, std::string("seventeen")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << myit->first << ", " << myit->second << "} | " << x;
+		ss << "{" << it->first << ", " << it->second << "} | " << y;
+		print_subsubcontent_compare("insert( upper_bound(20), {17, seventeen} )", "", myss.str(), ss.str());
+	}
+	{
+		typename T::iterator	myit = x.insert(x.upper_bound(20), ft::make_pair(17, std::string("seventeen")));
+		typename U::iterator	it = y.insert(y.upper_bound(20), std::make_pair(17, std::string("seventeen")));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << "{" << myit->first << ", " << myit->second << "} | " << x;
+		ss << "{" << it->first << ", " << it->second << "} | " << y;
+		print_subsubcontent_compare("insert( upper_bound(20), {17, seventeen} ) ", "Duplicates", myss.str(), ss.str());
+	}
+	T	a;
+	U	b;
+	a.insert(ft::make_pair(-1, std::string("-one")));
+	a.insert(ft::make_pair(-3, std::string("-three")));
+	a.insert(ft::make_pair(-5, std::string("-five")));
+	b.insert(std::make_pair(-1, std::string("-one")));
+	b.insert(std::make_pair(-3, std::string("-three")));
+	b.insert(std::make_pair(-5, std::string("-five")));
+	{
+		x.insert(a.begin(), a.find(-3));
+		y.insert(b.begin(), b.find(-3));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("insert( begin(), find(-5) ) ", "{-5, -five}, {-3, -three}, {-1, -one}", myss.str(), ss.str());
+	}
+	{
+		x.insert(a.find(-3), a.end());
+		y.insert(b.find(-3), b.end());
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("insert( find(-3), end()) ", "{-5, -five}, {-3, -three}, {-1, -one}", myss.str(), ss.str());
+	}
+	std::cout << std::endl;
 }
+
+template < typename T, typename U >
+

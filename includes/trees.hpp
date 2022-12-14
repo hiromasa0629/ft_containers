@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 02:32:53 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 22:27:56 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,8 +54,8 @@ class RBTree
 		template < class InputIt >
 		void	rbt_insert(InputIt first, InputIt last)
 		{
-			for (; first != last; first++)
-				rbt_insert(*first);
+			for (InputIt tmp = first; tmp != last; tmp++)
+				rbt_insert(*tmp);
 		}
 
 		iterator	rbt_lower_bound(const key_type& key)

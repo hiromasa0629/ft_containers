@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 21:17:07 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 22:04:50 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,24 +27,24 @@ void	myprint(T value)
 
 int	main(void)
 {
-	// {		// Vector Tests
-	// 	print_header("Vector");
-	// 	ft::Vector<int>		x;
-	// 	std::vector<int>	y;
-	// 	pre_test_int(x, y);
-	// 	// pre_test_string(x, y);
-	// 	test_element_access(x, y);
-	// 	test_capacity(x, y);
-	// 	test_iterator(x, y);
-	// 	test_clear(x, y);
-	// 	test_insert(x, y);
-	// 	test_erase(x, y);
-	// 	test_push_back(x, y);
-	// 	test_pop_back(x, y);
-	// 	test_resize(x, y);
-	// 	test_operators_n_lexicographical(x, y);
-	// 	test_reverse_iterator(x, y);
-	// }
+	{		// Vector Tests
+		// print_header("Vector");
+		// ft::Vector<int>		x;
+		// std::vector<int>	y;
+		// pre_test_int(x, y);
+		// pre_test_string(x, y);
+		// test_element_access(x, y);
+		// test_capacity(x, y);
+		// test_iterator(x, y);
+		// test_clear(x, y);
+		// test_insert(x, y);
+		// test_erase(x, y);
+		// test_push_back(x, y);
+		// test_pop_back(x, y);
+		// test_resize(x, y);
+		// test_operators_n_lexicographical(x, y);
+		// test_reverse_iterator(x, y);
+	}
 
 	// {		// Stack Tests
 	// 	print_header("Stack");
@@ -73,13 +73,9 @@ int	main(void)
 		// x.insert(ft::make_pair(2, std::string("two")));
 		// x.insert(ft::make_pair(4, std::string("four")));
 		x.print_tree(myprint);
-		// ft::Map<int, std::string>::iterator	it = x.begin();
-		// x.print_tree(myprint);
-		// test_map_capacity(x, y);
-		// test_map_lookup(x, y);
-		// test_map_insert(x, y);
-		std::map<int, std::string>::iterator	it = y.upper_bound(20);
-		std::cout << it->first << ", " << it->second << std::endl;
+		test_map_capacity(x, y);
+		test_map_lookup(x, y);
+		test_map_insert(x, y);
 		// x.insert(ft::make_pair(6, std::string("six")));
 		// x.print_tree(myprint);
 	}
