@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 22:27:56 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/15 01:52:05 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@
 
 namespace ft {
 
-template < class key_type, class value_type, class key_compare_type, class value_compare_type>
+template < class key_type, class value_type, class key_compare_type>
 class RBTree
 {
 	public:
@@ -28,9 +28,24 @@ class RBTree
 		typedef ft::BidirectionalIterator<value_type>		iterator;
 		typedef const ft::BidirectionalIterator<value_type>	const_iterator;
 
+		RBTree(const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
+			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare() {};
+
 		/* Construct an empty RBT Tree */
-		RBTree(const key_compare_type& key_compare, const value_compare_type& value_compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
-			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _value_compare(value_compare), _key_compare(key_compare) {}
+		RBTree(const key_compare_type& key_compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
+			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare(key_compare) {}
+
+		RBTree&	operator=(const RBTree& rhs)
+		{
+			this->rbt_clear();
+			this->_nil = create_nil();
+			this->_root = this->_nil;
+			rbt_insert(iterator(rhs.rbt_findmin()), iterator(rhs.get_nil()));
+			this->_alloc = rhs.get_allocator();
+			this->_node_alloc = rhs.get_node_allocator();
+			this->_key_compare = rhs.get_key_compare();
+			return (*this);
+		}
 
 		ft::pair<iterator, bool>	rbt_insert(const value_type& content)
 		{
@@ -124,21 +139,20 @@ class RBTree
 			return (ft::make_pair(rbt_lower_bound(key), rbt_upper_bound(key)));
 		}
 
-		iterator	rbt_erase(iterator pos)
+		void	rbt_erase(iterator pos)
 		{
 			node_type*	searched;
 
 			searched = rbt_search(_root, pos->first);
 			if (rbt_isnil(searched))
-				return (NULL);
+				return ;
 			rbt_erase(&_root, searched);
-			return (NULL);
 		}
 
-		iterator	rbt_erase(iterator first, iterator last)
+		void	rbt_erase(iterator first, iterator last)
 		{
-			for (; first != last; first++)
-				rbt_erase(first);
+			while (first != last)
+				rbt_erase(first++);
 		}
 
 		size_type	rbt_erase(const key_type& key)
@@ -152,7 +166,7 @@ class RBTree
 			return (1);
 		}
 
-		void		clear(void) { rbt_iter(&RBTree::rbt_destroyone); _root = _nil; }
+		void		rbt_clear(void) { rbt_iter(&RBTree::rbt_destroyone); _root = _nil; }
 		void		rbt_iter(void (*f)(node_type *)) { rbt_iter(_root, f); }
 		void		rbt_iter(void (RBTree::*f)(node_type *)) { rbt_iter(_root, f); }
 		node_type*	rbt_findmin(void) const { return (rbt_findmin(_root)); }
@@ -167,17 +181,47 @@ class RBTree
 			_node_alloc.deallocate(node, 1);
 		}
 
+		void	rbt_swap(RBTree& other)
+		{
+			node_type*			tmp_nil;
+			node_type*			tmp_root;
+			allocator_type		tmp_alloc;
+			node_allocator		tmp_node_alloc;
+			key_compare_type	tmp_key_compare;
+
+			tmp_nil = _nil;
+			tmp_root = _root;
+			tmp_alloc = _alloc;
+			tmp_node_alloc = _node_alloc;
+			tmp_key_compare = _key_compare;
+
+			_nil = other._nil;
+			_root = other._root;
+			_alloc = other._alloc;
+			_node_alloc = other._node_alloc;
+			_key_compare = other._key_compare;
+
+			other._nil = tmp_nil;
+			other._root = tmp_root;
+			other._alloc = tmp_alloc;
+			other._node_alloc = tmp_node_alloc;
+			other._key_compare = tmp_key_compare;
+		}
+
 		node_type*	rbt_search(const key_type& key) const { return (rbt_search(_root, key)); }
 
 		node_type*	get_nil(void) const { return (_nil); }
 		node_type*	get_root(void) const { return (_root); }
+
+		allocator_type		get_allocator(void) const { return (allocator_type()); }
+		node_allocator		get_node_allocator(void) const { return (node_allocator()); }
+		key_compare_type	get_key_compare(void) const { return (_key_compare); }
 
 	private:
 		node_type*			_nil;
 		node_type*			_root;
 		allocator_type		_alloc;
 		node_allocator		_node_alloc;
-		value_compare_type	_value_compare;
 		key_compare_type	_key_compare;
 
 		bool		rbt_isnil(node_type* node) const { return ((node == _nil) || (node == NULL)); }
@@ -250,7 +294,7 @@ class RBTree
 				*node = rbt_new(content, parent);
 				return (*node);
 			}
-			else if (_value_compare(content, *((*node)->content)))
+			else if (_key_compare(content.first, (*node)->content->first))
 				return (rbt_preinsert(&((*node)->left), content, *node));
 			else
 				return (rbt_preinsert(&((*node)->right), content, *node));
@@ -491,7 +535,7 @@ class RBTree
 				small->color = tbd->color;
 			}
 			if (ori == nodeBLACK)
-				rbt_delfixup(root, x);
+				rbt_erasefixup(root, x);
 			rbt_destroyone(tbd);
 		}
 

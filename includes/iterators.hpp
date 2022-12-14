@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 21:11:34 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/15 01:39:20 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,22 +123,22 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 		bool													operator!=(const BidirectionalIterator& rhs) const { return (_ptr != rhs._ptr); }
 		typename IteratorBase<Category, value_type>::reference	operator*(void) const { return (*(_ptr->content)); }
 		typename IteratorBase<Category, value_type>::pointer	operator->(void) { return (_ptr->content); }
-		BidirectionalIterator									operator++(void)
+		BidirectionalIterator									operator++(int)
 		{
 			BidirectionalIterator	it = *this;
 
 			_ptr = _ptr->node_find_nextgreater();
 			return (it);
 		}
-		BidirectionalIterator&									operator++(int) { this->operator++(); return (*this); }
-		BidirectionalIterator									operator--(void)
+		BidirectionalIterator&									operator++(void) { this->operator++(); return (*this); }
+		BidirectionalIterator									operator--(int)
 		{
 			BidirectionalIterator	it = *this;
 
 			_ptr = _ptr->node_find_nextlesser();
 			return (it);
 		}
-		BidirectionalIterator&									operator--(int) { this->operator--(); return (*this); }
+		BidirectionalIterator&									operator--(void) { this->operator--(); return (*this); }
 };
 
 template < class Iter >

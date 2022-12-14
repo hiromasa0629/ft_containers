@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 22:24:41 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/15 02:11:59 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,26 +50,30 @@ class Map
 				bool	operator()(const value_type& lhs, const value_type& rhs) const { return(comp(lhs.first, rhs.first)); }
 		};
 
-		typedef ft::RBTree<key_type, value_type, key_compare, value_compare>	RBTree;
-		typedef typename RBTree::node_type										node_type;
-		typedef typename RBTree::iterator										iterator;
-		typedef typename RBTree::const_iterator									const_iterator;
-		typedef ft::reverse_iterator<iterator>									reverse_iterator;
-		typedef const ft::reverse_iterator<iterator>							const_reverse_iterator;
+		typedef ft::RBTree<key_type, value_type, key_compare>	RBTree;
+		typedef typename RBTree::node_type						node_type;
+		typedef typename RBTree::iterator						iterator;
+		typedef typename RBTree::const_iterator					const_iterator;
+		typedef ft::reverse_iterator<iterator>					reverse_iterator;
+		typedef const ft::reverse_iterator<iterator>			const_reverse_iterator;
 
 		key_compare		key_comp(void) const { return (key_compare()); }
 		value_compare	value_comp(void) const { return (value_compare(key_comp())); }
 
 		/* Default Constructor */
-		Map(const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp(), value_comp())), _alloc(alloc) {}
+		Map(const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp())), _alloc(alloc) {}
+		Map(const Map& src) : _alloc(src.get_allocator()) { _tree = src.get_tree(); }
+		Map&	operator=(const Map& rhs) { this->clear(); _tree = rhs.get_tree(); return (*this); }
 
 		ft::pair<iterator, bool>		insert(const value_type& value) { return (_tree.rbt_insert(value)); }
 		iterator						insert(iterator pos, const value_type& value) { return (_tree.rbt_insert(pos, value)); }
-		template < class InputIt > void	insert(InputIt first, InputIt last) { std::cout << "here" << std::endl; _tree.rbt_insert(first, last); }
+		template < class InputIt > void	insert(InputIt first, InputIt last) { _tree.rbt_insert(first, last); }
 
-		iterator					erase(iterator pos) { return (_tree.rbt_erase(pos)); }
+		void						erase(iterator pos) { _tree.rbt_erase(pos); }
+		void						erase(iterator first, iterator last) { _tree.rbt_erase(first, last); }
+		size_type					erase(const key_type& key) { return (_tree.rbt_erase(key)); }
 		allocator_type				get_allocator(void) const { return (allocator_type()); }
-		void						clear(void) { _tree.clear(); }
+		void						clear(void) { _tree.rbt_clear(); }
 
 		iterator					begin(void) { return (iterator(_tree.rbt_findmin())); }
 		const_iterator				begin(void) const { return (iterator(_tree.rbt_findmin())); }
@@ -98,8 +102,20 @@ class Map
 		bool						empty(void) const { return (this->size() == 0); }
 		size_type					max_size(void) const { return (_alloc.max_size()); }
 
+		void						swap(Map& other)
+		{
+			allocator_type	tmp_alloc;
+
+			tmp_alloc = _alloc;
+			_alloc = other._alloc;
+			other._alloc = tmp_alloc;
+			_tree.rbt_swap(other._tree);
+		}
+
 		/* ============================ Print tree ============================ */
 		void	print_tree(void (*f)(node_type *)) { _tree.rbt_iter(f); }
+
+		RBTree	get_tree(void) const { return (_tree); }
 
 	private:
 		RBTree			_tree;

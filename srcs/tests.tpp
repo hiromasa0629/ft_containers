@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 22:32:07 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/15 02:12:40 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -770,7 +770,7 @@ void	test_map_insert(T x, U y)
 		std::stringstream	ss;
 		myss << "{" << mypair.first->first << ", " << mypair.first->second << "}, " << mypair.second << " | " << x;
 		ss << "{" << pair.first->first << ", " << pair.first->second << "}, " << pair.second << " | " << y;
-		print_subsubcontent_compare("insert( {-2, -two} )", "Duplicates", myss.str(), ss.str());
+		print_subsubcontent_compare("insert( {-2, -two} ) ", "Duplicates", myss.str(), ss.str());
 	}
 	{
 		typename T::iterator	myit = x.insert(x.lower_bound(9), ft::make_pair(15, std::string("fifteen")));
@@ -829,4 +829,101 @@ void	test_map_insert(T x, U y)
 }
 
 template < typename T, typename U >
+void	test_map_erase(T x, U y)
+{
+	std::stringstream	s;
+	s << "erase ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
+	{
+		x.erase(x.find(7));
+		y.erase(y.find(7));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("erase(find(7))", "", myss.str(), ss.str());
+	}
+	{
+		x.erase(x.find(3), x.find(12));
+		y.erase(y.find(3), y.find(12));
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("erase(find(3), find(12))", "", myss.str(), ss.str());
+	}
+	{
+		size_t	i = x.erase(1);
+		size_t	j = y.erase(1);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << i << " | " << x;
+		ss << j << " | " << y;
+		print_subsubcontent_compare("erase(1)", "", myss.str(), ss.str());
+	}
+	{
+		size_t	i = x.erase(1);
+		size_t	j = y.erase(1);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << i << " | " << x;
+		ss << j << " | " << y;
+		print_subsubcontent_compare("erase(1)", "", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_map_swap(T x, U y)
+{
+	std::stringstream	s;
+	s << "swap ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
+
+	T	a;
+	U	b;
+	a.insert(ft::make_pair(-1, std::string("-one")));
+	a.insert(ft::make_pair(-3, std::string("-three")));
+	a.insert(ft::make_pair(-5, std::string("-five")));
+	b.insert(std::make_pair(-1, std::string("-one")));
+	b.insert(std::make_pair(-3, std::string("-three")));
+	b.insert(std::make_pair(-5, std::string("-five")));
+	{
+		{
+			std::stringstream	myss;
+			std::stringstream	ss;
+			myss << x << " | " << a;
+			ss << y << " | " << b;
+			print_subsubcontent_compare("swap() ", "before", myss.str(), ss.str());
+		}
+		x.swap(a);
+		y.swap(b);
+		{
+			std::stringstream	myss;
+			std::stringstream	ss;
+			myss << x << " | " << a;
+			ss << y << " | " << b;
+			print_subsubcontent_compare("swap() ", "after", myss.str(), ss.str());
+		}
+	}
+	{
+		{
+			std::stringstream	myss;
+			std::stringstream	ss;
+			myss << x << " | " << a;
+			ss << y << " | " << b;
+			print_subsubcontent_compare("swap() ", "before", myss.str(), ss.str());
+		}
+		x.swap(a);
+		y.swap(b);
+		{
+			std::stringstream	myss;
+			std::stringstream	ss;
+			myss << x << " | " << a;
+			ss << y << " | " << b;
+			print_subsubcontent_compare("swap() ", "after", myss.str(), ss.str());
+		}
+	}
+}
 

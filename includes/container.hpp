@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 21:11:17 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/15 01:24:57 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,11 +41,11 @@ struct RBTNode : public Node<T, RBTNode<T> >
 {
 	enum color	color;
 	bool		isnil;
-	
+
 	RBTNode*	node_find_rightmin(void)
 	{
 		RBTNode*	tmp;
-		
+
 		if (this->right->isnil)
 			return (this);
 		tmp = this->right;
@@ -53,11 +53,11 @@ struct RBTNode : public Node<T, RBTNode<T> >
 			tmp = tmp->left;
 		return (tmp);
 	}
-	
+
 	RBTNode*	node_find_leftmax(void)
 	{
 		RBTNode*	tmp;
-		
+
 		if (this->left->isnil)
 			return (this);
 		tmp = this->left;
@@ -65,11 +65,12 @@ struct RBTNode : public Node<T, RBTNode<T> >
 			tmp = tmp->right;
 		return (tmp);
 	}
-	
+
 	RBTNode*	node_find_nextgreater(void)
 	{
 		RBTNode*	tmp;
-		
+
+
 		tmp = node_find_rightmin();
 		if (tmp->content->first != this->content->first)
 			return (tmp);
@@ -87,11 +88,11 @@ struct RBTNode : public Node<T, RBTNode<T> >
 			return (this->right);
 		return (tmp->parent);
 	}
-	
+
 	RBTNode*	node_find_nextlesser(void)
 	{
 		RBTNode*	tmp;
-		
+
 		tmp = node_find_leftmax();
 		if (tmp != this)
 			return (tmp);
