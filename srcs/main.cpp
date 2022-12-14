@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 02:45:38 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 21:17:07 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,9 +67,19 @@ int	main(void)
 		std::map<int, std::string>	y;
 
 		pre_test_map(x, y);
-		test_map_capacity(x, y);
-		test_map_lookup(x, y);
-		test_map_insert(x, y);
+		// x.insert(ft::make_pair(10, std::string("ten")));
+		// x.insert(ft::make_pair(6, std::string("six")));
+		// x.insert(ft::make_pair(-1, std::string("-one")));
+		// x.insert(ft::make_pair(2, std::string("two")));
+		// x.insert(ft::make_pair(4, std::string("four")));
+		x.print_tree(myprint);
+		// ft::Map<int, std::string>::iterator	it = x.begin();
+		// x.print_tree(myprint);
+		// test_map_capacity(x, y);
+		// test_map_lookup(x, y);
+		// test_map_insert(x, y);
+		std::map<int, std::string>::iterator	it = y.upper_bound(20);
+		std::cout << it->first << ", " << it->second << std::endl;
 		// x.insert(ft::make_pair(6, std::string("six")));
 		// x.print_tree(myprint);
 	}

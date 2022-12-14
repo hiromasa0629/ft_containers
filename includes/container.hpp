@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/13 19:24:24 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 21:11:17 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,74 @@ struct RBTNode : public Node<T, RBTNode<T> >
 {
 	enum color	color;
 	bool		isnil;
+	
+	RBTNode*	node_find_rightmin(void)
+	{
+		RBTNode*	tmp;
+		
+		if (this->right->isnil)
+			return (this);
+		tmp = this->right;
+		while (!(tmp->left->isnil))
+			tmp = tmp->left;
+		return (tmp);
+	}
+	
+	RBTNode*	node_find_leftmax(void)
+	{
+		RBTNode*	tmp;
+		
+		if (this->left->isnil)
+			return (this);
+		tmp = this->left;
+		while (!(tmp->right->isnil))
+			tmp = tmp->right;
+		return (tmp);
+	}
+	
+	RBTNode*	node_find_nextgreater(void)
+	{
+		RBTNode*	tmp;
+		
+		tmp = node_find_rightmin();
+		if (tmp->content->first != this->content->first)
+			return (tmp);
+		if (tmp->parent->isnil)
+			return (tmp->right);
+		if (tmp == tmp->parent->left)
+			return (tmp->parent);
+		while (tmp != tmp->parent->left && !(tmp->isnil))
+		{
+			tmp = tmp->parent;
+			if (tmp->isnil)
+				break ;
+		}
+		if (tmp->isnil)
+			return (this->right);
+		return (tmp->parent);
+	}
+	
+	RBTNode*	node_find_nextlesser(void)
+	{
+		RBTNode*	tmp;
+		
+		tmp = node_find_leftmax();
+		if (tmp != this)
+			return (tmp);
+		if (tmp->parent->isnil)
+			return (tmp->left);
+		if (tmp == tmp->parent->right)
+			return (tmp->parent);
+		while (tmp != tmp->parent->right && !(tmp->isnil))
+		{
+			tmp = tmp->parent;
+			if (tmp->isnil)
+				break ;
+		}
+		if (tmp->isnil)
+			return (this->left);
+		return (tmp->parent);
+	}
 };
 
 template <typename T>

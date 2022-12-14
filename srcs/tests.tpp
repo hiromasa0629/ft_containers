@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 02:46:06 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 18:56:02 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ template < typename T, typename U > std::ostream&				operator<<(std::ostream& o,
 	o << "{";
 	for (size_t i = 0; i < rhs.size(); i++, it++)
 	{
-		std::cout << it->first << std::endl;
+		// std::cout << it->first << std::endl;
 		o << " {" << it->first << ", " << it->second << (i + 1 == rhs.size() ? "} " : "}, ");
 	}
 	o << "}";

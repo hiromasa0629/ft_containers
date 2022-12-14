@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/14 00:39:50 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/14 21:11:34 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,41 +125,18 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 		typename IteratorBase<Category, value_type>::pointer	operator->(void) { return (_ptr->content); }
 		BidirectionalIterator									operator++(void)
 		{
-			BidirectionalIterator	tmp = *this;
+			BidirectionalIterator	it = *this;
 
-			if (_ptr->parent->isnil) // if root
-			{
-				if (!(_ptr->right->isnil) && !(_ptr->right->left->isnil))
-					_ptr = _ptr->right->left;
-				else
-					_ptr = _ptr->right;
-			}
-			else if (_ptr == _ptr->parent->left) // if left child
-				_ptr = _ptr->parent;
-			else if (_ptr == _ptr->parent->right) // if right child
-			{
-				if (_ptr->right->left && !(_ptr->right->left->isnil))
-					_ptr = _ptr->right->left;
-				else
-					_ptr = _ptr->right;
-			}
-			return (tmp);
+			_ptr = _ptr->node_find_nextgreater();
+			return (it);
 		}
 		BidirectionalIterator&									operator++(int) { this->operator++(); return (*this); }
 		BidirectionalIterator									operator--(void)
 		{
-			BidirectionalIterator	tmp = *this;
+			BidirectionalIterator	it = *this;
 
-			if (_ptr->parent->isnil)
-				_ptr = _ptr->left;
-			else if (!(_ptr->left->isnil))
-				_ptr = _ptr->left;
-			else if (((_ptr == _ptr->parent->left) && !(_ptr->parent->parent->isnil) && (_ptr->parent == _ptr->parent->parent->right)) ||
-					((_ptr == _ptr->parent->right) && !(_ptr->parent->parent->isnil) && (_ptr->parent == _ptr->parent->parent->left)))
-				_ptr = _ptr->parent->parent;
-			else
-				_ptr = _ptr->parent;
-			return (tmp);
+			_ptr = _ptr->node_find_nextlesser();
+			return (it);
 		}
 		BidirectionalIterator&									operator--(int) { this->operator--(); return (*this); }
 };
@@ -192,7 +169,7 @@ class reverse_iterator
 		/* Returns a copy of the base iterator */
 		iterator_type	base(void) const { return(iterator_type(_current)); }
 
-		reference			operator*(void) const { iterator_type tmp = _current; return (*(--tmp)); }
+		reference			operator*(void) const { iterator_type tmp = _current; /* std::cout << "reverse" << std::endl; */ return (*(--tmp)); }
 		reverse_iterator	operator+(difference_type n) const { return (reverse_iterator(_current - n)); }
 		reverse_iterator	operator-(difference_type n) const { return (reverse_iterator(_current + n)); }
 		reverse_iterator&	operator++(void) { _current--; return (*this); }
