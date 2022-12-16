@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 02:11:59 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 15:18:26 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,11 @@ class Map
 		key_compare		key_comp(void) const { return (key_compare()); }
 		value_compare	value_comp(void) const { return (value_compare(key_comp())); }
 
-		/* Default Constructor */
+		/* ============================ Constructors and Destructor ============================ */
 		Map(const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp())), _alloc(alloc) {}
 		Map(const Map& src) : _alloc(src.get_allocator()) { _tree = src.get_tree(); }
-		Map&	operator=(const Map& rhs) { this->clear(); _tree = rhs.get_tree(); return (*this); }
+		Map&	operator=(const Map& rhs) { _tree = rhs.get_tree(); return (*this); }
+		~Map(void) {}
 
 		ft::pair<iterator, bool>		insert(const value_type& value) { return (_tree.rbt_insert(value)); }
 		iterator						insert(iterator pos, const value_type& value) { return (_tree.rbt_insert(pos, value)); }
@@ -84,7 +85,36 @@ class Map
 		reverse_iterator			rend(void) { return (reverse_iterator(iterator(_tree.rbt_findmin()))); }
 		const_reverse_iterator		crend(void) const { return (reverse_iterator(iterator(_tree.rbt_findmin()))); }
 
-		// mapped_type&				operator[](const key_type&)
+		/* ============================ Element access ============================ */
+		mapped_type&		at(const key_type& key)
+		{
+			node_type*	node;
+
+			node = _tree.rbt_search(key);
+			if (node->isnil)
+				throw std::out_of_range("ft::Map::at key not found");
+			return (node->content->second);
+		}
+
+		const mapped_type&	at(const key_type& key) const
+		{
+			node_type*	node;
+
+			node = _tree.rbt_search(key);
+			if (node->isnil)
+				throw std::out_of_range("ft::Map::at key not found");
+			return (node->content->second);
+		}
+
+		mapped_type&				operator[](const key_type& key)
+		{
+			node_type*	node;
+
+			node = _tree.rbt_search(key);
+			if (!(node->isnil))
+				return (node->content->second);
+			return ((insert(ft::make_pair(key, mapped_type()))).first->second);
+		}
 
 		/* ============================ Look up functions ============================ */
 		size_type									count(const key_type& key) const { return (_tree.rbt_search(key) == _tree.get_nil() ? 0 : 1); }
@@ -115,7 +145,7 @@ class Map
 		/* ============================ Print tree ============================ */
 		void	print_tree(void (*f)(node_type *)) { _tree.rbt_iter(f); }
 
-		RBTree	get_tree(void) const { return (_tree); }
+		const RBTree&	get_tree(void) const { return (_tree); }
 
 	private:
 		RBTree			_tree;

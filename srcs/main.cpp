@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 02:00:34 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 15:29:25 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,19 +68,12 @@ int	main(void)
 
 		pre_test_map(x, y);
 		// test_map_capacity(x, y);
+		test_map_element_access(x, y);
 		// test_map_lookup(x, y);
 		// test_map_insert(x, y);
 		// test_map_erase(x, y);
-		test_map_swap(x, y);
-		// x.erase(x.find(7));
-		// x.print_tree(myprint);
-		// x.erase(x.find(3), x.find(9));
-		// x.print_tree(myprint);
-
-		// x.print_tree(myprint);
-		// std::cout << x << std::endl;
+		// test_map_swap(x, y);
 	}
-
 	int	diff = g_total - g_correct;
 	std::stringstream	ss;
 	if (diff > 0)
@@ -88,5 +81,8 @@ int	main(void)
 	else
 		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
 	std::cout << ss.str() << std::endl;
+
+	std::string	s;
+	std::cin >> s;
 	return (0);
 }

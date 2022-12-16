@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 02:12:40 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 15:17:50 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -927,3 +927,41 @@ void	test_map_swap(T x, U y)
 	}
 }
 
+template < typename T, typename U >
+void	test_map_element_access(T x, U y)
+{
+	std::stringstream	s;
+	s << "at ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
+	print_subsubcontent_compare("at(1)", "", x.at(1), y.at(1));
+	// std::stringstream	myss;
+	// std::stringstream	ss;
+	// try { x.at(6); } catch (const std::out_of_range& e) { myss << e.what(); }
+	// try { y.at(6); } catch (const std::out_of_range& e) { ss << e.what(); }
+	// print_subsubcontent_compare("at(6)", "exception", myss.str(), ss.str());
+	print_subcontent_header("at(6) ", "Exception");
+	try { x.at(6); } catch (const std::out_of_range& e) { print_subsubcontent(MY, e.what()); }
+	try { y.at(6); } catch (const std::out_of_range& e) { print_subsubcontent(EXPECTED, e.what()); }
+	print_subsubcontent_compare("operator[3]", "", x[3], y[3]);
+	print_subsubcontent_compare("operator[8]", "", x[8], y[8]);
+	{
+		x[11] = "eleven";
+		y[11] = "eleven";
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("operator[11] = eleven", "", myss.str(), ss.str());
+	}
+	{
+		x[7] = "sevenseven";
+		y[7] = "sevenseven";
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("operator[7] = sevenseven", "", myss.str(), ss.str());
+	}
+
+}

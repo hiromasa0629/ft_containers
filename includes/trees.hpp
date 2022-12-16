@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 01:52:05 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 15:30:57 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,15 +35,18 @@ class RBTree
 		RBTree(const key_compare_type& key_compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
 			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare(key_compare) {}
 
+		~RBTree(void) { /* rbt_clear(); rbt_destroyone(_nil); */ }
+
 		RBTree&	operator=(const RBTree& rhs)
 		{
 			this->rbt_clear();
+			this->rbt_destroyone(this->_nil);
 			this->_nil = create_nil();
 			this->_root = this->_nil;
-			rbt_insert(iterator(rhs.rbt_findmin()), iterator(rhs.get_nil()));
 			this->_alloc = rhs.get_allocator();
 			this->_node_alloc = rhs.get_node_allocator();
 			this->_key_compare = rhs.get_key_compare();
+			rbt_insert(iterator(rhs.rbt_findmin()), iterator(rhs.get_nil()));
 			return (*this);
 		}
 
@@ -166,7 +169,7 @@ class RBTree
 			return (1);
 		}
 
-		void		rbt_clear(void) { rbt_iter(&RBTree::rbt_destroyone); _root = _nil; }
+		void		rbt_clear(void) {if (_root == _nil) return; rbt_iter(&RBTree::rbt_destroyone); _root = _nil; }
 		void		rbt_iter(void (*f)(node_type *)) { rbt_iter(_root, f); }
 		void		rbt_iter(void (RBTree::*f)(node_type *)) { rbt_iter(_root, f); }
 		node_type*	rbt_findmin(void) const { return (rbt_findmin(_root)); }
