@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 01:39:20 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:55:48 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -130,7 +130,7 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 			_ptr = _ptr->node_find_nextgreater();
 			return (it);
 		}
-		BidirectionalIterator&									operator++(void) { this->operator++(); return (*this); }
+		BidirectionalIterator&									operator++(void) { this->operator++(1); return (*this); }
 		BidirectionalIterator									operator--(int)
 		{
 			BidirectionalIterator	it = *this;
@@ -138,7 +138,7 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 			_ptr = _ptr->node_find_nextlesser();
 			return (it);
 		}
-		BidirectionalIterator&									operator--(void) { this->operator--(); return (*this); }
+		BidirectionalIterator&									operator--(void) { this->operator--(1); return (*this); }
 };
 
 template < class Iter >
@@ -169,7 +169,7 @@ class reverse_iterator
 		/* Returns a copy of the base iterator */
 		iterator_type	base(void) const { return(iterator_type(_current)); }
 
-		reference			operator*(void) const { iterator_type tmp = _current; /* std::cout << "reverse" << std::endl; */ return (*(--tmp)); }
+		reference			operator*(void) const { iterator_type tmp = _current; return (*(--tmp)); }
 		reverse_iterator	operator+(difference_type n) const { return (reverse_iterator(_current - n)); }
 		reverse_iterator	operator-(difference_type n) const { return (reverse_iterator(_current + n)); }
 		reverse_iterator&	operator++(void) { _current--; return (*this); }

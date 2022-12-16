@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:27:16 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 15:10:10 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:12:27 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ template < typename T, typename U > void	test_map_insert(T x, U y);
 template < typename T, typename U > void	test_map_erase(T x, U y);
 template < typename T, typename U > void	test_map_swap(T x, U y);
 template < typename T, typename U > void	test_map_element_access(T x, U y);
+template < typename T, typename U > void	test_map_iterator(T x, U y);
 
 
 

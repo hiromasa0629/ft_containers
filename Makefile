@@ -6,7 +6,7 @@
 #    By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/08/14 12:49:23 by hyap              #+#    #+#              #
-#    Updated: 2022/12/16 15:19:46 by hyap             ###   ########.fr        #
+#    Updated: 2022/12/16 16:06:05 by hyap             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ DEPENDSDIR	= srcs/depends
 DEPENDS		= $(SRCS:$(SRCSDIR)/%.cpp=$(DEPENDSDIR)/%.d)
 CPPFLAGS	= -Wall -Werror -Wextra -Wshadow -std=c++98 -pedantic -I includes/
 DEPFLAGS	= -MM
-LDFLAGS		= -lstdc++ # -fsanitize=address -g3
+LDFLAGS		= -g -lstdc++ # -fsanitize=address
 TPP			= $(wildcard $(SRCSDIR)/*.tpp)
 HPP			= $(wildcard includes/*.hpp)
 
@@ -27,10 +27,10 @@ HPP			= $(wildcard includes/*.hpp)
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	cc $(LDFLAGS) $< -o $(NAME)
+	gcc $(LDFLAGS) $< -o $(NAME)
 
 $(OBJSDIR)/%.o: $(SRCSDIR)/%.cpp $(TPP) $(HPP) | $(OBJSDIR)
-	c++ $(CPPFLAGS) -c $< -o $@
+	gcc $(CPPFLAGS) -c $< -o $@
 
 $(DEPENDSDIR)/%.d: $(SRCSDIR)/%.cpp | $(DEPENDSDIR)
 	c++ $(CPPFLAGS) $(DEPFLAGS) $< -o $@

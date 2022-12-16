@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 15:17:50 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:53:46 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,9 @@ template < typename T > std::ostream&				operator<<(std::ostream& o, const std::
 template < typename T > std::ostream&				operator<<(std::ostream& o, const ft::Vector<T>& rhs) { for (size_t i = 0; i < rhs.size(); i++) o << rhs[i] << " "; o << "| " << rhs.size() << " | " << rhs.capacity(); return (o); }
 template < typename T > std::ostream&				operator<<(std::ostream& o, std::stack<T> rhs) { while (rhs.empty()) { o << rhs.top() << " "; rhs.pop(); } o << "| " << rhs.size(); return (o); }
 template < typename T > std::ostream&				operator<<(std::ostream& o, ft::Stack<T> rhs) { while (rhs.empty()) { o << rhs.top() << " "; rhs.pop(); } o << "| " << rhs.size(); return (o); }
+template < typename T, typename U> std::ostream&	operator<<(std::ostream& o, const ft::pair<T, U>* rhs) {o << "{" << rhs->first << ", " << rhs->second << "}"; return (o); }
+template < typename T, typename U> std::ostream&	operator<<(std::ostream& o, const ft::pair<T, U>& rhs) {o << "{" << rhs.first << ", " << rhs.second << "}"; return (o); }
+template < typename T, typename U> std::ostream&	operator<<(std::ostream& o, const std::pair<T, U>& rhs) {o << "{" << rhs.first << ", " << rhs.second << "}"; return (o); }
 
 template < typename T, typename U > std::ostream&				operator<<(std::ostream& o, ft::Map<T, U>& rhs)
 {
@@ -43,10 +46,7 @@ template < typename T, typename U > std::ostream&				operator<<(std::ostream& o,
 
 	o << "{";
 	for (size_t i = 0; i < rhs.size(); i++, it++)
-	{
-		// std::cout << it->first << std::endl;
 		o << " {" << it->first << ", " << it->second << (i + 1 == rhs.size() ? "} " : "}, ");
-	}
 	o << "}";
 	o << " | " << rhs.size();
 	return (o);
@@ -963,5 +963,54 @@ void	test_map_element_access(T x, U y)
 		ss << y;
 		print_subsubcontent_compare("operator[7] = sevenseven", "", myss.str(), ss.str());
 	}
+}
 
+template < typename T, typename U >
+void	test_map_iterator(T x, U y)
+{
+	typename T::iterator			myit;
+	typename U::iterator			it;
+	typename T::reverse_iterator	myrit;
+	typename U::reverse_iterator	rit;
+
+	{
+		myit = x.begin();
+		it = y.begin();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << *myit;
+		ss << *it;
+		print_subsubcontent_compare("begin()", "", myss.str(), ss.str());
+	}
+	{
+		myrit = x.rbegin();
+		rit = y.rbegin();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << *myrit;
+		ss << *rit;
+		print_subsubcontent_compare("rbegin()", "", myss.str(), ss.str());
+	}
+	{
+		myit = x.begin();
+		it = y.begin();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		for (size_t i = 0; i < x.size(); i++, it++)
+			myss << " {" << myit->first << ", " << myit->second << (i + 1 == x.size() ? "} " : "}, ");
+		for (size_t i = 0; i < y.size(); i++, it++)
+			ss << " {" << it->first << ", " << it->second << (i + 1 == y.size() ? "} " : "}, ");
+		print_subsubcontent_compare("begin()++ to end()", "", myss.str(), ss.str());
+	}
+	{
+		myrit = x.rbegin();
+		rit = y.rbegin();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		for (size_t i = 0; i < x.size(); i++, it++)
+			myss << " {" << myrit->first << ", " << myrit->second << (i + 1 == x.size() ? "} " : "}, ");
+		for (size_t i = 0; i < y.size(); i++, it++)
+			ss << " {" << it->first << ", " << it->second << (i + 1 == y.size() ? "} " : "}, ");
+		print_subsubcontent_compare("rbegin()++ to end()", "", myss.str(), ss.str());
+	}
 }

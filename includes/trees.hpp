@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 15:30:57 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:09:58 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ class RBTree
 		RBTree(const key_compare_type& key_compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
 			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare(key_compare) {}
 
-		~RBTree(void) { /* rbt_clear(); rbt_destroyone(_nil); */ }
+		~RBTree(void) { rbt_clear(); rbt_destroyone(_nil); }
 
 		RBTree&	operator=(const RBTree& rhs)
 		{

@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 15:29:25 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:38:29 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 #include "tests.tpp"
 #include <iterator>
 #include <map>
+#include <unistd.h>
 
 template < typename T >
 void	myprint(T value)
@@ -68,11 +69,12 @@ int	main(void)
 
 		pre_test_map(x, y);
 		// test_map_capacity(x, y);
-		test_map_element_access(x, y);
+		// test_map_element_access(x, y);
 		// test_map_lookup(x, y);
 		// test_map_insert(x, y);
 		// test_map_erase(x, y);
 		// test_map_swap(x, y);
+		test_map_iterator(x, y);
 	}
 	int	diff = g_total - g_correct;
 	std::stringstream	ss;
@@ -82,7 +84,14 @@ int	main(void)
 		ss << GREEN << diff << " Error found " << RESET << DIM << "(" << g_correct << "/" << g_total << ")" << RESET;;
 	std::cout << ss.str() << std::endl;
 
-	std::string	s;
-	std::cin >> s;
+	// pid_t	pid = getpid();
+	// std::cout << pid << std::endl;
+	// std::stringstream	sss;
+
+	// std::string	s;
+	// std::cin >> s;
+	// sss << "leaks " << pid;
+	// system(sss.str().c_str());
+	system("leaks main");
 	return (0);
 }

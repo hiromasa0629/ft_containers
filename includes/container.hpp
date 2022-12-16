@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/15 01:24:57 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/16 16:40:44 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,8 +170,6 @@ struct pair
 	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 	/* Copy assignment */
 	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
-
-	friend std::ostream&	operator<<(std::ostream& o, const pair* rhs) {o << "first: " << rhs->first << " | second: " << rhs->second; return (o); }
 };
 
 template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }
