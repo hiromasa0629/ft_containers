@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 16:40:44 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/17 17:18:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
-		if (this->right->isnil)
+		if (this->right == NULL || this->right->isnil)
 			return (this);
 		tmp = this->right;
 		while (!(tmp->left->isnil))
@@ -58,7 +58,7 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
-		if (this->left->isnil)
+		if (this->left == NULL || this->left->isnil)
 			return (this);
 		tmp = this->left;
 		while (!(tmp->right->isnil))

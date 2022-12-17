@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 16:53:46 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/17 18:41:55 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -970,9 +970,11 @@ void	test_map_iterator(T x, U y)
 {
 	typename T::iterator			myit;
 	typename U::iterator			it;
-	typename T::reverse_iterator	myrit;
-	typename U::reverse_iterator	rit;
 
+	std::stringstream	s;
+	s << "iterator ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
 	{
 		myit = x.begin();
 		it = y.begin();
@@ -983,6 +985,58 @@ void	test_map_iterator(T x, U y)
 		print_subsubcontent_compare("begin()", "", myss.str(), ss.str());
 	}
 	{
+		myit = x.begin();
+		it = y.begin();
+		std::stringstream	myss;
+		std::stringstream	ss;
+		for (size_t i = 0; myit != x.end(); i++, myit++)
+			myss << " {" << myit->first << ", " << myit->second << (i + 1 == x.size() ? "} " : "}, ");
+		for (size_t i = 0; it != y.end(); i++, it++)
+			ss << " {" << it->first << ", " << it->second << (i + 1 == y.size() ? "} " : "}, ");
+		print_subsubcontent_compare("begin()++ to end()", "", myss.str(), ss.str());
+	}
+	{
+		myit = x.find(7);
+		it = y.find(7);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << (*myit).first << ", " << (*myit).second;
+		ss << (*it).first << ", " << (*it).second;
+		print_subsubcontent_compare("operator*", "*(find(7)).first, *(find(7)).second", myss.str(), ss.str());
+	}
+	{
+		myit = x.find(3);
+		it = y.find(3);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << myit->first << ", " << myit->second;
+		ss << it->first << ", " << it->second;
+		print_subsubcontent_compare("operator->", "find(3)->first, find(3)->second", myss.str(), ss.str());
+	}
+	{
+		myit = x.find(9);
+		it = y.find(9);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		--myit;
+		--it;
+		myss << myit->first << ", " << myit->second;
+		ss << it->first << ", " << it->second;
+		print_subsubcontent_compare("--operator", "find(9)->first, find(9)->second", myss.str(), ss.str());
+	}
+}
+
+template < typename T, typename U >
+void	test_map_reverse_iterator(T x, U y)
+{
+	typename T::reverse_iterator	myrit;
+	typename U::reverse_iterator	rit;
+
+	std::stringstream	s;
+	s << "reverse iterator ";
+	s << x;
+	print_content_header("Member Functions: ", s.str());
+	{
 		myrit = x.rbegin();
 		rit = y.rbegin();
 		std::stringstream	myss;
@@ -992,25 +1046,25 @@ void	test_map_iterator(T x, U y)
 		print_subsubcontent_compare("rbegin()", "", myss.str(), ss.str());
 	}
 	{
-		myit = x.begin();
-		it = y.begin();
-		std::stringstream	myss;
-		std::stringstream	ss;
-		for (size_t i = 0; i < x.size(); i++, it++)
-			myss << " {" << myit->first << ", " << myit->second << (i + 1 == x.size() ? "} " : "}, ");
-		for (size_t i = 0; i < y.size(); i++, it++)
-			ss << " {" << it->first << ", " << it->second << (i + 1 == y.size() ? "} " : "}, ");
-		print_subsubcontent_compare("begin()++ to end()", "", myss.str(), ss.str());
-	}
-	{
 		myrit = x.rbegin();
 		rit = y.rbegin();
 		std::stringstream	myss;
 		std::stringstream	ss;
-		for (size_t i = 0; i < x.size(); i++, it++)
+		for (size_t i = 0; myrit != x.rend(); i++, myrit++)
 			myss << " {" << myrit->first << ", " << myrit->second << (i + 1 == x.size() ? "} " : "}, ");
-		for (size_t i = 0; i < y.size(); i++, it++)
-			ss << " {" << it->first << ", " << it->second << (i + 1 == y.size() ? "} " : "}, ");
-		print_subsubcontent_compare("rbegin()++ to end()", "", myss.str(), ss.str());
+		for (size_t i = 0; rit != y.rend(); i++, rit++)
+			ss << " {" << rit->first << ", " << rit->second << (i + 1 == y.size() ? "} " : "}, ");
+		print_subsubcontent_compare("rbegin()++ to rend()", "", myss.str(), ss.str());
+	}
+	{
+		myrit = x.rend();
+		rit = y.rend();
+		myrit--;
+		rit--;
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << *myrit;
+		ss << *rit;
+		print_subsubcontent_compare("rend()--", "", myss.str(), ss.str());
 	}
 }

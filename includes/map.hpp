@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/16 15:18:26 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/17 18:41:41 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,10 +80,28 @@ class Map
 		const_iterator				begin(void) const { return (iterator(_tree.rbt_findmin())); }
 		iterator					end(void) { return (iterator(_tree.get_nil())); }
 		const_iterator				end(void) const { return (iterator(_tree.get_nil())); }
-		reverse_iterator			rbegin(void) { return (reverse_iterator(iterator(_tree.rbt_findmax()))); }
-		const_reverse_iterator		crbegin(void) const { return (reverse_iterator(iterator(_tree.rbt_findmax()))); }
-		reverse_iterator			rend(void) { return (reverse_iterator(iterator(_tree.rbt_findmin()))); }
-		const_reverse_iterator		crend(void) const { return (reverse_iterator(iterator(_tree.rbt_findmin()))); }
+		reverse_iterator			rbegin(void)
+		{
+			// node_type*	node;
+			// node_type*	nil;
+
+			// node = _tree.rbt_findmax();
+			// nil = _tree.get_nil();
+			// nil->parent = node;
+			return (reverse_iterator(_tree.rbt_findmax()));
+		}
+		const_reverse_iterator		crbegin(void) const { return (rbegin()); }
+		reverse_iterator			rend(void)
+		{
+			node_type*	node;
+			node_type*	nil;
+
+			node = _tree.rbt_findmin();
+			nil = _tree.get_nil();
+			nil->parent = node;
+			return (reverse_iterator(nil));
+		}
+		const_reverse_iterator		crend(void) const { return (rend()); }
 
 		/* ============================ Element access ============================ */
 		mapped_type&		at(const key_type& key)

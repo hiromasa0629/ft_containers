@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 21:07:54 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/17 18:38:03 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 namespace ft {
 
 template <typename T, typename Allocator = std::allocator<T> >
-class Vector 
+class Vector
 {
 	public:
 		typedef typename std::size_t									size_type;
@@ -49,9 +49,9 @@ class Vector
 		}
 
 		/* Copy constructor, shrink to the minimum capacity */
-		Vector(const Vector &src) : _data(NULL), _capacity(src.size()), _size(src.size()), _alloc(src.get_allocator()) 
-		{ 
-			
+		Vector(const Vector &src) : _data(NULL), _capacity(src.size()), _size(src.size()), _alloc(src.get_allocator())
+		{
+
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < this->size(); i++)
 				_alloc.construct(&(_data[i]), src[i]);
@@ -113,7 +113,7 @@ class Vector
 
 
 		/* ============================ Capacity functions ============================ */
-		
+
 		bool		empty(void) const { if (this->begin() == this->end()) return true; return false; }
 		size_type	size(void) const { return (_size); } /* Returns the number of elements */
 		size_type	max_size(void) const { return (_alloc.max_size()); } /* Returns the maximum number of elements the vector can hold */
@@ -228,7 +228,7 @@ class Vector
 		iterator	erase(iterator pos)
 		{
 			size_type	ipos;
-			
+
 			ipos = ft::distance(pos, this->begin());
 			_alloc.destroy(&(_data[ipos]));
 			for (size_type i = ipos + 1; i < _size; i++)
@@ -239,11 +239,11 @@ class Vector
 			_size--;
 			return (iterator(_data + ipos));
 		}
-		
+
 		iterator	erase(iterator first, iterator last)
 		{
 			size_type	ipos;
-			
+
 			ipos = ft::distance(first, this->begin());
 			for (iterator end = last - 1; end >= first; end--)
 				this->erase(end);
@@ -252,7 +252,7 @@ class Vector
 
 		/* Appends the given element value to the end  */
 		void	push_back(const_reference value) { this->insert(end(), value); }
-		
+
 		/* Removes the last element of the container. */
 		void	pop_back(void) { _alloc.destroy(&(_data[_size - 1])); _size--; }
 
@@ -275,7 +275,7 @@ class Vector
 			_size = n;
 			_data = newdata;
 		}
-		
+
 		/* Exchanges the contents of the container with those of other */
 		void	swap(Vector& other)
 		{
@@ -283,7 +283,7 @@ class Vector
 			size_type		size;
 			allocator_type	alloc;
 			pointer			data;
-			
+
 			data = _data;
 			size = _size;
 			capacity = _capacity;
@@ -315,12 +315,12 @@ class Vector
 		/* ============================ Iterator ============================ */
 		iterator				begin(void) { return (_data); }
 		const_iterator			begin(void) const { return (_data); }
-		reverse_iterator		rbegin(void) { return (reverse_iterator(this->end())); }
-		const_reverse_iterator	rbegin(void) const { return (reverse_iterator(this->end())); }
+		reverse_iterator		rbegin(void) { return (reverse_iterator(--(this->end()))); }
+		const_reverse_iterator	crbegin(void) const { return (reverse_iterator(--(this->end()))); }
 		iterator				end(void) { return (&(_data[_size])); }
 		const_iterator			end(void) const { return (&(_data[_size])); }
 		reverse_iterator		rend(void) { return (reverse_iterator(this->begin())); }
-		const_reverse_iterator	rend(void) const { return (reverse_iterator(this->begin())); }
+		const_reverse_iterator	crend(void) const { return (reverse_iterator(this->begin())); }
 
 
 
@@ -356,10 +356,10 @@ bool	operator!=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs
 	return (true);
 }
 
-template < class T, class Alloc > bool	operator<(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); } 
-template < class T, class Alloc > bool	operator<=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs < rhs); } 
-template < class T, class Alloc > bool	operator>(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (!ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); } 
-template < class T, class Alloc > bool	operator>=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs > rhs); } 
+template < class T, class Alloc > bool	operator<(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+template < class T, class Alloc > bool	operator<=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs < rhs); }
+template < class T, class Alloc > bool	operator>(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (!ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+template < class T, class Alloc > bool	operator>=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs > rhs); }
 
 
 }
