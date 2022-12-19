@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/19 22:47:22 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 01:31:55 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,11 @@ int	main(void)
 {
 	{		// Vector Tests
 		print_header("Vector");
-		ft::Vector<int>		x;
 		std::vector<int>	y;
+		ft::Vector<int>		x;
 		pre_test_int(x, y);
 		// pre_test_string(x, y);
+		test_constructor(x, y);
 		test_element_access(x, y);
 		test_capacity(x, y);
 		test_iterator(x, y);
@@ -44,7 +45,7 @@ int	main(void)
 		test_pop_back(x, y);
 		test_resize(x, y);
 		test_operators_n_lexicographical(x, y);
-		// test_reverse_iterator(x, y);
+		test_reverse_iterator(x, y);
 	}
 
 	{		// Stack Tests
@@ -55,27 +56,28 @@ int	main(void)
 		test_stack(x, y);
 	}
 
-	{		// Pair Tests
-		print_header("Pair");
-		ft::pair<std::string, int>	x("Hello world", 10);
-		std::pair<std::string, int>	y("Hello world", 10);
-		test_pair(x, y);
-	}
+	// {		// Pair Tests
+	// 	print_header("Pair");
+	// 	ft::pair<std::string, int>	x("Hello world", 10);
+	// 	std::pair<std::string, int>	y("Hello world", 10);
+	// 	test_pair(x, y);
+	// }
 
-	{
-		print_header("Map");
-		ft::Map<int, std::string>	x;
-		std::map<int, std::string>	y;
-		pre_test_map(x, y);
-		test_map_capacity(x, y);
-		test_map_element_access(x, y);
-		test_map_lookup(x, y);
-		test_map_insert(x, y);
-		test_map_erase(x, y);
-		test_map_swap(x, y);
-		test_map_iterator(x, y);
-		test_map_reverse_iterator(x, y);
-	}
+	// {
+		// print_header("Map");
+		// ft::Map<int, std::string>	x;
+		// std::map<int, std::string>	y;
+		// pre_test_map(x, y);
+		// test_map_capacity(x, y);
+		// test_map_element_access(x, y);
+		// test_map_lookup(x, y);
+		// test_map_insert(x, y);
+		// test_map_erase(x, y);
+		// test_map_swap(x, y);
+		// test_map_iterator(x, y);
+		// test_map_reverse_iterator(x, y);
+		// test_map_lexicographical(x, y);
+	// }
 	int	diff = g_total - g_correct;
 	std::stringstream	ss;
 	if (diff > 0)

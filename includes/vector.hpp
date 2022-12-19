@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/17 22:37:49 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 00:56:24 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,14 @@ class Vector
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
 				_alloc.construct(&_data[i], val);
+		}
+
+		template < class InputIt >
+		Vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+			: _data(NULL), _capacity(0), _size(0), _alloc(alloc)
+		{
+			for (; first != last; first++)
+				this->push_back(*first);
 		}
 
 		/* Copy constructor, shrink to the minimum capacity */

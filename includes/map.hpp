@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/19 16:28:13 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 02:03:47 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,14 @@ class Map
 		value_compare	value_comp(void) const { return (value_compare(key_comp())); }
 
 		/* ============================ Constructors and Destructor ============================ */
-		Map(const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp())), _alloc(alloc) {}
+		Map(const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp())), _alloc(alloc), _comp(key_compare()) {}
+		template < class InputIt >
+		Map(InputIt first, InputIt last, const key_compare& comp = Compare(), const allocator_type& alloc = allocator_type()) : _tree(RBTree(key_comp())), _alloc(alloc), _comp(comp)
+		{
+			for (; first != last; first++)
+				this->insert(ft::make_pair(first->first, first->second));
+		}
+
 		Map(const Map& src) : _alloc(src.get_allocator()) { _tree = src.get_tree(); }
 		Map&	operator=(const Map& rhs) { _tree = rhs.get_tree(); return (*this); }
 		~Map(void) {}
@@ -150,7 +157,34 @@ class Map
 	private:
 		RBTree			_tree;
 		allocator_type	_alloc;
+		key_compare		_comp;
 };
+
+template < class Key, class T, class Compare, class Alloc >
+bool	operator==(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs)
+{
+	typename Map<Key, T, Compare, Alloc>::iterator lhs_it;
+	typename Map<Key, T, Compare, Alloc>::iterator rhs_it;
+
+	lhs_it = lhs.begin();
+	rhs_it = rhs.begin();
+	if (lhs.size() != rhs.size())
+		return (false);
+	while (lhs_it != lhs.end() && rhs_it != rhs.end())
+	{
+		if (*lhs_it != *rhs_it)
+			return (false);
+		lhs_it++;
+		rhs_it++;
+	}
+	return (true);
+}
+
+template < class Key, class T, class Compare, class Alloc > bool	operator!=(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs) { return (!(lhs == rhs)); }
+template < class Key, class T, class Compare, class Alloc > bool	operator<(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+template < class Key, class T, class Compare, class Alloc > bool	operator<=(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs) { return (lhs < rhs || lhs == rhs); }
+template < class Key, class T, class Compare, class Alloc > bool	operator>(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs) { return (!(lhs <= rhs)); }
+template < class Key, class T, class Compare, class Alloc > bool	operator>=(const Map<Key, T, Compare, Alloc>& lhs, const Map<Key, T, Compare, Alloc>& rhs) { return (lhs > rhs || lhs == rhs); }
 
 }
 

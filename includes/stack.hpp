@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 15:42:13 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/10 21:08:22 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 01:45:45 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,9 @@
 # include "vector.hpp"
 
 namespace ft {
-	
+
 template < class T, class Container = ft::Vector<T> >
-class Stack 
+class Stack
 {
 	public:
 		typedef T			value_type;
@@ -27,25 +27,27 @@ class Stack
 
 		/* Default constructor */
 		explicit Stack(const container_type& ctnr = container_type()) : _c(ctnr) {}
+		Stack&	operator=(const Stack& other) { _c = other._c; return (*this); }
 		~Stack(void) { _c.clear(); }
-		
+
 		bool							empty(void) const { return (_c.empty()); }			/* Returns whether thestack is empty */
-		size_type						size(void) const { return (_c.size()); }			/* Returns the number of elements in the stack */	
+		size_type						size(void) const { return (_c.size()); }			/* Returns the number of elements in the stack */
 		value_type&						top(void) { return (_c.back()); }					/* Returns a reference to the top element in the stack */
 		const value_type&				top(void) const { return (_c.back()); }				/* Returns a const reference to the top element in the stack */
 		void							push(const value_type& val) { _c.push_back(val); }	/* Inserts a new element above its current top element */
 		void							pop(void) { _c.pop_back(); }						/* Removes the top element */
 
+		bool	operator==(const Stack& rhs) { return (_c == rhs._c); }
+		bool	operator!=(const Stack& rhs) { return (_c != rhs._c); }
+		bool	operator>(const Stack& rhs) { return (_c > rhs._c); }
+		bool	operator>=(const Stack& rhs) { return (_c >= rhs._c); }
+		bool	operator<(const Stack& rhs) { return (_c < rhs._c); }
+		bool	operator<=(const Stack& rhs) { return (_c <= rhs._c); }
+
 	private:
 		container_type	_c;
 };
 
-template < class T, class Container > bool	operator==(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c == rhs._c); }
-template < class T, class Container > bool	operator!=(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c != rhs._c); }
-template < class T, class Container > bool	operator>(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c > rhs._c); }
-template < class T, class Container > bool	operator>=(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c >= rhs._c); }
-template < class T, class Container > bool	operator<(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c < rhs._c); }
-template < class T, class Container > bool	operator<=(const ft::Stack<T, Container>& lhs, const ft::Stack<T, Container>& rhs) { return (lhs._c <= rhs._c); }
 
 }
 
