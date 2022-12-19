@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/17 17:18:53 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/19 16:33:27 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,13 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
-
+		if (this->isnil && this->parent)
+		{
+			tmp = this->parent;
+			while (tmp->right && !(tmp->right->isnil))
+				tmp = tmp->right;
+			return (tmp);
+		}
 		tmp = node_find_rightmin();
 		if (tmp->content->first != this->content->first)
 			return (tmp);
@@ -93,6 +99,13 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
+		if (this->isnil && this->parent) // rbegin
+		{
+			tmp = this->parent;
+			while (tmp->right && !(tmp->right->isnil))
+				tmp = tmp->right;
+			return (tmp);
+		}
 		tmp = node_find_leftmax();
 		if (tmp != this)
 			return (tmp);

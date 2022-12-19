@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/17 17:15:29 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/19 16:32:20 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,7 @@ class RBTree
 				return (ft::make_pair(iterator(exist), false));
 			inserted = rbt_preinsert(&_root, content, _nil);
 			rbt_insert_fixup(&_root, inserted);
+			_nil->parent = _root;
 			return (ft::make_pair(iterator(inserted), true));
 		}
 
@@ -150,6 +151,7 @@ class RBTree
 			if (rbt_isnil(searched))
 				return ;
 			rbt_erase(&_root, searched);
+			_nil->parent = _root;
 		}
 
 		void	rbt_erase(iterator first, iterator last)
@@ -258,7 +260,7 @@ class RBTree
 			_alloc.construct(newnode->content, value_type());
 			newnode->left = NULL;
 			newnode->right = NULL;
-			newnode->parent = NULL;
+			newnode->parent = _root;
 			newnode->isnil = true;
 			return (newnode);
 		}

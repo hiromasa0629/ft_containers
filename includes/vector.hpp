@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/17 18:38:03 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/17 22:37:49 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -315,8 +315,8 @@ class Vector
 		/* ============================ Iterator ============================ */
 		iterator				begin(void) { return (_data); }
 		const_iterator			begin(void) const { return (_data); }
-		reverse_iterator		rbegin(void) { return (reverse_iterator(--(this->end()))); }
-		const_reverse_iterator	crbegin(void) const { return (reverse_iterator(--(this->end()))); }
+		reverse_iterator		rbegin(void) { return (reverse_iterator(this->end())); }
+		const_reverse_iterator	crbegin(void) const { return (reverse_iterator(this->end())); }
 		iterator				end(void) { return (&(_data[_size])); }
 		const_iterator			end(void) const { return (&(_data[_size])); }
 		reverse_iterator		rend(void) { return (reverse_iterator(this->begin())); }

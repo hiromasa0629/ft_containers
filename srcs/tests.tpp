@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/17 18:41:55 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/19 22:46:56 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -940,7 +940,7 @@ void	test_map_element_access(T x, U y)
 	// try { x.at(6); } catch (const std::out_of_range& e) { myss << e.what(); }
 	// try { y.at(6); } catch (const std::out_of_range& e) { ss << e.what(); }
 	// print_subsubcontent_compare("at(6)", "exception", myss.str(), ss.str());
-	print_subcontent_header("at(6) ", "Exception");
+	// print_subcontent_header("at(6) ", "Exception");
 	try { x.at(6); } catch (const std::out_of_range& e) { print_subsubcontent(MY, e.what()); }
 	try { y.at(6); } catch (const std::out_of_range& e) { print_subsubcontent(EXPECTED, e.what()); }
 	print_subsubcontent_compare("operator[3]", "", x[3], y[3]);
@@ -969,12 +969,19 @@ template < typename T, typename U >
 void	test_map_iterator(T x, U y)
 {
 	typename T::iterator			myit;
+	typename T::iterator			myit2;
 	typename U::iterator			it;
+	typename U::iterator			it2;
 
 	std::stringstream	s;
 	s << "iterator ";
 	s << x;
 	print_content_header("Member Functions: ", s.str());
+	myit = x.begin();
+	it = y.begin();
+	myit2 = ++myit;
+	it2 = ++it;
+	print_subsubcontent_compare("++begin() == ++begin()", "", myit == myit2, it == it2);
 	{
 		myit = x.begin();
 		it = y.begin();
@@ -1030,12 +1037,19 @@ template < typename T, typename U >
 void	test_map_reverse_iterator(T x, U y)
 {
 	typename T::reverse_iterator	myrit;
+	typename T::reverse_iterator	myrit2;
 	typename U::reverse_iterator	rit;
+	typename U::reverse_iterator	rit2;
 
 	std::stringstream	s;
 	s << "reverse iterator ";
 	s << x;
 	print_content_header("Member Functions: ", s.str());
+	myrit = x.rbegin();
+	rit = y.rbegin();
+	myrit2 = ++myrit;
+	rit2 = ++rit;
+	print_subsubcontent_compare("++rbegin() == ++rbegin()", "", myrit == myrit2, rit == rit2);
 	{
 		myrit = x.rbegin();
 		rit = y.rbegin();
@@ -1066,5 +1080,18 @@ void	test_map_reverse_iterator(T x, U y)
 		myss << *myrit;
 		ss << *rit;
 		print_subsubcontent_compare("rend()--", "", myss.str(), ss.str());
+	}
+	{
+		myrit = x.rend();
+		rit = y.rend();
+		myrit--;
+		rit--;
+		std::stringstream	myss;
+		std::stringstream	ss;
+		for (size_t i = 0; myrit != x.rbegin(); i++, myrit--)
+			myss << " {" << myrit->first << ", " << myrit->second << (i + 1 == x.size() ? "} " : "}, ");
+		for (size_t i = 0; rit != y.rbegin(); i++, rit--)
+			ss << " {" << rit->first << ", " << rit->second << (i + 1 == y.size() ? "} " : "}, ");
+		print_subsubcontent_compare("rend()--; -- to rbegin()", "", myss.str(), ss.str());
 	}
 }
