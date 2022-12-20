@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/20 00:56:24 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 19:48:52 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 namespace ft {
 
 template <typename T, typename Allocator = std::allocator<T> >
-class Vector
+class vector
 {
 	public:
 		typedef typename std::size_t									size_type;
@@ -30,7 +30,7 @@ class Vector
 		typedef typename  allocator_type::pointer						pointer;
 		typedef	const typename allocator_type::const_pointer			const_pointer;
 		typedef ft::RandomAccessIterator<T>								iterator;
-		typedef const ft::RandomAccessIterator<T>						const_iterator;
+		typedef ft::RandomAccessIterator<const T>						const_iterator;
 		typedef ft::reverse_iterator<iterator>							reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator>					const_reverse_iterator;
 		typedef	typename ft::iterator_traits<iterator>::difference_type	difference_type;
@@ -38,10 +38,10 @@ class Vector
 		/* ============================ Member Functions ============================ */
 
 		/* Default constructor */
-		explicit Vector(const allocator_type &alloc = allocator_type()) : _data(NULL), _capacity(0), _size(0), _alloc(alloc) {}
+		explicit vector(const allocator_type &alloc = allocator_type()) : _data(NULL), _capacity(0), _size(0), _alloc(alloc) {}
 
 		/* Fill construcotr */
-		explicit Vector(size_type n, const value_type &val, const allocator_type &alloc = allocator_type()) : _capacity(n), _size(n), _alloc(alloc)
+		explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &alloc = allocator_type()) : _capacity(n), _size(n), _alloc(alloc)
 		{
 			_data = _alloc.allocate(_capacity);
 			for (size_type i = 0; i < _size; i++)
@@ -49,7 +49,7 @@ class Vector
 		}
 
 		template < class InputIt >
-		Vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
+		vector(InputIt first, InputIt last, const allocator_type& alloc = allocator_type(), typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 			: _data(NULL), _capacity(0), _size(0), _alloc(alloc)
 		{
 			for (; first != last; first++)
@@ -57,7 +57,7 @@ class Vector
 		}
 
 		/* Copy constructor, shrink to the minimum capacity */
-		Vector(const Vector &src) : _data(NULL), _capacity(src.size()), _size(src.size()), _alloc(src.get_allocator())
+		vector(const vector &src) : _data(NULL), _capacity(src.size()), _size(src.size()), _alloc(src.get_allocator())
 		{
 
 			_data = _alloc.allocate(_capacity);
@@ -66,7 +66,7 @@ class Vector
 		}
 
 		/* Copy assignment, shirk to the minimum capacity if the current  */
-		Vector&	operator=(const Vector &rhs)
+		vector&	operator=(const vector &rhs)
 		{
 			this->clear();
 			_alloc = rhs.get_allocator();
@@ -80,9 +80,10 @@ class Vector
 		}
 
 		/* Destructor */
-		~Vector(void)
+		~vector(void)
 		{
-			this->clear();
+			if (_size != 0)
+				this->clear();
 			_alloc.deallocate(_data, _capacity);
 		}
 
@@ -97,14 +98,15 @@ class Vector
 			size_type	oldcapacity;
 
 			oldcapacity = _capacity;
-			_size = ft::distance(last, first);
+			_size = ft::distance<InputIt>(first, last);
 			_capacity = _size;
 			newdata = _alloc.allocate(_capacity);
-			for (size_type i = 0; i < _size; i++)
-				_alloc.construct(&(newdata[i]), first[i]);
+			InputIt	tmpfirst = first;
+			for (size_type i = 0; i < _size; i++, tmpfirst++)
+				_alloc.construct(&(newdata[i]), *tmpfirst);
 			this->clear();
 			_alloc.deallocate(_data, oldcapacity);
-			_size = ft::distance(last, first);
+			_size = ft::distance<InputIt>(first, last);
 			_data = newdata;
 		}
 
@@ -164,8 +166,7 @@ class Vector
 			size_type	inserted;
 			pointer		newdata;
 			size_type	oldsize;
-
-			ipos = ft::distance(pos, this->begin());
+			ipos = ft::distance<const_iterator>(this->begin(), pos);
 			oldsize = _size;
 			inserted = 0;
 			if (_size == _capacity)
@@ -209,11 +210,11 @@ class Vector
 
 		iterator	insert(const_iterator pos, size_type count, const_reference value)
 		{
-			size_type	i;
-			size_type	ipos;
-			iterator	tmppos;
+			size_type		i;
+			size_type		ipos;
+			const_iterator	tmppos;
 
-			ipos = ft::distance(pos, this->begin());
+			ipos = ft::distance<const_iterator>(this->begin(), pos);
 			tmppos = pos;
 			for (i = 0; i < count; i++)
 				tmppos = this->insert(tmppos, value);
@@ -223,12 +224,16 @@ class Vector
 		template< class InputIt >
 		iterator	insert(const_iterator pos, InputIt first, InputIt last, typename ft::enable_if<!ft::is_integral<InputIt>::value, InputIt>::type* = NULL)
 		{
-			size_type	ipos;
-			iterator	tmppos;
+			size_type		ipos;
+			const_iterator	tmppos;
+			InputIt			end;
 
-			ipos = ft::distance(pos, this->begin());
+			ipos = ft::distance<const_iterator>(this->begin(), pos);
 			tmppos = pos;
-			for (InputIt end = last - 1; end >= first; end--)
+			end = --last;
+			for (; end != first; end--)
+				tmppos = this->insert(tmppos, *end);
+			if (end == first)
 				tmppos = this->insert(tmppos, *end);
 			return (iterator(_data + ipos));
 		}
@@ -237,7 +242,7 @@ class Vector
 		{
 			size_type	ipos;
 
-			ipos = ft::distance(pos, this->begin());
+			ipos = ft::distance<const_iterator>(this->begin(), pos);
 			_alloc.destroy(&(_data[ipos]));
 			for (size_type i = ipos + 1; i < _size; i++)
 			{
@@ -252,7 +257,7 @@ class Vector
 		{
 			size_type	ipos;
 
-			ipos = ft::distance(first, this->begin());
+			ipos = ft::distance<const_iterator>(this->begin(), first);
 			for (iterator end = last - 1; end >= first; end--)
 				this->erase(end);
 			return (iterator(_data + ipos));
@@ -272,7 +277,7 @@ class Vector
 
 			if (n > this->max_size())
 				throw (std::length_error("ft::vector::resize"));
-			newdata = _alloc.allocate(n);
+			newdata = _alloc.allocate(n < _capacity ? _capacity : n);
 			for (i = 0; i < _size && i < n; i++)
 				_alloc.construct(&(newdata[i]), _data[i]);
 			for (size_type j = i; j < n; j++)
@@ -285,7 +290,7 @@ class Vector
 		}
 
 		/* Exchanges the contents of the container with those of other */
-		void	swap(Vector& other)
+		void	swap(vector& other)
 		{
 			size_type		capacity;
 			size_type		size;
@@ -308,9 +313,9 @@ class Vector
 
 		/* ============================ Element access ============================ */
 		/* Returns a reference to the element at position n, throw out_of_range if n >= size */
-		reference			at(size_type n) { if (n >= _size) throw std::out_of_range("ft::Vector::at"); return (_data[n]); }
+		reference			at(size_type n) { if (n >= _size) throw std::out_of_range("ft::vector::at"); return (_data[n]); }
 		/* Returns a reference to the element at position n, throw out_of_range if n >= size */
-		const_reference		at(size_type n) const { if (n >= _size) throw std::out_of_range("const ft::Vector::at"); return (_data[n]); }
+		const_reference		at(size_type n) const { if (n >= _size) throw std::out_of_range("const ft::vector::at"); return (_data[n]); }
 		reference			operator[](size_type n) { return (_data[n]); }			/* Returns a reference to the element at position n */
 		const_reference		operator[](size_type n) const { return (_data[n]); }	/* Returns a const reference to the element at position n */
 		reference			front(void) { return (_data[0]); }						/* Returns a reference to the first element */
@@ -340,10 +345,10 @@ class Vector
 };
 
 template < class T, class Alloc >
-void	swap(ft::Vector<T, Alloc>& lhs, ft::Vector<T, Alloc>& rhs) { lhs.swap(rhs); }
+void	swap(ft::vector<T, Alloc>& lhs, ft::vector<T, Alloc>& rhs) { lhs.swap(rhs); }
 
 template < class T, class Alloc >
-bool	operator==(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs)
+bool	operator==(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs)
 {
 	if (lhs.size() != rhs.size())
 		return (false);
@@ -353,21 +358,11 @@ bool	operator==(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs
 	return (true);
 }
 
-template < class T, class Alloc >
-bool	operator!=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs)
-{
-	if (lhs.size() == rhs.size())
-		return (false);
-	for (size_t i = 0; i < lhs.size(); i++)
-		if (lhs[i] == rhs[i])
-			return (false);
-	return (true);
-}
-
-template < class T, class Alloc > bool	operator<(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
-template < class T, class Alloc > bool	operator<=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs < rhs); }
-template < class T, class Alloc > bool	operator>(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (!ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
-template < class T, class Alloc > bool	operator>=(const ft::Vector<T, Alloc>& lhs, const ft::Vector<T, Alloc>& rhs) { return (lhs == rhs || lhs > rhs); }
+template < class T, class Alloc > bool	operator!=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) { return (!(lhs == rhs)); }
+template < class T, class Alloc > bool	operator< (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) { return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())); }
+template < class T, class Alloc > bool	operator<=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) { return (lhs == rhs || lhs < rhs); }
+template < class T, class Alloc > bool	operator> (const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) { return (!(lhs <= rhs)); }
+template < class T, class Alloc > bool	operator>=(const ft::vector<T, Alloc>& lhs, const ft::vector<T, Alloc>& rhs) { return (lhs == rhs || lhs > rhs); }
 
 
 }

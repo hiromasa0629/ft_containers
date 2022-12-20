@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/19 16:32:20 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 22:54:44 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class RBTree
 		typedef	std::allocator<value_type>					allocator_type;
 		typedef std::allocator<node_type>					node_allocator;
 		typedef ft::BidirectionalIterator<value_type>		iterator;
-		typedef const ft::BidirectionalIterator<value_type>	const_iterator;
+		typedef ft::BidirectionalIterator<const value_type>	const_iterator;
 
 		RBTree(const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
 			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare() {};
@@ -168,6 +168,7 @@ class RBTree
 			if (rbt_isnil(searched))
 				return (0);
 			rbt_erase(&_root, searched);
+			_nil->parent = _root;
 			return (1);
 		}
 

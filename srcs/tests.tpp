@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/29 11:26:10 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/20 01:55:43 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 23:11:24 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,9 +119,9 @@ void	test_element_access(T x, U y)
 template < typename T, typename U >
 void	test_iterator(T x, U y)
 {
-	ft::Vector<int>::iterator			myit;
+	ft::vector<int>::iterator			myit;
 	std::vector<int>::iterator			it;
-	ft::Vector<int>::const_iterator		cmyit;
+	ft::vector<int>::const_iterator		cmyit;
 	std::vector<int>::const_iterator	cit;
 
 	std::stringstream	s;
@@ -656,19 +656,37 @@ void	test_pair(T x, U y)
 template < typename T, typename U >
 void	pre_test_map(T& x, U& y)
 {
-	print_content_header("Pre test: ", "insert( {1, one}, {3, three}, {5, five}, {7, seven}, {9, nine} )");
-	std::string	s[5] = {"one", "three", "five", "seven", "nine"};
+	print_content_header("Pre test: ", "insert( {0, AAAAAA}, {1, BBBBB}, {2, CCCC}, {3, DDD}, {4, EE}, {5, F} )");
+	std::string	s[6] = {"AAAAAA", "BBBBB", "CCCC", "DDD", "EE", "F"};
 
-	for (int i = 0; i < 5; i++)
-		x.insert(ft::make_pair(((i * 2) + 1), s[i]));
-	for (int i = 0; i < 5; i++)
-		y.insert(std::make_pair(((i * 2) + 1), s[i]));
+	for (int i = 0; i < 6; i++)
+		x.insert(ft::make_pair(i, s[i]));
+	for (int i = 0; i < 6; i++)
+		y.insert(std::make_pair(i, s[i]));
 }
 
 template < typename T, typename U >
 void	test_map_constructor(T x, U y)
 {
-	
+	{
+		T	a(x.begin(), x.end());
+		U	b(y.begin(), y.end());
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << a;
+		ss << b;
+		print_subsubcontent_compare("constructor(begin(), end())", "", myss.str(), ss.str());
+	}
+	{
+		T	a(x);
+		U	b(y);
+		std::stringstream	myss;
+		std::stringstream	ss;
+		myss << a;
+		ss << b;
+		print_subsubcontent_compare("constructor(map)", "", myss.str(), ss.str());
+	}
+
 }
 
 template < typename T, typename U >
@@ -866,40 +884,40 @@ void	test_map_erase(T x, U y)
 	s << x;
 	print_content_header("Member Functions: ", s.str());
 	{
-		x.erase(x.find(7));
-		y.erase(y.find(7));
 		std::stringstream	myss;
 		std::stringstream	ss;
+		x.erase(2);
+		y.erase(2);
 		myss << x;
 		ss << y;
-		print_subsubcontent_compare("erase(find(7))", "", myss.str(), ss.str());
+		print_subsubcontent_compare("erase(2)", "", myss.str(), ss.str());
 	}
 	{
-		x.erase(x.find(3), x.find(12));
-		y.erase(y.find(3), y.find(12));
 		std::stringstream	myss;
 		std::stringstream	ss;
+		x.erase(3);
+		y.erase(3);
 		myss << x;
 		ss << y;
-		print_subsubcontent_compare("erase(find(3), find(12))", "", myss.str(), ss.str());
+		print_subsubcontent_compare("erase(3)", "", myss.str(), ss.str());
 	}
 	{
-		size_t	i = x.erase(1);
-		size_t	j = y.erase(1);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << i << " | " << x;
-		ss << j << " | " << y;
-		print_subsubcontent_compare("erase(1)", "", myss.str(), ss.str());
+		x.erase(x.begin()->first);
+		y.erase(y.begin()->first);
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("erase(begin()->first)", "", myss.str(), ss.str());
 	}
 	{
-		size_t	i = x.erase(1);
-		size_t	j = y.erase(1);
 		std::stringstream	myss;
 		std::stringstream	ss;
-		myss << i << " | " << x;
-		ss << j << " | " << y;
-		print_subsubcontent_compare("erase(1)", "", myss.str(), ss.str());
+		x.erase((--x.end())->first);
+		y.erase((--y.end())->first);
+		myss << x;
+		ss << y;
+		print_subsubcontent_compare("erase((--end())->first)", "", myss.str(), ss.str());
 	}
 }
 

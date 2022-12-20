@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/19 16:33:27 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 23:37:26 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,13 +70,13 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
-		if (this->isnil && this->parent)
-		{
-			tmp = this->parent;
-			while (tmp->right && !(tmp->right->isnil))
-				tmp = tmp->right;
-			return (tmp);
-		}
+		// if (this->isnil && this->parent)
+		// {
+		// 	tmp = this->parent;
+		// 	while (tmp->right && !(tmp->right->isnil))
+		// 		tmp = tmp->right;
+		// 	return (tmp);
+		// }
 		tmp = node_find_rightmin();
 		if (tmp->content->first != this->content->first)
 			return (tmp);
@@ -124,9 +124,6 @@ struct RBTNode : public Node<T, RBTNode<T> >
 		return (tmp->parent);
 	}
 };
-
-template <typename T>
-std::ostream&	operator<<(std::ostream& o, const RBTNode<T>& rhs) {o << rhs.content; return (o); }
 
 /* ============================ Enable if ============================ */
 template< bool B, class T = void >
@@ -183,6 +180,8 @@ struct pair
 	pair(const first_type& a, const second_type& b) : first(a), second(b) {}
 	/* Copy assignment */
 	pair&	operator=(const pair& rhs) { first = rhs.first; second = rhs.second; return (*this); }
+
+	operator	pair<const first_type, second_type>(void) { return (pair<const first_type, second_type>(first, second)); }
 };
 
 template < class T1, class T2 > bool	operator==(const ft::pair<T1, T2>& lhs, const ft::pair<T1, T2>& rhs) { return (lhs.first == rhs.first && lhs.second == rhs.second); }
@@ -193,7 +192,7 @@ template < class T1, class T2 > bool	operator<(const ft::pair<T1, T2>& lhs, cons
 		return (true);
 	else if (lhs.first > rhs.first)
 		return (false);
-	if (lhs.second < lhs.second)
+	if (lhs.second < rhs.second)
 		return (true);
 	else if (lhs.second > rhs.second)
 		return (false);

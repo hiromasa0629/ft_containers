@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/17 21:25:09 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/19 22:54:53 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/20 23:39:39 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,9 +72,13 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>
 	public:
 		/* Iterator constructor */
 		RandomAccessIterator(void) : _ptr(NULL) {}
-		RandomAccessIterator&	operator=(const RandomAccessIterator& rhs) { _ptr = rhs._ptr; return (*this); };
 		RandomAccessIterator(typename IteratorBase<Category, T>::pointer ptr) : _ptr(ptr) { /* std::cout << "Iterator construct" << std::endl; */ }
+		RandomAccessIterator(const RandomAccessIterator& it) : _ptr(it._ptr) {}
+		RandomAccessIterator&	operator=(const RandomAccessIterator& rhs) { _ptr = rhs.base(); return (*this); };
 
+		operator	RandomAccessIterator<const T>(void) const { return (RandomAccessIterator<const T>(_ptr)); }
+
+		typename IteratorBase<Category, T>::pointer			base(void) const { return (_ptr); }
 		/* Operators */
 		typename IteratorBase<Category, T>::reference		operator*(void) const { return (*_ptr); }
 		typename IteratorBase<Category, T>::reference		operator[](size_t n) { return *(_ptr + n); }
@@ -84,32 +88,48 @@ struct RandomAccessIterator : public virtual IteratorBase<Category, T>
 		RandomAccessIterator&								operator--(void) { _ptr--; return (*this); }
 		RandomAccessIterator								operator--(int) { RandomAccessIterator<T>	tmp = *this; _ptr--; return (tmp); }
 
-		bool												operator==(const RandomAccessIterator<T>& rhs) const { return (_ptr == rhs._ptr); }
-		bool												operator!=(const RandomAccessIterator<T>& rhs) const { return (_ptr != rhs._ptr); }
-		bool												operator<(const RandomAccessIterator<T>& rhs) const { return (_ptr < rhs._ptr); }
-		bool												operator>(const RandomAccessIterator<T>& rhs) const { return (_ptr > rhs._ptr); }
-		bool												operator<=(const RandomAccessIterator<T>& rhs) const { return (_ptr <= rhs._ptr); }
-		bool												operator>=(const RandomAccessIterator<T>& rhs) const { return (_ptr >= rhs._ptr); }
+		bool												operator==(const RandomAccessIterator& rhs) const { return (_ptr == rhs._ptr); }
+		bool												operator!=(const RandomAccessIterator& rhs) const { return (_ptr != rhs._ptr); }
+		bool												operator< (const RandomAccessIterator& rhs) const { return (_ptr < rhs._ptr); }
+		bool												operator> (const RandomAccessIterator& rhs) const { return (_ptr > rhs._ptr); }
+		bool												operator<=(const RandomAccessIterator& rhs) const { return (_ptr <= rhs._ptr); }
+		bool												operator>=(const RandomAccessIterator& rhs) const { return (_ptr >= rhs._ptr); }
+
 
 		RandomAccessIterator&								operator+=(int n) { _ptr += n; return (*this); }
 		RandomAccessIterator&								operator-=(int n) { _ptr -= n; return (*this); }
-		typename IteratorBase<Category, T>::difference_type	operator-(const RandomAccessIterator<T>& rhs) { return (_ptr - rhs._ptr); };
-		typename IteratorBase<Category, T>::difference_type	operator-(const RandomAccessIterator<T>& rhs) const { return (_ptr - rhs._ptr); };
-		friend RandomAccessIterator							operator+(int n, const RandomAccessIterator<T>& rhs) { return (RandomAccessIterator<T>(n + rhs._ptr)); }
-		friend RandomAccessIterator							operator+(const RandomAccessIterator<T>& lhs, int n) { return (RandomAccessIterator<T>(lhs._ptr + n)); }
-		friend RandomAccessIterator							operator-(int n, const RandomAccessIterator<T>& rhs) { return (RandomAccessIterator<T>(n - rhs._ptr)); }
-		friend RandomAccessIterator							operator-(const RandomAccessIterator<T>& lhs, int n) { return (RandomAccessIterator<T>(lhs._ptr - n)); }
+		typename IteratorBase<Category, T>::difference_type	operator-(const RandomAccessIterator& rhs) { return (_ptr - rhs._ptr); };
+		typename IteratorBase<Category, T>::difference_type	operator-(const RandomAccessIterator& rhs) const { return (_ptr - rhs._ptr); };
+		friend RandomAccessIterator							operator+(int n, const RandomAccessIterator& rhs) { return (RandomAccessIterator<T>(n + rhs._ptr)); }
+		friend RandomAccessIterator							operator+(const RandomAccessIterator& lhs, int n) { return (RandomAccessIterator<T>(lhs._ptr + n)); }
+		friend RandomAccessIterator							operator-(int n, const RandomAccessIterator& rhs) { return (RandomAccessIterator<T>(n - rhs._ptr)); }
+		friend RandomAccessIterator							operator-(const RandomAccessIterator& lhs, int n) { return (RandomAccessIterator<T>(lhs._ptr - n)); }
 
 		/* Destructor */
 		~RandomAccessIterator(void) {}
 };
 
+/* ============================ Const iterators ============================ */
+
+template < typename T, typename U > bool		operator==(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() == rhs.base()); }
+template < typename T, typename U > bool		operator!=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() != rhs.base()); }
+template < typename T, typename U > bool		operator< (const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() <  rhs.base()); }
+template < typename T, typename U > bool		operator> (const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() >  rhs.base()); }
+template < typename T, typename U > bool		operator<=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() <= rhs.base()); }
+template < typename T, typename U > bool		operator>=(const RandomAccessIterator<T>& lhs, const RandomAccessIterator<U>& rhs) { return (lhs.base() >= rhs.base()); }
+
 template < class T, class Category = ft::bidirectional_iterator_tag >
 struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 {
-	typedef T													value_type;
-	typedef ft::RBTNode<value_type>								node_type;
-	typedef typename IteratorBase<Category, node_type>::pointer	node_pointer;
+	typedef T																value_type;
+	typedef typename IteratorBase<Category, const value_type>::reference	const_value_reference;
+	typedef typename IteratorBase<Category, const value_type>::pointer		const_value_pointer;
+	typedef ft::RBTNode<value_type>											node_type;
+	typedef ft::RBTNode<const value_type>									const_node_type;
+	typedef typename IteratorBase<Category, node_type>::pointer				node_pointer;
+	typedef typename IteratorBase<Category, const_node_type>::pointer		const_node_pointer;
+	typedef typename IteratorBase<Category, value_type>::reference			value_reference;
+	typedef typename IteratorBase<Category, value_type>::pointer			value_pointer;
 
 	private:
 		node_pointer	_ptr;
@@ -119,10 +139,14 @@ struct BidirectionalIterator : public virtual IteratorBase<Category, T>
 		BidirectionalIterator(node_pointer ptr) : _ptr(ptr) {}
 		BidirectionalIterator&	operator=(const BidirectionalIterator& rhs) { _ptr = rhs._ptr; return (*this); }
 
+		operator	BidirectionalIterator<const value_type>(void) { return (BidirectionalIterator<const value_type>(reinterpret_cast<const_node_pointer>(_ptr))); }
+
 		bool													operator==(const BidirectionalIterator& rhs) const { return (_ptr == rhs._ptr); }
 		bool													operator!=(const BidirectionalIterator& rhs) const { return (_ptr != rhs._ptr); }
-		typename IteratorBase<Category, value_type>::reference	operator*(void) const { return (*(_ptr->content)); }
-		typename IteratorBase<Category, value_type>::pointer	operator->(void) { return (_ptr->content); }
+		value_reference			operator*(void) { return (*(_ptr->content)); }
+		const_value_pointer		operator->(void) const { return (_ptr->content); }
+		value_pointer			operator->(void) { return (_ptr->content); }
+		const_value_reference	operator*(void) const { return (*(_ptr->content)); }
 		BidirectionalIterator									operator++(int)
 		{
 			BidirectionalIterator	it = *this;
@@ -180,15 +204,16 @@ class reverse_iterator
 		reverse_iterator&	operator--(void) { _current++; return (*this); }
 		reverse_iterator	operator--(int) { iterator_type tmp = _current; _current++; return (reverse_iterator(tmp)); }
 		reverse_iterator&	operator-=(difference_type n) { _current += n; return (*this); }
+		pointer				operator->(void) const { return (&(operator*())); }
 		pointer				operator->(void) { return (&(operator*())); }
 		reference			operator[](difference_type n) const { return *(_current - n - 1); }
 
-		bool	operator==(const reverse_iterator& rhs) { return (_current == rhs.base()); }
-		bool	operator!=(const reverse_iterator& rhs) { return (_current != rhs.base()); }
-		bool	operator<(const reverse_iterator& rhs) { return (_current > rhs.base()); }
-		bool	operator<=(const reverse_iterator& rhs) { return (_current >= rhs.base()); }
-		bool	operator>(const reverse_iterator& rhs) { return (_current < rhs.base()); }
-		bool	operator>=(const reverse_iterator& rhs) { return (_current <= rhs.base()); }
+		bool	operator==(const reverse_iterator& rhs) const { return (_current == rhs.base()); }
+		bool	operator!=(const reverse_iterator& rhs) const { return (_current != rhs.base()); }
+		bool	operator<(const reverse_iterator& rhs) const { return (_current > rhs.base()); }
+		bool	operator<=(const reverse_iterator& rhs) const { return (_current >= rhs.base()); }
+		bool	operator>(const reverse_iterator& rhs) const { return (_current < rhs.base()); }
+		bool	operator>=(const reverse_iterator& rhs) const { return (_current <= rhs.base()); }
 
 		difference_type	operator-(const reverse_iterator& rhs) { return (rhs._current - _current); }
 		friend reverse_iterator		operator+(difference_type n, const reverse_iterator& rev_it) { return (reverse_iterator(rev_it + n)); }
@@ -197,12 +222,26 @@ class reverse_iterator
 		iterator_type	_current;
 };
 
+/* ============================ Const reverse_iterators ============================ */
+
+template < typename T, typename U > bool		operator==(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() == rhs.base()); }
+template < typename T, typename U > bool		operator!=(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() != rhs.base()); }
+template < typename T, typename U > bool		operator< (const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() >  rhs.base()); }
+template < typename T, typename U > bool		operator> (const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() <  rhs.base()); }
+template < typename T, typename U > bool		operator<=(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() >= rhs.base()); }
+template < typename T, typename U > bool		operator>=(const reverse_iterator<T>& lhs, const reverse_iterator<U>& rhs) { return (lhs.base() <= rhs.base()); }
+
 template< class InputIt >
 typename ft::iterator_traits<InputIt>::difference_type	distance(InputIt first, InputIt last)
 {
-	if (last > first)
-		return (last - first);
-	return (first - last);
+	typename ft::iterator_traits<InputIt>::difference_type	d;
+	InputIt													tmp;
+
+	d = 0;
+	tmp = first;
+	for (; tmp != last; tmp++)
+		d++;
+	return (d);
 }
 
 }
