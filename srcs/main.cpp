@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/20 23:18:31 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/21 00:49:37 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,17 +36,17 @@ void	myprint(T value)
 int	main(void)
 {
 
-	ft::map<char, int> mp1;
-	ft::map<char, int> mp2;
+	// ft::map<char, int> mp1;
+	// ft::map<char, int> mp2;
 
-	mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
-	mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
-	mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
-	(++(++mp1.begin()))->second = 42;
-	std::cout << mp1 << std::endl;
-	std::cout << mp2 << std::endl;
-	std::cout << "eq: " << (mp1 == mp2) << " | ne: " << (mp1 != mp2) << std::endl;
-	std::cout << "lt: " << (mp1 <  mp2) << " | le: " << (mp1 <= mp2) << std::endl;
+	// mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
+	// mp2['a'] = 2; mp2['b'] = 3; mp2['c'] = 4; mp2['d'] = 5;
+	// mp2['e'] = 6; mp2['f'] = 7; mp2['h'] = 8; mp2['h'] = 9;
+	// (++(++mp1.begin()))->second = 42;
+	// std::cout << mp1 << std::endl;
+	// std::cout << mp2 << std::endl;
+	// std::cout << "eq: " << (mp1 == mp2) << " | ne: " << (mp1 != mp2) << std::endl;
+	// std::cout << "lt: " << (mp1 <  mp2) << " | le: " << (mp1 <= mp2) << std::endl;
 	// std::cout << "gt: " << (mp1 >  mp2) << " | ge: " << (mp1 >= mp2) << std::endl;
 
 
