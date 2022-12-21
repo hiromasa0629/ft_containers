@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/21 00:49:37 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/21 15:21:53 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	myprint(T value)
 int	main(void)
 {
 
-	// ft::map<char, int> mp1;
+	// ft::map<std::string, std::string> mp1;
+	// mp1.insert(std::make_pair("123", "123"));
 	// ft::map<char, int> mp2;
 
 	// mp1['a'] = 2; mp1['b'] = 3; mp1['c'] = 4; mp1['d'] = 5;
