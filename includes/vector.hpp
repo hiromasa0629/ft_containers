@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/20 19:48:52 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/28 18:25:20 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 # define VECTOR_H
 # include "container.hpp"
 # include "iterators.hpp"
-# include "colors.hpp"
 
 namespace ft {
 
