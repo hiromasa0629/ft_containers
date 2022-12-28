@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:12:04 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/21 15:21:53 by hyap             ###   ########.fr       */
+/*   Updated: 2022/12/22 19:07:33 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,14 @@ void	myprint(T value)
 
 int	main(void)
 {
+	// typedef	ft::map<std::string, std::string>::const_iterator	const_iterator;
+	// typedef ft::RBTree<std::string, std::string, std::less<std::string> >::const_iterator tree_const_iterator;
 
-	// ft::map<std::string, std::string> mp1;
+	// const_iterator cit = mp1.begin();
+	// tree_const_iterator	tree_cit = mp1.begin();
+
+	// (void)tree_cit;
+
 	// mp1.insert(std::make_pair("123", "123"));
 	// ft::map<char, int> mp2;
 
@@ -86,22 +92,22 @@ int	main(void)
 	// 	test_pair(x, y);
 	// }
 
-	// {
-	// 	print_header("Map");
-	// 	ft::map<int, std::string>	x;
-	// 	std::map<int, std::string>	y;
-	// 	pre_test_map(x, y);
-	// 	test_map_constructor(x, y);
-	// 	test_map_capacity(x, y);
-	// 	test_map_element_access(x, y);
-	// 	test_map_lookup(x, y);
-	// 	test_map_insert(x, y);
-	// 	test_map_erase(x, y);
-	// 	test_map_swap(x, y);
-	// 	test_map_iterator(x, y);
-	// 	test_map_reverse_iterator(x, y);
-	// 	test_map_lexicographical(x, y);
-	// }
+	{
+		print_header("Map");
+		ft::map<int, std::string>	x;
+		std::map<int, std::string>	y;
+		std::cout << x << std::endl;
+		// test_map_constructor(x, y);
+		// test_map_capacity(x, y);
+		// test_map_element_access(x, y);
+		// test_map_lookup(x, y);
+		// test_map_insert(x, y);
+		// test_map_erase(x, y);
+		// test_map_swap(x, y);
+		// test_map_iterator(x, y);
+		// test_map_reverse_iterator(x, y);
+		// test_map_lexicographical(x, y);
+	}
 	int	diff = g_total - g_correct;
 	std::stringstream	ss;
 	if (diff > 0)
