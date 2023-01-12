@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/23 14:11:45 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/28 18:25:20 by hyap             ###   ########.fr       */
+/*   Updated: 2023/01/12 17:43:16 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,7 +165,10 @@ class vector
 			size_type	inserted;
 			pointer		newdata;
 			size_type	oldsize;
-			ipos = ft::distance<const_iterator>(this->begin(), pos);
+			if (pos == end())
+				ipos = _size;
+			else
+				ipos = ft::distance<const_iterator>(this->begin(), pos);
 			oldsize = _size;
 			inserted = 0;
 			if (_size == _capacity)
