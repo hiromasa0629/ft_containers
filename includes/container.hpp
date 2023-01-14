@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/16 12:26:20 by hyap              #+#    #+#             */
-/*   Updated: 2022/12/21 14:48:06 by hyap             ###   ########.fr       */
+/*   Updated: 2023/01/14 15:59:11 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,15 +70,8 @@ struct RBTNode : public Node<T, RBTNode<T> >
 	{
 		RBTNode*	tmp;
 
-		// if (this->isnil && this->parent)
-		// {
-		// 	tmp = this->parent;
-		// 	while (tmp->right && !(tmp->right->isnil))
-		// 		tmp = tmp->right;
-		// 	return (tmp);
-		// }
 		tmp = node_find_rightmin();
-		if (tmp->content->first != this->content->first)
+		if (tmp->content != this->content)
 			return (tmp);
 		if (tmp->parent->isnil)
 			return (tmp->right);
