@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/01 20:25:53 by hyap              #+#    #+#             */
-/*   Updated: 2023/01/14 15:47:42 by hyap             ###   ########.fr       */
+/*   Updated: 2023/01/18 22:49:34 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ class map
 		typedef const value_type&							const_reference;
 		typedef typename allocator_type::pointer			pointer;
 		typedef	typename allocator_type::pointer			const_pointer;
-		
+
 
 		class value_compare : std::binary_function<value_type, value_type, bool>
 		{
@@ -49,18 +49,18 @@ class map
 				value_compare(key_compare c) : comp(c) { /* std::cout << "value_compare()" << std::endl; */ }
 				bool	operator()(const value_type& lhs, const value_type& rhs) const { return(comp(lhs.first, rhs.first)); }
 		};
-		
+
 		class key_equal_compare : std::binary_function<value_type, value_type, bool>
 		{
 			friend class map;
-			
+
 			protected:
 				Equal comp;
 			public:
 				typedef bool		result_type;
 				typedef value_type	first_argument_type;
 				typedef value_type	second_argument_type;
-				
+
 				key_equal_compare(void) : comp() {}
 				key_equal_compare(const key_equal_compare& src) : comp(src.comp) {}
 				key_equal_compare&	operator=(const key_equal_compare& rhs) { comp = rhs.comp; return (*this); }
@@ -86,7 +86,7 @@ class map
 				this->insert(ft::make_pair(first->first, first->second));
 		}
 
-		map(const map& src) : _alloc(src.get_allocator()) { _tree = src.get_tree(); }
+		map(const map& src) : _alloc(src.get_allocator()) { *this = src; }
 		map&	operator=(const map& rhs) { _tree = rhs.get_tree(); return (*this); }
 		~map(void) {}
 

@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
+#if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
@@ -37,7 +37,7 @@ class MutantStack : public ft::stack<T>
 public:
 	MutantStack() {}
 	MutantStack(const MutantStack<T>& src) { *this = src; }
-	MutantStack<T>& operator=(const MutantStack<T>& rhs) 
+	MutantStack<T>& operator=(const MutantStack<T>& rhs)
 	{
 		this->c = rhs.c;
 		return *this;
@@ -67,7 +67,7 @@ int main(int argc, char** argv) {
 	ft::vector<Buffer> vector_buffer;
 	ft::stack<Buffer, std::deque<Buffer> > stack_deq_buffer;
 	ft::map<int, int> map_int;
-	
+
 	for (int i = 0; i < COUNT; i++)
 	{
 		vector_buffer.push_back(Buffer());
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
 		vector_buffer[idx].idx = 5;
 	}
 	ft::vector<Buffer>().swap(vector_buffer);
-	
+
 	try
 	{
 		for (int i = 0; i < COUNT; i++)
@@ -93,15 +93,15 @@ int main(int argc, char** argv) {
 	{
 		//NORMAL ! :P
 	}
-	
+
 	for (int i = 0; i < COUNT; ++i)
 	{
 		map_int.insert(ft::make_pair(rand(), rand()));
 	}
-	
+
 
 	int sum = 0;
-	for (int i = 0; i < 10000; i++)
+	for (int i = 0; i < COUNT; i++)
 	{
 		int access = rand();
 		sum += map_int[access];

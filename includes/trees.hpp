@@ -6,7 +6,7 @@
 /*   By: hyap <hyap@student.42kl.edu.my>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/07 21:27:35 by hyap              #+#    #+#             */
-/*   Updated: 2023/01/14 15:50:22 by hyap             ###   ########.fr       */
+/*   Updated: 2023/01/18 22:54:38 by hyap             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,13 +35,19 @@ class RBTree
 		RBTree(const key_compare_type& key_compare, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
 			: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare(key_compare), _value_compare(key_compare), _key_equal_compare() {}
 
-		~RBTree(void) 
-		{ 
+		// RBTree(const RBTree& src, const allocator_type &alloc = allocator_type(), const node_allocator& node_alloc = node_allocator())
+		// 	: _nil(create_nil()), _root(_nil), _alloc(alloc), _node_alloc(node_alloc), _key_compare(), _value_compare(key_compare_type()), _key_equal_compare()
+		// {
+		// 	std::cout << "tree copy constructor" << std::endl; *this = src;
+		// }
+
+		~RBTree(void)
+		{
 			rbt_clear();
-			rbt_destroyone(_nil); 
+			rbt_destroyone(_nil);
 		}
 
-		RBTree&	operator=(const RBTree& rhs)
+		const RBTree&	operator=(const RBTree& rhs)
 		{
 			this->rbt_clear();
 			this->rbt_destroyone(this->_nil);
@@ -421,12 +427,15 @@ class RBTree
 
 		void		rbt_iter(node_type* root, void (RBTree::*f)(node_type *))
 		{
+			node_type*	tmp;
+
 			if (!rbt_isnil(root->left))
 				rbt_iter(root->left, f);
-			// std::cout << root->content->first << " " << root->content->second << std::endl;
+			// std::cout << root->content->first << ", " << root->content->second << std::endl;
+			tmp = root->right;
 			(this->*f)(root);
-			if (!rbt_isnil(root->right))
-				rbt_iter(root->right, f);
+			if (!rbt_isnil(tmp))
+				rbt_iter(tmp, f);
 		}
 
 		void		rbt_transplant(node_type** root, node_type* u, node_type* v)
